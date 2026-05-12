@@ -17,7 +17,7 @@ Monarca Tasks is a single-user personal Kanban task manager. The user has tasks 
 | Styling | TailwindCSS v4 + CSS custom properties for design tokens + ui.shadcn |
 | Font | Inter (via next/font/google) |
 | Icons | Lucide React |
-| ORM | Prisma |
+| ORM | Prisma 7 |
 | Database | PostgreSQL (Neon) |
 | Auth | NextAuth v5 (Credentials provider, single user) |
 | Drag & Drop | @dnd-kit/core + @dnd-kit/sortable |
