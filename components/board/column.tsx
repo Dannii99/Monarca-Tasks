@@ -14,25 +14,29 @@ const columnConfig: Record<string, {
   icon: typeof Circle
   color: string 
   gradient: string
-  bgGradient: string
+  accentColor: string
+  lightBg: string
 }> = {
   TODO: {
     icon: Circle,
     color: 'text-slate-600 dark:text-slate-400',
     gradient: 'from-slate-400 to-slate-600',
-    bgGradient: 'from-slate-100 to-slate-200 dark:from-slate-800/50 dark:to-slate-700/50',
+    accentColor: 'border-l-slate-400',
+    lightBg: 'bg-slate-50/80',
   },
   IN_PROGRESS: {
     icon: Loader2,
     color: 'text-blue-600 dark:text-blue-400',
     gradient: 'from-blue-400 to-blue-600',
-    bgGradient: 'from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30',
+    accentColor: 'border-l-blue-500',
+    lightBg: 'bg-blue-50/60',
   },
   DONE: {
     icon: CheckCircle2,
     color: 'text-emerald-600 dark:text-emerald-400',
     gradient: 'from-emerald-400 to-emerald-600',
-    bgGradient: 'from-emerald-50 to-emerald-100 dark:from-emerald-900/30 dark:to-emerald-800/30',
+    accentColor: 'border-l-emerald-500',
+    lightBg: 'bg-emerald-50/60',
   },
 }
 
@@ -69,7 +73,8 @@ export function Column({ status, tasks, onEdit, onDelete, onComplete, onDragStar
       <div className={`
         flex items-center justify-between px-4 sm:px-5 py-4 
         border-b border-[var(--border-default)]
-        bg-gradient-to-r ${config.bgGradient}
+        ${config.lightBg} dark:bg-[var(--bg-subtle)]
+        border-l-4 ${config.accentColor}
       `}>
         <div className="flex items-center gap-3">
           <div className={`
