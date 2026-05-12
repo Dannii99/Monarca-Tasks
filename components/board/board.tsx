@@ -8,7 +8,18 @@ import { Column } from './column'
 import { BoardToolbar } from './board-toolbar'
 import { TaskFormModal } from './task-form-modal'
 import { STATUS_COLUMNS } from '@/lib/constants'
-import { Circle, Loader2, CheckCircle2 } from 'lucide-react'
+import { Circle, Loader2, CheckCircle2, AlertTriangle } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useLoading } from '@/components/ui/loading'
 
 interface BoardProps {
   initialTasks: Task[]
@@ -31,6 +42,11 @@ export function Board({ initialTasks }: BoardProps) {
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null)
   // Estado para controlar qué columna se muestra en móvil
   const [activeTab, setActiveTab] = useState<TaskStatus>('TODO')
+  // Estado para el diálogo de confirmación de eliminación
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null)
+  // Hook de loading
+  const { startLoading, stopLoading } = useLoading()
 
   const filteredTasks = tasks
     .filter((task) => {
@@ -96,6 +112,7 @@ export function Board({ initialTasks }: BoardProps) {
       )
     )
 
+    startLoading('Moviendo tarea...')
     try {
       const res = await fetch(`/api/tasks/${draggedTaskId}/move`, {
         method: 'PATCH',
@@ -108,6 +125,8 @@ export function Board({ initialTasks }: BoardProps) {
       setTasks((prev) =>
         prev.map((t) => (t.id === draggedTaskId ? { ...t, status: task.status as TaskStatus, isOverdue: task.isOverdue } : t))
       )
+    } finally {
+      stopLoading()
     }
 
     setDraggedTaskId(null)
@@ -118,17 +137,25 @@ export function Board({ initialTasks }: BoardProps) {
     setIsModalOpen(true)
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.')) {
-      return
-    }
+  const handleDelete = (id: string) => {
+    setTaskToDelete(id)
+    setDeleteDialogOpen(true)
+  }
 
-    setTasks((prev) => prev.filter((t) => t.id !== id))
+  const confirmDelete = async () => {
+    if (!taskToDelete) return
+
+    setTasks((prev) => prev.filter((t) => t.id !== taskToDelete))
+    startLoading('Eliminando tarea...')
 
     try {
-      await fetch(`/api/tasks/${id}`, { method: 'DELETE' })
+      await fetch(`/api/tasks/${taskToDelete}`, { method: 'DELETE' })
     } catch {
-      setTasks((prev) => [...prev, tasks.find((t) => t.id === id)!])
+      setTasks((prev) => [...prev, tasks.find((t) => t.id === taskToDelete)!])
+    } finally {
+      stopLoading()
+      setDeleteDialogOpen(false)
+      setTaskToDelete(null)
     }
   }
 
@@ -139,6 +166,7 @@ export function Board({ initialTasks }: BoardProps) {
       )
     )
 
+    startLoading('Completando tarea...')
     try {
       await fetch(`/api/tasks/${id}/move`, {
         method: 'PATCH',
@@ -147,10 +175,14 @@ export function Board({ initialTasks }: BoardProps) {
       })
     } catch {
       setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status: tasks.find((x) => x.id === id)?.status as TaskStatus, isOverdue: tasks.find((x) => x.id === id)?.isOverdue ?? false } : t)))
+    } finally {
+      stopLoading()
     }
   }
 
   const handleSave = async (taskData: Partial<Task>) => {
+    startLoading(editingTask ? 'Guardando cambios...' : 'Creando tarea...')
+    
     if (editingTask) {
       setTasks((prev) =>
         prev.map((t) => (t.id === editingTask.id ? { ...t, ...taskData } : t))
@@ -213,6 +245,7 @@ export function Board({ initialTasks }: BoardProps) {
       }
     }
 
+    stopLoading()
     setIsModalOpen(false)
     setEditingTask(null)
   }
@@ -390,6 +423,31 @@ export function Board({ initialTasks }: BoardProps) {
           />
         )}
       </AnimatePresence>
+
+      {/* Diálogo de confirmación para eliminar */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 rounded-full bg-[var(--color-error)]/10 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-[var(--color-error)]" />
+              </div>
+              <AlertDialogTitle className="text-xl">¿Eliminar tarea?</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-base">
+              ¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="mt-6">
+            <AlertDialogCancel onClick={() => setTaskToDelete(null)}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

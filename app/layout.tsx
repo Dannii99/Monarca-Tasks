@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SessionProvider } from 'next-auth/react'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { LoadingProvider } from '@/components/ui/loading'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -39,7 +40,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <SessionProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              <LoadingProvider>
+                {children}
+              </LoadingProvider>
+            </TooltipProvider>
           </SessionProvider>
         </ThemeProvider>
       </body>

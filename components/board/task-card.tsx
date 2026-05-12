@@ -12,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { fadeInUp } from '@/lib/motion'
 
 interface TaskCardProps {
@@ -106,44 +105,36 @@ export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart, isMo
             transition-opacity
           `}>
             {!isDone && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={`
-                      text-[var(--color-success)] hover:opacity-80 hover:bg-[var(--color-success)]/10 rounded-xl
-                      ${isMobile ? 'h-10 w-10' : 'h-8 w-8 rounded-lg'}
-                    `}
-                    onClick={() => onComplete(task.id)}
-                    aria-label="Complete task"
-                  >
-                    <CheckCircle2 size={isMobile ? 20 : 16} />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Completar</TooltipContent>
-              </Tooltip>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`
+                  text-[var(--color-success)] hover:opacity-80 hover:bg-[var(--color-success)]/10 rounded-xl
+                  ${isMobile ? 'h-10 w-10' : 'h-8 w-8 rounded-lg'}
+                `}
+                onClick={() => onComplete(task.id)}
+                aria-label="Completar tarea"
+                title="Completar"
+              >
+                <CheckCircle2 size={isMobile ? 20 : 16} />
+              </Button>
             )}
 
             <DropdownMenu>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className={`
-                        text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]
-                        ${isMobile ? 'h-10 w-10 rounded-xl' : 'h-8 w-8 rounded-lg'}
-                      `}
-                      aria-label="More actions"
-                    >
-                      <MoreVertical size={isMobile ? 20 : 16} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                </TooltipTrigger>
-                <TooltipContent>Opciones</TooltipContent>
-              </Tooltip>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`
+                    text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]
+                    ${isMobile ? 'h-10 w-10 rounded-xl' : 'h-8 w-8 rounded-lg'}
+                  `}
+                  aria-label="Más opciones"
+                  title="Opciones"
+                >
+                  <MoreVertical size={isMobile ? 20 : 16} />
+                </Button>
+              </DropdownMenuTrigger>
               <DropdownMenuContent 
                 align="end" 
                 className="w-44 bg-[var(--bg-surface)] border-[var(--border-default)]"
