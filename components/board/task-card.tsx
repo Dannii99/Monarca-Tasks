@@ -21,9 +21,10 @@ interface TaskCardProps {
   onDelete: (id: string) => void
   onComplete: (id: string) => void
   onDragStart: (e: React.DragEvent, taskId: string) => void
+  isMobile?: boolean
 }
 
-export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart, isMobile }: TaskCardProps) {
   const isDone = task.status === 'DONE'
 
   return (
@@ -35,63 +36,89 @@ export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart }: Ta
       layout
     >
       <div
-        draggable
+        draggable={!isMobile}
         onDragStart={(e) => onDragStart(e, task.id)}
-        className={`group relative rounded-xl border bg-[var(--bg-surface)] p-4 cursor-grab active:cursor-grabbing hover:shadow-md transition-all duration-200 ${
-          isDone 
+        className={`
+          group relative rounded-2xl border bg-[var(--bg-surface)] cursor-grab active:cursor-grabbing 
+          hover:shadow-lg transition-all duration-200
+          ${isDone 
             ? 'border-[var(--border-default)] opacity-75' 
             : 'border-[var(--border-default)] hover:border-[var(--border-strong)]'
-        }`}
+          }
+          ${isMobile ? 'p-4 shadow-sm' : 'p-4'}
+        `}
       >
         <div className="flex items-start gap-3">
-          {/* Drag handle - hidden on mobile touch, visible on hover/desktop */}
-          <div className="hidden sm:block mt-0.5 text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing shrink-0">
-            <GripVertical size={16} />
-          </div>
+          {/* Drag handle - solo desktop */}
+          {!isMobile && (
+            <div className="hidden lg:block mt-0.5 text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing shrink-0">
+              <GripVertical size={16} />
+            </div>
+          )}
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <h4 className={`text-sm font-semibold text-[var(--text-primary)] leading-snug ${isDone ? 'line-through text-[var(--text-muted)]' : ''}`}>
+            <h4 className={`
+              font-semibold text-[var(--text-primary)] leading-snug
+              ${isMobile ? 'text-base' : 'text-sm'}
+              ${isDone ? 'line-through text-[var(--text-muted)]' : ''}
+            `}>
               {task.title}
             </h4>
 
             {task.description && (
-              <p className="mt-1.5 text-sm text-[var(--text-secondary)] line-clamp-2 leading-relaxed">
+              <p className={`
+                mt-2 text-[var(--text-secondary)] line-clamp-2 leading-relaxed
+                ${isMobile ? 'text-sm' : 'text-sm'}
+              `}>
                 {task.description}
               </p>
             )}
 
             {/* Meta row */}
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <CategoryBadge category={task.category} />
-              <PriorityIndicator priority={task.priority} />
+            <div className={`
+              flex flex-wrap items-center gap-2
+              ${isMobile ? 'mt-4' : 'mt-3'}
+            `}>
+              <CategoryBadge category={task.category} isMobile={isMobile} />
+              <PriorityIndicator priority={task.priority} isMobile={isMobile} />
 
               {task.dueDate && (
-                <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-md ${
-                  task.isOverdue 
+                <span className={`
+                  inline-flex items-center gap-1.5 font-medium rounded-lg
+                  ${task.isOverdue 
                     ? 'text-[var(--color-error)] bg-[var(--color-error)]/10' 
                     : 'text-[var(--text-secondary)] bg-[var(--bg-muted)]'
-                }`}>
-                  <Calendar size={12} />
+                  }
+                  ${isMobile ? 'text-xs px-2.5 py-1.5' : 'text-xs px-2 py-1'}
+                `}>
+                  <Calendar size={isMobile ? 14 : 12} />
                   {task.dueDateLabel}
                 </span>
               )}
             </div>
           </div>
 
-          {/* Actions - always visible on mobile for touch, hover on desktop */}
-          <div className="flex flex-col gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
+          {/* Actions */}
+          <div className={`
+            flex flex-col gap-1 shrink-0
+            ${isMobile ? 'opacity-100' : 'sm:opacity-0 sm:group-hover:opacity-100'}
+            transition-opacity
+          `}>
             {!isDone && (
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-[var(--color-success)] hover:opacity-80 hover:bg-[var(--color-success)]/10 rounded-lg"
+                    className={`
+                      text-[var(--color-success)] hover:opacity-80 hover:bg-[var(--color-success)]/10 rounded-xl
+                      ${isMobile ? 'h-10 w-10' : 'h-8 w-8 rounded-lg'}
+                    `}
                     onClick={() => onComplete(task.id)}
                     aria-label="Complete task"
                   >
-                    <CheckCircle2 size={16} />
+                    <CheckCircle2 size={isMobile ? 20 : 16} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>Completar</TooltipContent>
@@ -105,25 +132,34 @@ export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart }: Ta
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] rounded-lg"
+                      className={`
+                        text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]
+                        ${isMobile ? 'h-10 w-10 rounded-xl' : 'h-8 w-8 rounded-lg'}
+                      `}
                       aria-label="More actions"
                     >
-                      <MoreVertical size={16} />
+                      <MoreVertical size={isMobile ? 20 : 16} />
                     </Button>
                   </DropdownMenuTrigger>
                 </TooltipTrigger>
                 <TooltipContent>Opciones</TooltipContent>
               </Tooltip>
-              <DropdownMenuContent align="end" className="w-40 bg-[var(--bg-surface)] border-[var(--border-default)]">
-                <DropdownMenuItem onClick={() => onEdit(task)} className="gap-2 text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]">
-                  <Pencil size={14} />
+              <DropdownMenuContent 
+                align="end" 
+                className="w-44 bg-[var(--bg-surface)] border-[var(--border-default)]"
+              >
+                <DropdownMenuItem 
+                  onClick={() => onEdit(task)} 
+                  className="gap-3 text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] py-2.5"
+                >
+                  <Pencil size={16} />
                   Editar
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="gap-2 text-[var(--color-error)] focus:text-[var(--color-error)] focus:bg-[var(--color-error)]/10"
+                  className="gap-3 text-[var(--color-error)] focus:text-[var(--color-error)] focus:bg-[var(--color-error)]/10 py-2.5"
                   onClick={() => onDelete(task.id)}
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={16} />
                   Eliminar
                 </DropdownMenuItem>
               </DropdownMenuContent>

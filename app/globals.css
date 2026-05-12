@@ -176,4 +176,31 @@ html.dark {
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* Ocultar scrollbar pero mantener funcionalidad */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Safe area para iPhone con notch */
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-area-pt {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  /* Prevenir pull-to-refresh en móviles */
+  .overscroll-none {
+    overscroll-behavior: none;
+  }
+  
+  /* Momentum scrolling en iOS */
+  .scroll-momentum {
+    -webkit-overflow-scrolling: touch;
+  }
 }
