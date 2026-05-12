@@ -1,0 +1,24 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e5]:
+      - heading "Monarca Tasks" [level=3] [ref=e7]
+      - generic [ref=e9]:
+        - group [ref=e10]:
+          - generic [ref=e11]: Email
+          - textbox "Email" [ref=e12]:
+            - /placeholder: tu@email.com
+        - group [ref=e13]:
+          - generic [ref=e14]: Contraseña
+          - textbox "Contraseña" [ref=e15]:
+            - /placeholder: ••••••••
+        - button "Entrar" [ref=e16]
+    - generic [ref=e20]:
+      - img [ref=e21]
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - heading "Acceso demo" [level=3] [ref=e25]
+          - paragraph [ref=e26]: "Email: demo@monarca.co"
+          - paragraph [ref=e27]: "Contraseña: monarca123"
+        - button "Entrar como demo" [ref=e28]
+  - button "Open Next.js Dev Tools" [ref=e34] [cursor=pointer]:
+    - img [ref=e35]

@@ -1,0 +1,24 @@
+- generic [ref=e3]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - heading "Monarca Tasks" [level=3] [ref=e7]
+      - paragraph [ref=e8]: Inicia sesión para continuar
+    - generic [ref=e10]:
+      - group [ref=e11]:
+        - generic [ref=e12]: Email
+        - textbox "Email" [ref=e13]:
+          - /placeholder: tu@email.com
+      - group [ref=e14]:
+        - generic [ref=e15]: Contraseña
+        - textbox "Contraseña" [ref=e16]:
+          - /placeholder: ••••••••
+      - button "Entrar" [ref=e17]
+  - generic [ref=e21]:
+    - img [ref=e23]
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - heading "Acceso demo" [level=3] [ref=e27]
+        - generic [ref=e28]:
+          - paragraph [ref=e29]: "Email: demo@monarca.co"
+          - paragraph [ref=e30]: "Contraseña: monarca123"
+      - button "Entrar como demo" [ref=e31]
