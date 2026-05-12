@@ -213,7 +213,7 @@ export function Board({ initialTasks }: BoardProps) {
   }
 
   return (
-    <div className="flex flex-col h-screen w-full overflow-hidden bg-gray-50/50">
+    <div className="flex flex-col h-screen w-full overflow-hidden bg-gray-50/50 dark:bg-gray-950">
       <BoardToolbar
         search={search}
         onSearchChange={setSearch}

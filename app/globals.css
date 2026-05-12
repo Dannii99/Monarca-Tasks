@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/* Anti-flash: Ocultar contenido hasta que se aplique el tema */
+html {
+  visibility: visible;
+  opacity: 1;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Prevenir flash de tema incorrecto durante carga */
+@media (prefers-color-scheme: dark) {
+  html:not(.light) {
+    color-scheme: dark;
+  }
+}
+
 /* Reset base - debe ir antes que Tailwind para que no sobreescriba utilidades */
 @layer base {
   *,
@@ -35,7 +52,7 @@
   }
 }
 
-/* Variables CSS personalizadas */
+/* Variables CSS personalizadas - Modo Claro */
 :root {
   --color-work: #2563eb;
   --color-home: #10b981;
@@ -87,6 +104,51 @@
   --input: 220 13% 91%;
   --ring: 217 84% 45%;
   --radius: 0.25rem;
+}
+
+/* Variables CSS - Modo Oscuro */
+.dark {
+  --bg-base: #0f0f10;
+  --bg-surface: #1a1a1b;
+  --bg-subtle: #242425;
+  --bg-muted: #2a2a2b;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --border-default: #27272a;
+  --border-strong: #3f3f46;
+  --border-focus: #3b82f6;
+  --bg-error: rgba(186, 26, 26, 0.2);
+  --color-active: #60a5fa;
+  --badge-work-bg: rgba(59, 130, 246, 0.2);
+  --badge-work-text: #60a5fa;
+  --badge-home-bg: rgba(34, 197, 94, 0.2);
+  --badge-home-text: #4ade80;
+  --badge-personal-bg: rgba(168, 85, 247, 0.2);
+  --badge-personal-text: #c084fc;
+  --shadow-card: 0px 4px 6px -1px rgba(0, 0, 0, 0.3), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-modal: 0px 20px 40px -8px rgba(0, 0, 0, 0.5);
+
+  /* shadcn dark theme */
+  --background: 240 6% 6%;
+  --foreground: 0 0% 98%;
+  --card: 240 6% 8%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 6% 8%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 217 84% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4% 16%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 4% 16%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 240 4% 16%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 4% 16%;
+  --input: 240 4% 16%;
+  --ring: 217 84% 55%;
 }
 
 /* Theme inline para Tailwind v4 */
