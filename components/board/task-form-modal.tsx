@@ -266,7 +266,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-          className="outline-none focus:outline-none bg-white dark:bg-gray-900 rounded-2xl"
+          className="outline-none focus:outline-none bg-[var(--bg-surface)] rounded-2xl"
         >
           {/* Header con gradiente */}
           <div className="relative px-6 pt-6 pb-5 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -304,13 +304,13 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
           </div>
 
           {/* Formulario con mejor espaciado */}
-          <form onSubmit={handleSubmit} className="px-6 py-8 space-y-6 bg-white dark:bg-gray-900">
+          <form onSubmit={handleSubmit} className="px-6 py-8 space-y-6 bg-[var(--bg-surface)]">
             {/* Título - Campo principal */}
             <Field className="space-y-3">
-              <FieldLabel htmlFor="title" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                <Type className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              <FieldLabel htmlFor="title" className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                <Type className="w-4 h-4 text-[var(--text-muted)]" />
                 Título de la tarea
-                <span className="text-red-500">*</span>
+                <span className="text-[var(--color-error)]">*</span>
               </FieldLabel>
               <div className="relative">
                 <Input
@@ -325,8 +325,8 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                   autoComplete="off"
                   autoCorrect="off"
                   spellCheck="false"
-                  className={`h-12 px-4 text-base bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:ring-4 transition-all duration-200 placeholder:text-gray-400 dark:text-white ${
-                    errors.title ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : 'focus:border-blue-500 focus:ring-blue-500/10'
+                  className={`h-12 px-4 text-base bg-[var(--bg-subtle)] border-[var(--border-default)] rounded-xl focus:bg-[var(--bg-surface)] focus:ring-4 transition-all duration-200 placeholder:text-[var(--text-muted)] ${
+                    errors.title ? 'border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]/10' : 'focus:border-[var(--color-active)] focus:ring-[var(--color-active)]/10'
                   }`}
                 />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
@@ -346,8 +346,8 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
 
             {/* Descripción */}
             <Field className="space-y-3">
-              <FieldLabel htmlFor="description" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                <AlignLeft className="w-4 h-4 text-gray-500" />
+              <FieldLabel htmlFor="description" className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                <AlignLeft className="w-4 h-4 text-[var(--text-muted)]" />
                 Descripción
               </FieldLabel>
               <div className="relative">
@@ -362,8 +362,8 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                   maxLength={VALIDATION.description.maxLength}
                   autoComplete="off"
                   spellCheck="false"
-                  className={`w-full px-4 py-3 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder:text-gray-400 focus:bg-white dark:focus:bg-gray-800 focus:ring-4 focus:outline-none resize-none transition-all duration-200 ${
-                    errors.description ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : 'focus:border-blue-500 focus:ring-blue-500/10'
+                  className={`w-full px-4 py-3 text-sm bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-xl text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:bg-[var(--bg-surface)] focus:ring-4 focus:outline-none resize-none transition-all duration-200 ${
+                    errors.description ? 'border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]/10' : 'focus:border-[var(--color-active)] focus:ring-[var(--color-active)]/10'
                   }`}
                 />
                 <div className="absolute bottom-3 right-3 text-xs text-gray-400">
@@ -383,8 +383,8 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
               {/* Categoría */}
               <div ref={categoryRef}>
                 <Field className="space-y-3">
-                  <FieldLabel className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    <Tag className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  <FieldLabel className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                    <Tag className="w-4 h-4 text-[var(--text-muted)]" />
                     Categoría
                   </FieldLabel>
                   <div className="relative">
@@ -403,40 +403,40 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''}`} />
                   </button>
                   
-                  <AnimatePresence>
-                    {showCategoryDropdown && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
-                      >
-                        {CATEGORIES.map((cat) => {
-                          const CatIcon = categoryConfig[cat.value as TaskCategory].icon
-                          return (
-                            <button
-                              key={cat.value}
-                              type="button"
-                              onClick={() => {
-                                setCategory(cat.value as TaskCategory)
-                                setShowCategoryDropdown(false)
-                              }}
-                              className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${category === cat.value ? 'bg-gray-50 dark:bg-gray-700' : ''}`}
-                            >
-                              <CatIcon className={`w-4 h-4 ${categoryConfig[cat.value as TaskCategory].color}`} />
-                              <span className={`text-sm font-medium ${categoryConfig[cat.value as TaskCategory].color}`}>
-                                {cat.label}
-                              </span>
-                              {category === cat.value && (
-                                <Check className="w-4 h-4 text-gray-900 dark:text-gray-100 ml-auto" />
-                              )}
-                            </button>
-                          )
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+<AnimatePresence>
+                     {showCategoryDropdown && (
+                       <motion.div
+                         initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                         animate={{ opacity: 1, y: 0, scale: 1 }}
+                         exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                         transition={{ duration: 0.15 }}
+                         className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
+                       >
+                         {CATEGORIES.map((cat) => {
+                           const CatIcon = categoryConfig[cat.value as TaskCategory].icon
+                           return (
+                             <button
+                               key={cat.value}
+                               type="button"
+                               onClick={() => {
+                                 setCategory(cat.value as TaskCategory)
+                                 setShowCategoryDropdown(false)
+                               }}
+                               className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-[var(--bg-subtle)] transition-colors ${category === cat.value ? 'bg-[var(--bg-subtle)]' : ''}`}
+                             >
+                               <CatIcon className={`w-4 h-4 ${categoryConfig[cat.value as TaskCategory].color}`} />
+                               <span className={`text-sm font-medium ${categoryConfig[cat.value as TaskCategory].color}`}>
+                                 {cat.label}
+                               </span>
+                               {category === cat.value && (
+                                 <Check className="w-4 h-4 text-[var(--text-primary)] ml-auto" />
+                               )}
+                             </button>
+                           )
+                         })}
+                       </motion.div>
+                     )}
+                   </AnimatePresence>
                 </div>
               </Field>
               </div>
@@ -444,10 +444,10 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
               {/* Prioridad */}
               <div ref={priorityRef}>
                 <Field className="space-y-3">
-                  <FieldLabel className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                    Prioridad
-                  </FieldLabel>
+<FieldLabel className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                     <AlertCircle className="w-4 h-4 text-[var(--text-muted)]" />
+                     Prioridad
+                   </FieldLabel>
                   <div className="relative">
                   <button
                     type="button"
@@ -464,75 +464,75 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${showPriorityDropdown ? 'rotate-180' : ''}`} />
                   </button>
                   
-                  <AnimatePresence>
-                    {showPriorityDropdown && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
-                      >
-                        {PRIORITIES.map((p) => {
-                          const PrioIcon = priorityConfig[p.value as TaskPriority].icon
-                          return (
-                            <button
-                              key={p.value}
-                              type="button"
-                              onClick={() => {
-                                setPriority(p.value as TaskPriority)
-                                setShowPriorityDropdown(false)
-                              }}
-                              className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${priority === p.value ? 'bg-gray-50 dark:bg-gray-700' : ''}`}
-                            >
-                              <PrioIcon className={`w-4 h-4 ${priorityConfig[p.value as TaskPriority].color}`} />
-                              <span className={`text-sm font-medium ${priorityConfig[p.value as TaskPriority].color}`}>
-                                {p.label}
-                              </span>
-                              {priority === p.value && (
-                                <Check className="w-4 h-4 text-gray-900 dark:text-gray-100 ml-auto" />
-                              )}
-                            </button>
-                          )
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+<AnimatePresence>
+                     {showPriorityDropdown && (
+                       <motion.div
+                         initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                         animate={{ opacity: 1, y: 0, scale: 1 }}
+                         exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                         transition={{ duration: 0.15 }}
+                         className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
+                       >
+                         {PRIORITIES.map((p) => {
+                           const PrioIcon = priorityConfig[p.value as TaskPriority].icon
+                           return (
+                             <button
+                               key={p.value}
+                               type="button"
+                               onClick={() => {
+                                 setPriority(p.value as TaskPriority)
+                                 setShowPriorityDropdown(false)
+                               }}
+                               className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-[var(--bg-subtle)] transition-colors ${priority === p.value ? 'bg-[var(--bg-subtle)]' : ''}`}
+                             >
+                               <PrioIcon className={`w-4 h-4 ${priorityConfig[p.value as TaskPriority].color}`} />
+                               <span className={`text-sm font-medium ${priorityConfig[p.value as TaskPriority].color}`}>
+                                 {p.label}
+                               </span>
+                               {priority === p.value && (
+                                 <Check className="w-4 h-4 text-[var(--text-primary)] ml-auto" />
+                               )}
+                             </button>
+                           )
+                         })}
+                       </motion.div>
+                     )}
+                   </AnimatePresence>
                 </div>
               </Field>
               </div>
 
               {/* Fecha límite */}
               <Field className="space-y-3">
-                <FieldLabel htmlFor="dueDate" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  Fecha límite
-                </FieldLabel>
-                <Input
-                  id="dueDate"
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                  min={new Date().toISOString().split('T')[0]}
-                  max={maxDateString}
-                  className="h-12 px-3 text-sm bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 dark:text-white"
-                />
-                <p className="text-xs text-gray-400 dark:text-gray-500">
-                  Máximo 5 años en el futuro
-                </p>
+<FieldLabel htmlFor="dueDate" className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                   <Calendar className="w-4 h-4 text-[var(--text-muted)]" />
+                   Fecha límite
+                 </FieldLabel>
+                 <Input
+                   id="dueDate"
+                   type="date"
+                   value={dueDate}
+                   onChange={(e) => setDueDate(e.target.value)}
+                   min={new Date().toISOString().split('T')[0]}
+                   max={maxDateString}
+                   className="h-12 px-3 text-sm bg-[var(--bg-subtle)] border-[var(--border-default)] rounded-xl focus:bg-[var(--bg-surface)] focus:border-[var(--color-active)] focus:ring-4 focus:ring-[var(--color-active)]/10 transition-all duration-200"
+                 />
+                 <p className="text-xs text-[var(--text-muted)]">
+                   Máximo 5 años en el futuro
+                 </p>
               </Field>
             </div>
 
             {/* Botones de acción con mejor espaciado */}
-            <div className="flex items-center justify-end gap-3 pt-6 mt-2 border-t border-gray-100 dark:border-gray-700">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                className="h-11 px-6 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors"
-              >
-                Cancelar
-              </Button>
+<div className="flex items-center justify-end gap-3 pt-6 mt-2 border-t border-[var(--border-default)]">
+               <Button
+                 type="button"
+                 variant="outline"
+                 onClick={handleClose}
+                 className="h-11 px-6 text-sm font-medium text-[var(--text-secondary)] bg-[var(--bg-surface)] border-[var(--border-default)] hover:bg-[var(--bg-subtle)] rounded-xl transition-colors"
+               >
+                 Cancelar
+               </Button>
               <Button
                 type="submit"
                 disabled={!isFormValid}

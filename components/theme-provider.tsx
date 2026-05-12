@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
 
 type Theme = 'light' | 'dark'
 
@@ -14,26 +14,27 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // SIEMPRE inicializar con 'light' para evitar mismatch SSR/hidratación
-  // El valor real se lee de localStorage después del montaje
+  // Estado inicial consistente para SSR/hidratación
   const [theme, setThemeState] = useState<Theme>('light')
   const [mounted, setMounted] = useState(false)
-  
-  // Leer tema guardado solo después de la hidratación
+
+  // Sincronizar con el DOM después de montar
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme | null
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light')
-    
-    setThemeState(initialTheme)
-    document.documentElement.classList.toggle('dark', initialTheme === 'dark')
+    const isDark = document.documentElement.classList.contains('dark')
+    setThemeState(isDark ? 'dark' : 'light')
     setMounted(true)
   }, [])
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme)
     localStorage.setItem('theme', newTheme)
-    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+    
+    // Aplicar al DOM
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
   }, [])
 
   const toggleTheme = useCallback(() => {

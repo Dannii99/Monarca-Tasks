@@ -185,7 +185,7 @@ export function LoginForm() {
         {mounted ? (
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm"
+            className="p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] transition-all duration-200 shadow-sm"
             aria-label={theme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'}
             title={theme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'}
           >
@@ -196,7 +196,7 @@ export function LoginForm() {
             )}
           </button>
         ) : (
-          <div className="p-2.5 rounded-xl bg-white border border-gray-200 shadow-sm">
+          <div className="p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-default)] shadow-sm">
             <div className="w-5 h-5" />
           </div>
         )}
@@ -207,32 +207,32 @@ export function LoginForm() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
       >
-        <Card className="w-full border-0 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] bg-white dark:bg-gray-900 backdrop-blur-xl rounded-2xl overflow-hidden">
+        <Card className="w-full border-0 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl rounded-2xl overflow-hidden">
           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
           
-          <CardHeader className="pb-6 pt-8 text-center space-y-3 bg-white dark:bg-gray-900">
+          <CardHeader className="pb-6 pt-8 text-center space-y-3 bg-[var(--bg-surface)]">
             <div className="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
               <LayoutGrid className="w-7 h-7 text-white" />
             </div>
             <div className="space-y-1">
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
                 Bienvenido
               </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-[var(--text-secondary)]">
                 Inicia sesión para continuar con Monarca Tasks
               </p>
             </div>
           </CardHeader>
           
-          <CardContent className="px-6 pb-8 bg-white dark:bg-gray-900">
+          <CardContent className="px-6 pb-8 bg-[var(--bg-surface)]">
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email */}
               <Field className="space-y-2">
-                <FieldLabel htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <FieldLabel htmlFor="email" className="text-sm font-medium text-[var(--text-secondary)]">
                   Correo electrónico
                 </FieldLabel>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                   <Input
                     id="email"
                     type="email"
@@ -246,10 +246,10 @@ export function LoginForm() {
                     autoComplete="email"
                     autoCorrect="off"
                     spellCheck="false"
-                    className={`h-12 pl-11 pr-4 text-sm bg-gray-50/50 dark:bg-gray-800/50 rounded-xl transition-all duration-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 dark:text-white border ${
+                    className={`h-12 pl-11 pr-4 text-sm bg-[var(--bg-subtle)] rounded-xl transition-all duration-200 placeholder:text-[var(--text-muted)] border ${
                       errors.email 
-                        ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' 
-                        : 'border-gray-200 dark:border-gray-700 focus:bg-white dark:focus:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
+                        ? 'border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-4 focus:ring-[var(--color-error)]/10' 
+                        : 'border-[var(--border-default)] focus:bg-[var(--bg-surface)] focus:border-[var(--color-active)] focus:ring-4 focus:ring-[var(--color-active)]/10'
                     }`}
                   />
                 </div>
@@ -259,7 +259,7 @@ export function LoginForm() {
                     <span>{errors.email}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500">
+                <div className="flex justify-between text-xs text-[var(--text-muted)]">
                   <span>Formato: usuario@dominio.com</span>
                   <span>{email.length}/{VALIDATION.email.maxLength}</span>
                 </div>
@@ -267,11 +267,11 @@ export function LoginForm() {
               
               {/* Password */}
               <Field className="space-y-2">
-                <FieldLabel htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <FieldLabel htmlFor="password" className="text-sm font-medium text-[var(--text-secondary)]">
                   Contraseña
                 </FieldLabel>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
@@ -283,16 +283,16 @@ export function LoginForm() {
                     required
                     maxLength={VALIDATION.password.maxLength}
                     autoComplete="current-password"
-                    className={`h-12 pl-11 pr-12 text-sm bg-gray-50/50 dark:bg-gray-800/50 rounded-xl transition-all duration-200 placeholder:text-gray-400 dark:placeholder:text-gray-600 dark:text-white border ${
+                    className={`h-12 pl-11 pr-12 text-sm bg-[var(--bg-subtle)] rounded-xl transition-all duration-200 placeholder:text-[var(--text-muted)] border ${
                       errors.password 
-                        ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' 
-                        : 'border-gray-200 dark:border-gray-700 focus:bg-white dark:focus:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
+                        ? 'border-[var(--color-error)] focus:border-[var(--color-error)] focus:ring-4 focus:ring-[var(--color-error)]/10' 
+                        : 'border-[var(--border-default)] focus:bg-[var(--bg-surface)] focus:border-[var(--color-active)] focus:ring-4 focus:ring-[var(--color-active)]/10'
                     }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -304,7 +304,7 @@ export function LoginForm() {
                     <span>{errors.password}</span>
                   </div>
                 )}
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className="text-xs text-[var(--text-muted)]">
                   Máximo {VALIDATION.password.maxLength} caracteres
                 </p>
               </Field>
@@ -313,7 +313,7 @@ export function LoginForm() {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="flex items-center gap-2 text-sm text-red-600 bg-red-50 dark:bg-red-950/30 px-4 py-3 rounded-xl"
+                  className="flex items-center gap-2 text-sm text-[var(--color-error)] bg-[var(--color-error)]/10 px-4 py-3 rounded-xl"
                 >
                   <Shield className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
@@ -344,34 +344,34 @@ export function LoginForm() {
 
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200 dark:border-gray-700" />
+                <div className="w-full border-t border-[var(--border-default)]" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white dark:bg-gray-900 px-4 text-gray-400 dark:text-gray-500">o</span>
+                <span className="bg-[var(--bg-surface)] px-4 text-[var(--text-muted)]">o</span>
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-gradient-to-br from-blue-50/80 to-purple-50/80 dark:from-blue-950/30 dark:to-purple-950/30 border border-blue-100/50 dark:border-blue-900/30">
+            <div className="p-5 rounded-xl bg-gradient-to-br from-[var(--color-work)]/5 to-[var(--color-personal)]/5 border border-[var(--color-work)]/10">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
                   <LayoutGrid className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Modo demo</h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Prueba la aplicación sin registro</p>
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)]">Modo demo</h3>
+                  <p className="text-xs text-[var(--text-muted)]">Prueba la aplicación sin registro</p>
                 </div>
               </div>
               
               <div className="space-y-2 mb-4 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 dark:text-gray-400 w-16">Email:</span>
-                  <code className="px-2 py-1 bg-white dark:bg-gray-800 rounded-md text-gray-700 dark:text-gray-300 font-mono border border-gray-200 dark:border-gray-700">
+                  <span className="text-[var(--text-muted)] w-16">Email:</span>
+                  <code className="px-2 py-1 bg-[var(--bg-subtle)] rounded-md text-[var(--text-secondary)] font-mono border border-[var(--border-default)]">
                     demo@monarca.co
                   </code>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 dark:text-gray-400 w-16">Contraseña:</span>
-                  <code className="px-2 py-1 bg-white dark:bg-gray-800 rounded-md text-gray-700 dark:text-gray-300 font-mono border border-gray-200 dark:border-gray-700">
+                  <span className="text-[var(--text-muted)] w-16">Contraseña:</span>
+                  <code className="px-2 py-1 bg-[var(--bg-subtle)] rounded-md text-[var(--text-secondary)] font-mono border border-[var(--border-default)]">
                     monarca123
                   </code>
                 </div>
@@ -381,7 +381,7 @@ export function LoginForm() {
                 onClick={handleDemoLogin}
                 disabled={loading}
                 variant="outline"
-                className="w-full h-11 text-sm font-medium border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl transition-all duration-200"
+                className="w-full h-11 text-sm font-medium border-[var(--border-default)] bg-[var(--bg-surface)] hover:bg-[var(--bg-subtle)] text-[var(--text-secondary)] rounded-xl transition-all duration-200"
               >
                 Entrar como invitado
               </Button>
@@ -394,7 +394,7 @@ export function LoginForm() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="mt-6 text-center text-xs text-gray-400 dark:text-gray-500"
+        className="mt-6 text-center text-xs text-[var(--text-muted)]"
       >
         Al iniciar sesión, aceptas nuestros términos de servicio
       </motion.p>

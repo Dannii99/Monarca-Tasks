@@ -41,7 +41,7 @@ export function BoardToolbar({
   const totalTasks = pendingCount + doneCount
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-20">
+    <header className="bg-[var(--bg-surface)] border-b border-[var(--border-default)] sticky top-0 z-20">
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Main Header */}
         <div className="flex items-center justify-between h-16 gap-4">
@@ -51,20 +51,20 @@ export function BoardToolbar({
               <LayoutGrid className="w-5 h-5 text-white" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">Monarca Tasks</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{totalTasks} tareas en total</p>
+              <h1 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Monarca Tasks</h1>
+              <p className="text-xs text-[var(--text-muted)]">{totalTasks} tareas en total</p>
             </div>
           </div>
 
           {/* Search - Desktop */}
           <div className="hidden md:flex flex-1 max-w-md">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
               <Input
                 placeholder="Buscar tareas..."
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full h-10 pl-10 pr-4 bg-gray-50/80 dark:bg-gray-800/80 border-gray-200 dark:border-gray-700 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 dark:text-white"
+                className="w-full h-10 pl-10 pr-4 bg-[var(--bg-subtle)] border-[var(--border-default)] rounded-xl focus:bg-[var(--bg-surface)] focus:ring-4 focus:ring-[var(--color-active)]/10 transition-all duration-200"
               />
             </div>
           </div>
@@ -75,7 +75,7 @@ export function BoardToolbar({
             {mounted ? (
               <button
                 onClick={toggleTheme}
-                className="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200"
+                className="h-10 w-10 flex items-center justify-center rounded-xl bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] transition-all duration-200"
                 aria-label={theme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'}
                 title={theme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'}
               >
@@ -100,7 +100,7 @@ export function BoardToolbar({
               variant="ghost"
               size="icon"
               onClick={onLogout}
-              className="h-10 w-10 text-gray-500 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors"
+              className="h-10 w-10 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-xl transition-colors"
             >
               <LogOut className="w-4 h-4" />
             </Button>
@@ -109,40 +109,40 @@ export function BoardToolbar({
       </div>
 
       {/* Stats Bar */}
-      <div className="border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+      <div className="border-t border-[var(--border-default)] bg-[var(--bg-subtle)]">
         <div className="px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             {/* Stats Cards */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center">
-                  <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm">
+                <div className="w-8 h-8 rounded-lg bg-[var(--color-work)]/10 flex items-center justify-center">
+                  <Clock className="w-4 h-4 text-[var(--color-work)]" />
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white leading-none">{pendingCount}</p>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide">Pendientes</p>
+                  <p className="text-lg font-bold text-[var(--text-primary)] leading-none">{pendingCount}</p>
+                  <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wide">Pendientes</p>
                 </div>
               </div>
 
               {urgentCount > 0 && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-xl border border-red-100 dark:border-red-900/30 shadow-sm">
-                  <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-950/30 flex items-center justify-center">
-                    <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
+                <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--color-error)]/20 shadow-sm">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--color-error)]/10 flex items-center justify-center">
+                    <AlertCircle className="w-4 h-4 text-[var(--color-error)]" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-red-600 leading-none">{urgentCount}</p>
-                    <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide">Urgentes</p>
+                    <p className="text-lg font-bold text-[var(--color-error)] leading-none">{urgentCount}</p>
+                    <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wide">Urgentes</p>
                   </div>
                 </div>
               )}
 
-              <div className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-                <div className="w-8 h-8 rounded-lg bg-green-50 dark:bg-green-950/30 flex items-center justify-center">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
+              <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm">
+                <div className="w-8 h-8 rounded-lg bg-[var(--color-success)]/10 flex items-center justify-center">
+                  <CheckCircle2 className="w-4 h-4 text-[var(--color-success)]" />
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white leading-none">{doneCount}</p>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide">Completadas</p>
+                  <p className="text-lg font-bold text-[var(--text-primary)] leading-none">{doneCount}</p>
+                  <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wide">Completadas</p>
                 </div>
               </div>
             </div>
@@ -150,49 +150,49 @@ export function BoardToolbar({
             {/* Filters & Sort */}
             <div className="flex items-center gap-2 sm:ml-auto">
               {/* Category Filters */}
-              <div className="flex items-center gap-1 bg-white dark:bg-gray-800 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.value}
-                    onClick={() =>
-                      onCategoryFilterChange(
-                        categoryFilter === cat.value ? null : cat.value
-                      )
-                    }
-                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
-                      categoryFilter === cat.value
-                        ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
+<div className="flex items-center gap-1 bg-[var(--bg-surface)] p-1 rounded-xl border border-[var(--border-default)]">
+               {CATEGORIES.map((cat) => (
+                 <button
+                   key={cat.value}
+                   onClick={() =>
+                     onCategoryFilterChange(
+                       categoryFilter === cat.value ? null : cat.value
+                     )
+                   }
+                   className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
+                     categoryFilter === cat.value
+                       ? 'bg-[var(--text-primary)] text-[var(--bg-surface)] shadow-sm'
+                       : 'text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)]'
+                   }`}
+                 >
+                   {cat.label}
+                 </button>
                 ))}
               </div>
 
               {/* Sort Dropdown */}
               <div className="relative">
-                <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => onSortByChange(e.target.value)}
-                  className="h-9 pl-9 pr-8 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 focus:outline-none appearance-none cursor-pointer hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
-                >
-                  <option value="priority">Prioridad</option>
-                  <option value="dueDate">Fecha</option>
-                  <option value="name">Nombre</option>
-                </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <svg className="w-3 h-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+<ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-muted)] pointer-events-none" />
+               <select
+                 value={sortBy}
+                 onChange={(e) => onSortByChange(e.target.value)}
+                 className="h-9 pl-9 pr-8 text-xs font-medium text-[var(--text-secondary)] bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl focus:border-[var(--color-active)] focus:ring-2 focus:ring-[var(--color-active)]/10 focus:outline-none appearance-none cursor-pointer hover:border-[var(--border-strong)] transition-colors"
+               >
+                 <option value="priority">Prioridad</option>
+                 <option value="dueDate">Fecha</option>
+                 <option value="name">Nombre</option>
+               </select>
+               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                 <svg className="w-3 h-3 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                 </svg>
+               </div>
               </div>
 
               {/* Mobile Filter Toggle */}
               <button
                 onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="md:hidden flex items-center gap-2 h-9 px-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-medium text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+                className="md:hidden flex items-center gap-2 h-9 px-3 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl text-xs font-medium text-[var(--text-secondary)] hover:border-[var(--border-strong)] transition-colors"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 Filtros
@@ -213,59 +213,59 @@ export function BoardToolbar({
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 overflow-hidden"
+            className="md:hidden border-t border-[var(--border-default)] bg-[var(--bg-subtle)] overflow-hidden"
           >
             <div className="px-4 py-4 space-y-4">
               {/* Mobile Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
-                <Input
-                  placeholder="Buscar tareas..."
-                  value={search}
-                  onChange={(e) => onSearchChange(e.target.value)}
-                  className="w-full h-11 pl-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl dark:text-white"
-                />
+<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+                 <Input
+                   placeholder="Buscar tareas..."
+                   value={search}
+                   onChange={(e) => onSearchChange(e.target.value)}
+                   className="w-full h-11 pl-10 bg-[var(--bg-surface)] border-[var(--border-default)] rounded-xl"
+                 />
               </div>
 
               {/* Mobile Category Filters */}
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Categorías</p>
-                <div className="flex flex-wrap gap-2">
-                  {CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.value}
-                      onClick={() =>
-                        onCategoryFilterChange(
-                          categoryFilter === cat.value ? null : cat.value
-                        )
-                      }
-                      className={`px-3 py-2 text-xs font-medium rounded-lg transition-all ${
-                        categoryFilter === cat.value
-                          ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                          : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300'
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
-                </div>
+<p className="text-xs font-medium text-[var(--text-muted)] mb-2">Categorías</p>
+                 <div className="flex flex-wrap gap-2">
+                   {CATEGORIES.map((cat) => (
+                     <button
+                       key={cat.value}
+                       onClick={() =>
+                         onCategoryFilterChange(
+                           categoryFilter === cat.value ? null : cat.value
+                         )
+                       }
+                       className={`px-3 py-2 text-xs font-medium rounded-lg transition-all ${
+                         categoryFilter === cat.value
+                           ? 'bg-[var(--text-primary)] text-[var(--bg-surface)]'
+                           : 'bg-[var(--bg-surface)] border border-[var(--border-default)] text-[var(--text-secondary)]'
+                       }`}
+                     >
+                       {cat.label}
+                     </button>
+                   ))}
+                 </div>
               </div>
 
               {/* Mobile Sort */}
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Ordenar por</p>
-                <div className="relative">
-                  <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 pointer-events-none" />
-                  <select
-                    value={sortBy}
-                    onChange={(e) => onSortByChange(e.target.value)}
-                    className="w-full h-11 pl-10 pr-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-blue-500 focus:outline-none appearance-none dark:text-white"
-                  >
-                    <option value="priority">Prioridad</option>
-                    <option value="dueDate">Fecha</option>
-                    <option value="name">Nombre</option>
-                  </select>
-                </div>
+<p className="text-xs font-medium text-[var(--text-muted)] mb-2">Ordenar por</p>
+                 <div className="relative">
+                   <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none" />
+                   <select
+                     value={sortBy}
+                     onChange={(e) => onSortByChange(e.target.value)}
+                     className="w-full h-11 pl-10 pr-4 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl text-sm focus:border-[var(--color-active)] focus:outline-none appearance-none"
+                   >
+                     <option value="priority">Prioridad</option>
+                     <option value="dueDate">Fecha</option>
+                     <option value="name">Nombre</option>
+                   </select>
+                 </div>
               </div>
             </div>
           </motion.div>

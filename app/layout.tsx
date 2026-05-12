@@ -12,6 +12,20 @@ export const metadata: Metadata = {
   description: 'Gestor de tareas personal tipo Kanban para un solo usuario',
 }
 
+// Script que se ejecuta antes de hidratación para aplicar el tema inmediatamente
+const themeScript = `
+  (function() {
+    try {
+      const theme = localStorage.getItem('theme')
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    } catch (e) {}
+  })()
+`
+
 export default function RootLayout({
   children,
 }: {
@@ -19,6 +33,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={inter.className}>
         <ThemeProvider>
           <SessionProvider>
