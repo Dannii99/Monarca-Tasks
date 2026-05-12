@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Calendar, Flag, X, Type, AlignLeft, Tag, AlertCircle, Check } from 'lucide-react'
+import { Calendar, X, Type, AlignLeft, Tag, AlertCircle, Check, Briefcase, Home, User, ChevronDown, Flame, Minus, ArrowDown } from 'lucide-react'
 import { Task, TaskCategory, TaskPriority } from '@/types/task'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -22,45 +22,48 @@ interface TaskFormModalProps {
   onSave: (taskData: Partial<Task>) => void
 }
 
-const priorityConfig: Record<TaskPriority, { color: string; bg: string; border: string; icon: string }> = {
+const priorityConfig: Record<TaskPriority, { color: string; bg: string; border: string; icon: typeof Flame }> = {
   HIGH: {
     color: 'text-red-700',
     bg: 'bg-red-50',
     border: 'border-red-200',
-    icon: '🔴',
+    icon: Flame,
   },
   MEDIUM: {
     color: 'text-amber-700',
     bg: 'bg-amber-50',
     border: 'border-amber-200',
-    icon: '🟡',
+    icon: Minus,
   },
   LOW: {
     color: 'text-green-700',
     bg: 'bg-green-50',
     border: 'border-green-200',
-    icon: '🟢',
+    icon: ArrowDown,
   },
 }
 
-const categoryConfig: Record<TaskCategory, { color: string; bg: string; border: string; icon: string }> = {
+const categoryConfig: Record<TaskCategory, { color: string; bg: string; border: string; icon: typeof Briefcase; label: string }> = {
   WORK: {
     color: 'text-blue-700',
     bg: 'bg-blue-50',
     border: 'border-blue-200',
-    icon: '💼',
+    icon: Briefcase,
+    label: 'Trabajo',
   },
   HOME: {
     color: 'text-green-700',
     bg: 'bg-green-50',
     border: 'border-green-200',
-    icon: '🏠',
+    icon: Home,
+    label: 'Hogar',
   },
   PERSONAL: {
     color: 'text-purple-700',
     bg: 'bg-purple-50',
     border: 'border-purple-200',
-    icon: '👤',
+    icon: User,
+    label: 'Personal',
   },
 }
 
@@ -72,6 +75,9 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
   const [dueDate, setDueDate] = useState('')
   const [showPriorityDropdown, setShowPriorityDropdown] = useState(false)
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
+  
+  const categoryRef = useRef<HTMLDivElement>(null)
+  const priorityRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (task) {
@@ -89,6 +95,20 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
     }
   }, [task, open])
 
+  // Cerrar dropdowns al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
+        setShowCategoryDropdown(false)
+      }
+      if (priorityRef.current && !priorityRef.current.contains(event.target as Node)) {
+        setShowPriorityDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
@@ -102,15 +122,21 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
     })
   }
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setShowPriorityDropdown(false)
     setShowCategoryDropdown(false)
     onOpenChange(false)
-  }
+  }, [onOpenChange])
+
+  const PriorityIcon = priorityConfig[priority].icon
+  const CategoryIcon = categoryConfig[category].icon
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[520px] p-0 overflow-hidden border-0 bg-white shadow-2xl shadow-black/10 rounded-2xl">
+      <DialogContent 
+        className="sm:max-w-[560px] p-0 overflow-hidden border-0 bg-white shadow-2xl rounded-2xl"
+        showCloseButton={false}
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -118,41 +144,44 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
           transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
         >
           {/* Header con gradiente */}
-          <div className="relative px-6 pt-6 pb-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20" />
+          <div className="relative px-6 pt-6 pb-5 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10" />
             <DialogHeader className="relative z-10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20">
                     {task ? (
-                      <AlignLeft className="w-5 h-5 text-white" />
+                      <AlignLeft className="w-6 h-6 text-white" />
                     ) : (
-                      <Type className="w-5 h-5 text-white" />
+                      <Type className="w-6 h-6 text-white" />
                     )}
                   </div>
                   <div>
-                    <DialogTitle className="text-lg font-bold text-white">
+                    <DialogTitle className="text-xl font-bold text-white">
                       {task ? 'Editar tarea' : 'Nueva tarea'}
                     </DialogTitle>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-slate-400 mt-1">
                       {task ? 'Modifica los detalles de la tarea' : 'Crea una nueva tarea para tu board'}
                     </p>
                   </div>
                 </div>
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={handleClose}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-colors"
+                  className="w-9 h-9 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-colors ring-1 ring-white/20"
                 >
-                  <X size={18} />
-                </button>
+                  <X className="w-5 h-5" />
+                </Button>
               </div>
             </DialogHeader>
           </div>
 
-          {/* Formulario */}
-          <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
+          {/* Formulario con mejor espaciado */}
+          <form onSubmit={handleSubmit} className="px-6 py-8 space-y-6 grid grid-cols-1 gap-4">
             {/* Título - Campo principal */}
-            <Field className="space-y-2">
+            <Field className="space-y-3">
               <FieldLabel htmlFor="title" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                 <Type className="w-4 h-4 text-gray-500" />
                 Título de la tarea
@@ -169,7 +198,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
             </Field>
 
             {/* Descripción */}
-            <Field className="space-y-2">
+            <Field className="space-y-3">
               <FieldLabel htmlFor="description" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                 <AlignLeft className="w-4 h-4 text-gray-500" />
                 Descripción
@@ -184,126 +213,132 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
               />
             </Field>
 
-            {/* Grid de configuración */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Grid de configuración con mejor espaciado */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {/* Categoría */}
-              <Field className="space-y-2">
-                <FieldLabel className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                  <Tag className="w-4 h-4 text-gray-500" />
-                  Categoría
-                </FieldLabel>
-                <div className="relative">
+              <div ref={categoryRef}>
+                <Field className="space-y-3">
+                  <FieldLabel className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                    <Tag className="w-4 h-4 text-gray-500" />
+                    Categoría
+                  </FieldLabel>
+                  <div className="relative">
                   <button
                     type="button"
                     onClick={() => {
                       setShowCategoryDropdown(!showCategoryDropdown)
                       setShowPriorityDropdown(false)
                     }}
-                    className={`w-full h-11 px-3 flex items-center gap-2 rounded-xl border transition-all duration-200 ${categoryConfig[category].bg} ${categoryConfig[category].border}`}
+                    className={`w-full h-12 px-3 flex items-center gap-2.5 rounded-xl border transition-all duration-200 ${categoryConfig[category].bg} ${categoryConfig[category].border} hover:shadow-sm`}
                   >
-                    <span>{categoryConfig[category].icon}</span>
+                    <CategoryIcon className={`w-4 h-4 ${categoryConfig[category].color}`} />
                     <span className={`text-sm font-medium flex-1 text-left ${categoryConfig[category].color}`}>
-                      {CATEGORIES.find(c => c.value === category)?.label}
+                      {categoryConfig[category].label}
                     </span>
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''}`} />
                   </button>
                   
                   <AnimatePresence>
                     {showCategoryDropdown && (
                       <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
+                        className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
                       >
-                        {CATEGORIES.map((cat) => (
-                          <button
-                            key={cat.value}
-                            type="button"
-                            onClick={() => {
-                              setCategory(cat.value as TaskCategory)
-                              setShowCategoryDropdown(false)
-                            }}
-                            className={`w-full px-3 py-2.5 flex items-center gap-2 hover:bg-gray-50 transition-colors ${category === cat.value ? 'bg-gray-50' : ''}`}
-                          >
-                            <span>{categoryConfig[cat.value as TaskCategory].icon}</span>
-                            <span className={`text-sm font-medium ${categoryConfig[cat.value as TaskCategory].color}`}>
-                              {cat.label}
-                            </span>
-                            {category === cat.value && (
-                              <Check className="w-4 h-4 text-gray-900 ml-auto" />
-                            )}
-                          </button>
-                        ))}
+                        {CATEGORIES.map((cat) => {
+                          const CatIcon = categoryConfig[cat.value as TaskCategory].icon
+                          return (
+                            <button
+                              key={cat.value}
+                              type="button"
+                              onClick={() => {
+                                setCategory(cat.value as TaskCategory)
+                                setShowCategoryDropdown(false)
+                              }}
+                              className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors ${category === cat.value ? 'bg-gray-50' : ''}`}
+                            >
+                              <CatIcon className={`w-4 h-4 ${categoryConfig[cat.value as TaskCategory].color}`} />
+                              <span className={`text-sm font-medium ${categoryConfig[cat.value as TaskCategory].color}`}>
+                                {cat.label}
+                              </span>
+                              {category === cat.value && (
+                                <Check className="w-4 h-4 text-gray-900 ml-auto" />
+                              )}
+                            </button>
+                          )
+                        })}
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
               </Field>
+              </div>
 
               {/* Prioridad */}
-              <Field className="space-y-2">
-                <FieldLabel className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-gray-500" />
-                  Prioridad
-                </FieldLabel>
-                <div className="relative">
+              <div ref={priorityRef}>
+                <Field className="space-y-3">
+                  <FieldLabel className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-gray-500" />
+                    Prioridad
+                  </FieldLabel>
+                  <div className="relative">
                   <button
                     type="button"
                     onClick={() => {
                       setShowPriorityDropdown(!showPriorityDropdown)
                       setShowCategoryDropdown(false)
                     }}
-                    className={`w-full h-11 px-3 flex items-center gap-2 rounded-xl border transition-all duration-200 ${priorityConfig[priority].bg} ${priorityConfig[priority].border}`}
+                    className={`w-full h-12 px-3 flex items-center gap-2.5 rounded-xl border transition-all duration-200 ${priorityConfig[priority].bg} ${priorityConfig[priority].border} hover:shadow-sm`}
                   >
-                    <span>{priorityConfig[priority].icon}</span>
+                    <PriorityIcon className={`w-4 h-4 ${priorityConfig[priority].color}`} />
                     <span className={`text-sm font-medium flex-1 text-left ${priorityConfig[priority].color}`}>
                       {PRIORITIES.find(p => p.value === priority)?.label}
                     </span>
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${showPriorityDropdown ? 'rotate-180' : ''}`} />
                   </button>
                   
                   <AnimatePresence>
                     {showPriorityDropdown && (
                       <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
+                        className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden"
                       >
-                        {PRIORITIES.map((p) => (
-                          <button
-                            key={p.value}
-                            type="button"
-                            onClick={() => {
-                              setPriority(p.value as TaskPriority)
-                              setShowPriorityDropdown(false)
-                            }}
-                            className={`w-full px-3 py-2.5 flex items-center gap-2 hover:bg-gray-50 transition-colors ${priority === p.value ? 'bg-gray-50' : ''}`}
-                          >
-                            <span>{priorityConfig[p.value as TaskPriority].icon}</span>
-                            <span className={`text-sm font-medium ${priorityConfig[p.value as TaskPriority].color}`}>
-                              {p.label}
-                            </span>
-                            {priority === p.value && (
-                              <Check className="w-4 h-4 text-gray-900 ml-auto" />
-                            )}
-                          </button>
-                        ))}
+                        {PRIORITIES.map((p) => {
+                          const PrioIcon = priorityConfig[p.value as TaskPriority].icon
+                          return (
+                            <button
+                              key={p.value}
+                              type="button"
+                              onClick={() => {
+                                setPriority(p.value as TaskPriority)
+                                setShowPriorityDropdown(false)
+                              }}
+                              className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition-colors ${priority === p.value ? 'bg-gray-50' : ''}`}
+                            >
+                              <PrioIcon className={`w-4 h-4 ${priorityConfig[p.value as TaskPriority].color}`} />
+                              <span className={`text-sm font-medium ${priorityConfig[p.value as TaskPriority].color}`}>
+                                {p.label}
+                              </span>
+                              {priority === p.value && (
+                                <Check className="w-4 h-4 text-gray-900 ml-auto" />
+                              )}
+                            </button>
+                          )
+                        })}
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
               </Field>
+              </div>
 
               {/* Fecha límite */}
-              <Field className="space-y-2">
+              <Field className="space-y-3">
                 <FieldLabel htmlFor="dueDate" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-gray-500" />
                   Fecha límite
@@ -313,13 +348,13 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="h-11 px-3 text-sm bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+                  className="h-12 px-3 text-sm bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                 />
               </Field>
             </div>
 
-            {/* Botones de acción */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+            {/* Botones de acción con mejor espaciado */}
+            <div className="flex items-center justify-end gap-3 pt-6 mt-2 border-t border-gray-100">
               <Button
                 type="button"
                 variant="outline"
