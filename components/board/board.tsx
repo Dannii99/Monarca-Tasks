@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Task, TaskStatus } from '@/types/task'
 import { Column } from './column'
 import { BoardToolbar } from './board-toolbar'
-import { TaskFormModal } from './task-form-modal'
 import { STATUS_COLUMNS } from '@/lib/constants'
 import { Circle, Loader2, CheckCircle2, AlertTriangle } from 'lucide-react'
 import {
@@ -33,12 +33,11 @@ const statusTabs = [
 ]
 
 export function Board({ initialTasks }: BoardProps) {
+  const router = useRouter()
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<string>('priority')
-  const [editingTask, setEditingTask] = useState<Task | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null)
   // Estado para controlar qué columna se muestra en móvil
   const [activeTab, setActiveTab] = useState<TaskStatus>('TODO')
@@ -132,11 +131,6 @@ export function Board({ initialTasks }: BoardProps) {
     setDraggedTaskId(null)
   }
 
-  const handleEdit = (task: Task) => {
-    setEditingTask(task)
-    setIsModalOpen(true)
-  }
-
   const handleDelete = (id: string) => {
     setTaskToDelete(id)
     setDeleteDialogOpen(true)
@@ -180,79 +174,8 @@ export function Board({ initialTasks }: BoardProps) {
     }
   }
 
-  const handleSave = async (taskData: Partial<Task>) => {
-    startLoading(editingTask ? 'Guardando cambios...' : 'Creando tarea...')
-    
-    if (editingTask) {
-      setTasks((prev) =>
-        prev.map((t) => (t.id === editingTask.id ? { ...t, ...taskData } : t))
-      )
-
-      try {
-        const res = await fetch(`/api/tasks/${editingTask.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(taskData),
-        })
-        const updated = await res.json()
-        setTasks((prev) => prev.map((t) => (t.id === editingTask.id ? updated : t)))
-      } catch {
-        setTasks((prev) =>
-          prev.map((t) => (t.id === editingTask.id ? editingTask : t))
-        )
-      }
-    } else {
-      const now = new Date().toISOString()
-      const dueDateStr = taskData.dueDate
-        ? new Date(taskData.dueDate as string).toISOString()
-        : null
-      const dueDateObj = dueDateStr ? new Date(dueDateStr) : null
-      const isOverdue = dueDateObj
-        ? dueDateObj < new Date() && (taskData.status || 'TODO') !== 'DONE'
-        : false
-      const dueDateLabel = dueDateObj
-        ? dueDateObj.toDateString() === new Date().toDateString()
-          ? 'Hoy'
-          : dueDateObj.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })
-        : ''
-
-      const newTask: Task = {
-        id: Date.now().toString(),
-        title: taskData.title || '',
-        description: taskData.description || null,
-        status: 'TODO',
-        category: taskData.category || 'PERSONAL',
-        priority: taskData.priority || 'MEDIUM',
-        dueDate: dueDateStr,
-        createdAt: now,
-        updatedAt: now,
-        isOverdue,
-        dueDateLabel,
-      }
-
-      setTasks((prev) => [newTask, ...prev])
-
-      try {
-        const res = await fetch('/api/tasks', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(taskData),
-        })
-        const created = await res.json()
-        setTasks((prev) => prev.map((t) => (t.id === newTask.id ? created : t)))
-      } catch {
-        setTasks((prev) => prev.filter((t) => t.id !== newTask.id))
-      }
-    }
-
-    stopLoading()
-    setIsModalOpen(false)
-    setEditingTask(null)
-  }
-
-  const handleOpenModal = () => {
-    setEditingTask(null)
-    setIsModalOpen(true)
+  const handleOpenNewTask = () => {
+    router.push('/task/new')
   }
 
   const handleLogout = () => {
@@ -269,7 +192,7 @@ export function Board({ initialTasks }: BoardProps) {
         onCategoryFilterChange={setCategoryFilter}
         sortBy={sortBy}
         onSortByChange={setSortBy}
-        onAddTask={handleOpenModal}
+        onAddTask={handleOpenNewTask}
         onLogout={handleLogout}
         pendingCount={pendingCount}
         urgentCount={urgentCount}
@@ -287,72 +210,32 @@ export function Board({ initialTasks }: BoardProps) {
                   key={status}
                   status={status}
                   tasks={filteredTasks}
-                  onEdit={handleEdit}
                   onDelete={handleDelete}
                   onComplete={handleComplete}
                   onDragStart={handleDragStart}
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
-                  onAddTask={handleOpenModal}
+                  onAddTask={handleOpenNewTask}
                 />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Vista Tablet/Móvil: Una columna con tabs */}
+        {/* Vista Tablet/Móvil: Una columna */}
         <div className="xl:hidden h-full flex flex-col">
-          {/* Tabs de navegación tipo app móvil */}
-          <div className="flex-none bg-[var(--bg-surface)] border-b border-[var(--border-default)] px-4 py-3">
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-              {statusTabs.map((tab) => {
-                const Icon = tab.icon
-                const count = getTaskCount(tab.value as TaskStatus)
-                const isActive = activeTab === tab.value
-                
-                return (
-                  <motion.button
-                    key={tab.value}
-                    onClick={() => setActiveTab(tab.value as TaskStatus)}
-                    className={`
-                      relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
-                      transition-all duration-200 whitespace-nowrap flex-shrink-0
-                      ${isActive 
-                        ? 'bg-[var(--text-primary)] text-[var(--bg-surface)] shadow-lg' 
-                        : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)]'
-                      }
-                    `}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    <Icon className={`w-4 h-4 ${isActive ? '' : tab.color}`} />
-                    <span>{tab.label}</span>
-                    {count > 0 && (
-                      <span className={`
-                        ml-1 text-xs px-1.5 py-0.5 rounded-full font-bold
-                        ${isActive ? 'bg-white/20' : 'bg-[var(--bg-surface)] text-[var(--text-muted)]'}
-                      `}>
-                        {count}
-                      </span>
-                    )}
-                  </motion.button>
-                )
-              })}
-            </div>
-          </div>
-
           {/* Contenido scrollable de la columna activa */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--bg-base)]">
             <div className="p-4 pb-24 max-w-lg mx-auto">
               <Column
                 status={activeTab}
                 tasks={filteredTasks}
-                onEdit={handleEdit}
                 onDelete={handleDelete}
                 onComplete={handleComplete}
                 onDragStart={handleDragStart}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                onAddTask={handleOpenModal}
+                onAddTask={handleOpenNewTask}
                 isMobile
               />
             </div>
@@ -407,22 +290,6 @@ export function Board({ initialTasks }: BoardProps) {
           </div>
         </div>
       </div>
-
-      <AnimatePresence>
-        {isModalOpen && (
-          <TaskFormModal
-            open={isModalOpen}
-            onOpenChange={(open) => {
-              if (!open) {
-                setIsModalOpen(false)
-                setEditingTask(null)
-              }
-            }}
-            task={editingTask}
-            onSave={handleSave}
-          />
-        )}
-      </AnimatePresence>
 
       {/* Diálogo de confirmación para eliminar */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

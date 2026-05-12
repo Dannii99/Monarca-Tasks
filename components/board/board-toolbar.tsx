@@ -208,10 +208,10 @@ export function BoardToolbar({
               </motion.div>
             </div>
 
-            {/* Filters Section */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 lg:ml-auto lg:flex-1 lg:justify-end">
+            {/* Filters Section - Desktop Only */}
+            <div className="hidden sm:flex flex-row items-center gap-2 lg:ml-auto lg:flex-1 lg:justify-end">
               {/* Category Filter Pills */}
-              <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-medium text-[var(--text-muted)] mr-1 hidden lg:inline">Filtrar:</span>
                 {CATEGORIES.map((cat) => {
                   const styles = categoryStyles[cat.value]
@@ -225,7 +225,7 @@ export function BoardToolbar({
                       whileTap={{ scale: 0.95 }}
                       onClick={() => onCategoryFilterChange(isActive ? null : cat.value)}
                       className={`
-                        relative flex items-center gap-1.5 px-3 sm:px-3 py-2 sm:py-2 rounded-xl text-xs font-semibold
+                        relative flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold
                         transition-all duration-200 border
                         ${isActive 
                           ? `${styles.bg} ${styles.color} ${styles.border} shadow-sm ring-1 ring-inset ring-black/5` 
@@ -233,8 +233,8 @@ export function BoardToolbar({
                         }
                       `}
                     >
-                      <Icon className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
-                      <span className="hidden sm:inline">{cat.label}</span>
+                      <Icon className="w-3.5 h-3.5" />
+                      <span>{cat.label}</span>
                       {isActive && (
                         <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}>
                           <X className="w-3 h-3 ml-0.5" />
@@ -245,58 +245,71 @@ export function BoardToolbar({
                 })}
               </div>
 
-              {/* Divider - Oculto en móvil */}
-              <div className="hidden sm:block w-px h-8 bg-[var(--border-default)]" />
+              {/* Divider */}
+              <div className="w-px h-8 bg-[var(--border-default)]" />
 
               {/* Sort Dropdown */}
-              <div className="relative min-w-[120px] sm:min-w-[140px]">
-                <ArrowUpDown className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-muted)]" />
+              <div className="relative min-w-[140px]">
+                <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-muted)]" />
                 <select
                   value={sortBy}
                   onChange={(e) => onSortByChange(e.target.value)}
-                  className="w-full h-9 sm:h-10 pl-8 sm:pl-9 pr-7 sm:pr-8 text-xs font-semibold text-[var(--text-secondary)] bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg sm:rounded-xl focus:border-[var(--color-work)] focus:ring-2 focus:ring-[var(--color-work)]/10 focus:outline-none appearance-none cursor-pointer hover:border-[var(--border-strong)] transition-all shadow-sm"
+                  className="w-full h-10 pl-9 pr-8 text-xs font-semibold text-[var(--text-secondary)] bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-xl focus:border-[var(--color-work)] focus:ring-2 focus:ring-[var(--color-work)]/10 focus:outline-none appearance-none cursor-pointer hover:border-[var(--border-strong)] transition-all shadow-sm"
                 >
                   <option value="priority">Por prioridad</option>
                   <option value="dueDate">Por fecha</option>
                   <option value="name">Por nombre</option>
                 </select>
-                <div className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                   <svg className="w-3.5 h-3.5 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </div>
-
-              {/* Mobile Filter Toggle */}
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="sm:hidden flex items-center gap-1.5 h-9 px-3 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg text-xs font-semibold text-[var(--text-secondary)] hover:border-[var(--border-strong)] transition-all shadow-sm"
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>Filtros</span>
-                {(categoryFilter || sortBy !== 'priority' || search) && (
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-[9px] text-white font-bold">
-                    {(categoryFilter ? 1 : 0) + (sortBy !== 'priority' ? 1 : 0) + (search ? 1 : 0)}
-                  </span>
-                )}
-              </motion.button>
             </div>
+
+            {/* Mobile Filter Toggle - Only visible on mobile */}
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="sm:hidden flex items-center gap-1.5 h-9 px-3 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg text-xs font-semibold text-[var(--text-secondary)] hover:border-[var(--border-strong)] transition-all shadow-sm ml-auto"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <span>Filtros</span>
+              {(categoryFilter || sortBy !== 'priority' || search) && (
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-[9px] text-white font-bold">
+                  {(categoryFilter ? 1 : 0) + (sortBy !== 'priority' ? 1 : 0) + (search ? 1 : 0)}
+                </span>
+              )}
+            </motion.button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Search & Filters */}
+      {/* Mobile Search & Filters - Fixed Full Screen */}
       <AnimatePresence>
         {showMobileFilters && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-            className="sm:hidden border-t border-[var(--border-default)] bg-[var(--bg-subtle)] overflow-hidden"
+            initial={{ opacity: 0, y: '100%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '100%' }}
+            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+            className="sm:hidden fixed inset-0 z-50 bg-[var(--bg-base)] flex flex-col"
           >
-            <div className="px-4 py-5 space-y-6">
+            {/* Header del panel */}
+            <div className="flex items-center justify-between px-4 h-14 border-b border-[var(--border-default)] bg-[var(--bg-surface)] flex-shrink-0">
+              <h2 className="text-lg font-bold text-[var(--text-primary)]">Filtros</h2>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowMobileFilters(false)}
+                className="h-10 w-10 flex items-center justify-center rounded-xl bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </motion.button>
+            </div>
+
+            {/* Contenido scrollable */}
+            <div className="flex-1 overflow-y-auto px-4 py-6 space-y-8">
               {/* Mobile Search */}
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--bg-muted)]">
@@ -414,6 +427,17 @@ export function BoardToolbar({
                 <LogOut className="w-5 h-5" />
                 Cerrar sesión
               </button>
+            </div>
+
+            {/* Botón fijo en la parte inferior */}
+            <div className="flex-shrink-0 p-4 border-t border-[var(--border-default)] bg-[var(--bg-surface)] safe-area-pb">
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowMobileFilters(false)}
+                className="w-full h-12 bg-[var(--color-work)] hover:bg-[var(--color-active)] text-white font-semibold rounded-xl shadow-lg shadow-orange-500/25 transition-all"
+              >
+                Aplicar filtros
+              </motion.button>
             </div>
           </motion.div>
         )}
