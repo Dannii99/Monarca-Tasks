@@ -1,19 +1,19 @@
 export const CATEGORIES = [
-  { value: 'WORK', label: 'Work', color: 'var(--color-work)' },
-  { value: 'HOME', label: 'Home', color: 'var(--color-home)' },
+  { value: 'WORK', label: 'Trabajo', color: 'var(--color-work)' },
+  { value: 'HOME', label: 'Hogar', color: 'var(--color-home)' },
   { value: 'PERSONAL', label: 'Personal', color: 'var(--color-personal)' },
 ] as const
 
 export const PRIORITIES = [
-  { value: 'HIGH', label: 'High' },
-  { value: 'MEDIUM', label: 'Medium' },
-  { value: 'LOW', label: 'Low' },
+  { value: 'HIGH', label: 'Alta' },
+  { value: 'MEDIUM', label: 'Media' },
+  { value: 'LOW', label: 'Baja' },
 ] as const
 
 export const STATUSES = [
-  { value: 'TODO', label: 'To Do' },
-  { value: 'IN_PROGRESS', label: 'In Progress' },
-  { value: 'DONE', label: 'Done' },
+  { value: 'TODO', label: 'Por hacer' },
+  { value: 'IN_PROGRESS', label: 'En progreso' },
+  { value: 'DONE', label: 'Completadas' },
 ] as const
 
 export const STATUS_COLUMNS = ['TODO', 'IN_PROGRESS', 'DONE'] as const

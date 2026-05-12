@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'motion/react'
-import { Mail, Lock, ArrowRight, Sparkles, Shield, Eye, EyeOff, AlertTriangle } from 'lucide-react'
+import { Mail, Lock, ArrowRight, LayoutGrid, Shield, Eye, EyeOff, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -188,7 +188,7 @@ export function LoginForm() {
           
           <CardHeader className="pb-6 pt-8 text-center space-y-3">
             <div className="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
-              <Sparkles className="w-7 h-7 text-white" />
+              <LayoutGrid className="w-7 h-7 text-white" />
             </div>
             <div className="space-y-1">
               <h1 className="text-2xl font-bold tracking-tight text-gray-900">
@@ -330,7 +330,7 @@ export function LoginForm() {
             <div className="p-5 rounded-xl bg-gradient-to-br from-blue-50/80 to-purple-50/80 border border-blue-100/50">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
+                  <LayoutGrid className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-gray-900">Modo demo</h3>
@@ -346,7 +346,7 @@ export function LoginForm() {
                   </code>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 w-16">Pass:</span>
+                  <span className="text-gray-500 w-16">Contraseña:</span>
                   <code className="px-2 py-1 bg-white rounded-md text-gray-700 font-mono border border-gray-200">
                     monarca123
                   </code>

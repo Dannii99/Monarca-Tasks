@@ -286,7 +286,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                       {task ? 'Editar tarea' : 'Nueva tarea'}
                     </DialogTitle>
                     <p className="text-sm text-slate-400 mt-1">
-                      {task ? 'Modifica los detalles de la tarea' : 'Crea una nueva tarea para tu board'}
+                      {task ? 'Modifica los detalles de la tarea' : 'Crea una nueva tarea para tu tablero'}
                     </p>
                   </div>
                 </div>

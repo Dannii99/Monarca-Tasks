@@ -105,7 +105,7 @@ export function Board({ initialTasks }: BoardProps) {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.')) {
       return
     }
 
@@ -166,8 +166,8 @@ export function Board({ initialTasks }: BoardProps) {
         : false
       const dueDateLabel = dueDateObj
         ? dueDateObj.toDateString() === new Date().toDateString()
-          ? 'Today'
-          : dueDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          ? 'Hoy'
+          : dueDateObj.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })
         : ''
 
       const newTask: Task = {

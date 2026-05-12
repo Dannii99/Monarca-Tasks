@@ -1,4 +1,5 @@
 import { isPast, isToday, format } from 'date-fns'
+import { es } from 'date-fns/locale'
 
 interface TaskRaw {
   id: string
@@ -17,8 +18,8 @@ export function serializeTask(task: TaskRaw) {
   const isOverdue = dueDate ? isPast(dueDate) && task.status !== 'DONE' : false
   const dueDateLabel = dueDate
     ? isToday(dueDate)
-      ? 'Today'
-      : format(dueDate, 'MMM d')
+      ? 'Hoy'
+      : format(dueDate, 'd MMM', { locale: es })
     : ''
 
   return {

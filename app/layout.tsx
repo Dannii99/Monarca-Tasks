@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Monarca Tasks',
-  description: 'Single-user personal Kanban task manager',
+  description: 'Gestor de tareas personal tipo Kanban para un solo usuario',
 }
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={inter.className}>
         <SessionProvider>
           <TooltipProvider>{children}</TooltipProvider>
