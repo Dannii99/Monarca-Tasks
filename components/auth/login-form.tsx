@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'motion/react'
-import { Mail, Lock, ArrowRight, LayoutGrid, Shield, Eye, EyeOff, AlertTriangle, Sun, Moon } from 'lucide-react'
+import { Mail, Lock, ArrowRight, Shield, Eye, EyeOff, AlertTriangle, Sun, Moon } from 'lucide-react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -211,8 +212,8 @@ export function LoginForm() {
           <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
           
           <CardHeader className="pb-6 pt-8 text-center space-y-3 bg-[var(--bg-surface)]">
-            <div className="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
-              <LayoutGrid className="w-7 h-7 text-white" />
+            <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-white to-gray-100 border border-gray-200 flex items-center justify-center shadow-lg">
+              <Image src="/monarca.png" alt="Monarca Tasks" width={48} height={48} className="w-12 h-12 object-contain" />
             </div>
             <div className="space-y-1">
               <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
@@ -351,10 +352,10 @@ export function LoginForm() {
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-gradient-to-br from-[var(--color-work)]/5 to-[var(--color-personal)]/5 border border-[var(--color-work)]/10">
+            <div className="p-5 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-                  <LayoutGrid className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-white to-gray-100 border border-gray-200 flex items-center justify-center">
+                  <Image src="/monarca.png" alt="Monarca" width={32} height={32} className="w-8 h-8 object-contain" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-[var(--text-primary)]">Modo demo</h3>

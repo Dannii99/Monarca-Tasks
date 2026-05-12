@@ -268,24 +268,23 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
           transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
           className="outline-none focus:outline-none bg-[var(--bg-surface)] sm:rounded-2xl flex flex-col h-full max-h-[100dvh] sm:max-h-[90vh]"
         >
-          {/* Header con gradiente */}
-          <div className="relative px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-5 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex-shrink-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10" />
-            <DialogHeader className="relative z-10">
+          {/* Header sin fondo de color */}
+          <div className="relative px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-5 bg-[var(--bg-surface)] border-b border-[var(--border-default)] flex-shrink-0">
+            <DialogHeader>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center ring-1 ring-white/20 flex-shrink-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[var(--bg-subtle)] flex items-center justify-center ring-1 ring-[var(--border-default)] flex-shrink-0">
                     {task ? (
-                      <AlignLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                      <AlignLeft className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--text-primary)]" />
                     ) : (
-                      <Type className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                      <Type className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--text-primary)]" />
                     )}
                   </div>
                   <div className="min-w-0">
-                    <DialogTitle className="text-lg sm:text-xl font-bold text-white">
+                    <DialogTitle className="text-lg sm:text-xl font-bold text-[var(--text-primary)]">
                       {task ? 'Editar tarea' : 'Nueva tarea'}
                     </DialogTitle>
-                    <p className="text-xs sm:text-sm text-slate-400 mt-0.5 sm:mt-1">
+                    <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-0.5 sm:mt-1">
                       {task ? 'Modifica los detalles' : 'Crea una nueva tarea'}
                     </p>
                   </div>
@@ -295,7 +294,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                   variant="ghost"
                   size="icon"
                   onClick={handleClose}
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-colors ring-1 ring-white/20 flex-shrink-0"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] hover:text-[var(--text-primary)] transition-colors ring-1 ring-[var(--border-default)] flex-shrink-0"
                 >
                   <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Button>

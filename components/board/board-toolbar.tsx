@@ -1,6 +1,7 @@
 'use client'
 
-import { Search, Plus, SlidersHorizontal, LogOut, ArrowUpDown, LayoutGrid, CheckCircle2, AlertCircle, Clock, Sun, Moon, Briefcase, Home, User, X } from 'lucide-react'
+import { Search, Plus, SlidersHorizontal, LogOut, ArrowUpDown, CheckCircle2, AlertCircle, Clock, Sun, Moon, Briefcase, Home, User, X, LayoutGrid } from 'lucide-react'
+import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { CATEGORIES } from '@/lib/constants'
@@ -69,9 +70,14 @@ export function BoardToolbar({
         <div className="flex items-center justify-between h-14 sm:h-16 gap-3 sm:gap-4">
           {/* Logo & Title */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/25">
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/20 to-transparent" />
-              <LayoutGrid className="w-4 h-4 sm:w-5 sm:h-5 text-white relative z-10" />
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
+              <Image 
+                src="/monarca.png" 
+                alt="Monarca Tasks Logo" 
+                width={40} 
+                height={40}
+                className="w-9 h-9 sm:w-10 sm:h-10 object-contain"
+              />
             </div>
             <div className="hidden sm:block">
               <h1 className="text-base lg:text-lg font-bold text-[var(--text-primary)] tracking-tight">Monarca Tasks</h1>

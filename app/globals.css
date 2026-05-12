@@ -54,7 +54,7 @@ html.dark {
 
 /* Variables CSS personalizadas - Modo Claro */
 :root {
-  --color-work: #2563eb;
+  --color-work: #f97316;
   --color-home: #10b981;
   --color-personal: #8b5cf6;
   --bg-base: #f8f9fa;
@@ -66,14 +66,14 @@ html.dark {
   --text-muted: #737686;
   --border-default: #e5e7eb;
   --border-strong: #c3c6d7;
-  --border-focus: #2563eb;
+  --border-focus: #f97316;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ba1a1a;
   --bg-error: #ffdad6;
-  --color-active: #0053db;
-  --badge-work-bg: rgba(37, 99, 235, 0.12);
-  --badge-work-text: #2563eb;
+  --color-active: #ea580c;
+  --badge-work-bg: rgba(249, 115, 22, 0.12);
+  --badge-work-text: #f97316;
   --badge-home-bg: rgba(16, 185, 129, 0.12);
   --badge-home-text: #10b981;
   --badge-personal-bg: rgba(139, 92, 246, 0.12);
@@ -117,11 +117,11 @@ html.dark {
   --text-muted: #71717a;
   --border-default: #27272a;
   --border-strong: #3f3f46;
-  --border-focus: #3b82f6;
+  --border-focus: #f97316;
   --bg-error: rgba(186, 26, 26, 0.2);
-  --color-active: #60a5fa;
-  --badge-work-bg: rgba(59, 130, 246, 0.2);
-  --badge-work-text: #60a5fa;
+  --color-active: #fb923c;
+  --badge-work-bg: rgba(249, 115, 22, 0.2);
+  --badge-work-text: #fb923c;
   --badge-home-bg: rgba(34, 197, 94, 0.2);
   --badge-home-text: #4ade80;
   --badge-personal-bg: rgba(168, 85, 247, 0.2);
