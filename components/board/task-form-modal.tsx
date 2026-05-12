@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Calendar, X, Type, AlignLeft, Tag, AlertCircle, Check, Briefcase, Home, User, ChevronDown, Flame, Minus, ArrowDown } from 'lucide-react'
+import { Calendar, X, Type, AlignLeft, Tag, AlertCircle, Check, Briefcase, Home, User, ChevronDown, Flame, Minus, ArrowDown, AlertTriangle } from 'lucide-react'
 import { Task, TaskCategory, TaskPriority } from '@/types/task'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -67,6 +67,34 @@ const categoryConfig: Record<TaskCategory, { color: string; bg: string; border: 
   },
 }
 
+// Funciones de validación y sanitización
+const VALIDATION = {
+  title: {
+    maxLength: 100,
+    // Permitir letras, números, espacios, y caracteres básicos de puntuación
+    pattern: /^[\w\s\-_'"!?.,:;()[\]{}@#&+*/=|<>$%^~`áéíóúÁÉÍÓÚñÑüÜ]+$/u,
+    sanitize: (value: string): string => {
+      // Eliminar caracteres potencialmente peligrosos
+      return value
+        .replace(/[<>]/g, '') // Eliminar < y > para prevenir XSS
+        .replace(/javascript:/gi, '') // Eliminar protocolos javascript
+        .replace(/on\w+=/gi, '') // Eliminar event handlers
+        .slice(0, 100) // Limitar longitud
+    }
+  },
+  description: {
+    maxLength: 500,
+    // Más permisivo para descripciones largas pero aún seguro
+    sanitize: (value: string): string => {
+      return value
+        .replace(/[<>]/g, '')
+        .replace(/javascript:/gi, '')
+        .replace(/on\w+=/gi, '')
+        .slice(0, 500)
+    }
+  }
+}
+
 export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModalProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -75,9 +103,14 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
   const [dueDate, setDueDate] = useState('')
   const [showPriorityDropdown, setShowPriorityDropdown] = useState(false)
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
+  const [errors, setErrors] = useState<{ title?: string; description?: string }>({})
   
   const categoryRef = useRef<HTMLDivElement>(null)
   const priorityRef = useRef<HTMLDivElement>(null)
+
+  // Verificar si hay errores reales (no solo keys undefined)
+  const hasErrors = Object.values(errors).some(error => error !== undefined && error !== '')
+  const isFormValid = title.trim().length > 0 && !hasErrors
 
   useEffect(() => {
     if (task) {
@@ -93,6 +126,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
       setPriority('MEDIUM')
       setDueDate('')
     }
+    setErrors({})
   }, [task, open])
 
   // Cerrar dropdowns al hacer click fuera
@@ -109,13 +143,97 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const validateTitle = (value: string): boolean => {
+    const sanitized = VALIDATION.title.sanitize(value)
+    if (sanitized !== value) {
+      setErrors(prev => ({ ...prev, title: 'El título contiene caracteres no permitidos' }))
+      return false
+    }
+    if (value.length > VALIDATION.title.maxLength) {
+      setErrors(prev => ({ ...prev, title: `Máximo ${VALIDATION.title.maxLength} caracteres` }))
+      return false
+    }
+    setErrors(prev => ({ ...prev, title: undefined }))
+    return true
+  }
+
+  const validateDescription = (value: string): boolean => {
+    const sanitized = VALIDATION.description.sanitize(value)
+    if (sanitized !== value) {
+      setErrors(prev => ({ ...prev, description: 'La descripción contiene caracteres no permitidos' }))
+      return false
+    }
+    if (value.length > VALIDATION.description.maxLength) {
+      setErrors(prev => ({ ...prev, description: `Máximo ${VALIDATION.description.maxLength} caracteres` }))
+      return false
+    }
+    setErrors(prev => ({ ...prev, description: undefined }))
+    return true
+  }
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setTitle(value)
+    validateTitle(value)
+  }
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value
+    setDescription(value)
+    validateDescription(value)
+  }
+
+  const handleTitleBlur = () => {
+    const sanitized = VALIDATION.title.sanitize(title)
+    if (sanitized !== title) {
+      setTitle(sanitized)
+    }
+  }
+
+  const handleDescriptionBlur = () => {
+    const sanitized = VALIDATION.description.sanitize(description)
+    if (sanitized !== description) {
+      setDescription(sanitized)
+    }
+  }
+
+  // Prevenir pegar contenido malicioso
+  const handlePaste = (e: React.ClipboardEvent, type: 'title' | 'description') => {
+    e.preventDefault()
+    const pastedText = e.clipboardData.getData('text')
+    const sanitized = type === 'title' 
+      ? VALIDATION.title.sanitize(pastedText)
+      : VALIDATION.description.sanitize(pastedText)
+    
+    if (type === 'title') {
+      setTitle(sanitized)
+      validateTitle(sanitized)
+    } else {
+      setDescription(sanitized)
+      validateDescription(sanitized)
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validación final antes de enviar
+    const isTitleValid = validateTitle(title)
+    const isDescriptionValid = validateDescription(description)
+    
+    if (!isTitleValid || !isDescriptionValid) {
+      return
+    }
+
     if (!title.trim()) return
 
+    // Sanitizar antes de enviar
+    const sanitizedTitle = VALIDATION.title.sanitize(title.trim())
+    const sanitizedDescription = description.trim() ? VALIDATION.description.sanitize(description.trim()) : null
+
     onSave({
-      title: title.trim(),
-      description: description.trim() || null,
+      title: sanitizedTitle,
+      description: sanitizedDescription,
       category,
       priority,
       dueDate: dueDate || null,
@@ -125,16 +243,22 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
   const handleClose = useCallback(() => {
     setShowPriorityDropdown(false)
     setShowCategoryDropdown(false)
+    setErrors({})
     onOpenChange(false)
   }, [onOpenChange])
 
   const PriorityIcon = priorityConfig[priority].icon
   const CategoryIcon = categoryConfig[category].icon
 
+  // Calcular fecha máxima (5 años desde ahora)
+  const maxDate = new Date()
+  maxDate.setFullYear(maxDate.getFullYear() + 5)
+  const maxDateString = maxDate.toISOString().split('T')[0]
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent 
-        className="sm:max-w-[560px] p-0 overflow-hidden border-0 bg-white shadow-2xl rounded-2xl"
+        className="sm:max-w-[560px] p-0 overflow-hidden border-0 bg-white shadow-2xl rounded-2xl focus:outline-none focus-visible:outline-none focus-visible:ring-0"
         showCloseButton={false}
       >
         <motion.div
@@ -142,6 +266,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+          className="outline-none focus:outline-none"
         >
           {/* Header con gradiente */}
           <div className="relative px-6 pt-6 pb-5 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -179,7 +304,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
           </div>
 
           {/* Formulario con mejor espaciado */}
-          <form onSubmit={handleSubmit} className="px-6 py-8 space-y-6 grid grid-cols-1 gap-4">
+          <form onSubmit={handleSubmit} className="px-6 py-8 space-y-6">
             {/* Título - Campo principal */}
             <Field className="space-y-3">
               <FieldLabel htmlFor="title" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
@@ -187,14 +312,36 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                 Título de la tarea
                 <span className="text-red-500">*</span>
               </FieldLabel>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="¿Qué necesitas hacer?"
-                required
-                className="h-12 px-4 text-base bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 placeholder:text-gray-400"
-              />
+              <div className="relative">
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={handleTitleChange}
+                  onBlur={handleTitleBlur}
+                  onPaste={(e) => handlePaste(e, 'title')}
+                  placeholder="¿Qué necesitas hacer?"
+                  required
+                  maxLength={VALIDATION.title.maxLength}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  className={`h-12 px-4 text-base bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:ring-4 transition-all duration-200 placeholder:text-gray-400 ${
+                    errors.title ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : 'focus:border-blue-500 focus:ring-blue-500/10'
+                  }`}
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+                  {title.length}/{VALIDATION.title.maxLength}
+                </div>
+              </div>
+              {errors.title && (
+                <div className="flex items-center gap-1.5 text-xs text-red-600">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  <span>{errors.title}</span>
+                </div>
+              )}
+              <p className="text-xs text-gray-400">
+                Máximo {VALIDATION.title.maxLength} caracteres. No se permiten caracteres especiales peligrosos.
+              </p>
             </Field>
 
             {/* Descripción */}
@@ -203,14 +350,32 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                 <AlignLeft className="w-4 h-4 text-gray-500" />
                 Descripción
               </FieldLabel>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Añade más detalles sobre la tarea (opcional)"
-                rows={3}
-                className="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none resize-none transition-all duration-200"
-              />
+              <div className="relative">
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={handleDescriptionChange}
+                  onBlur={handleDescriptionBlur}
+                  onPaste={(e) => handlePaste(e, 'description')}
+                  placeholder="Añade más detalles sobre la tarea (opcional)"
+                  rows={3}
+                  maxLength={VALIDATION.description.maxLength}
+                  autoComplete="off"
+                  spellCheck="false"
+                  className={`w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:bg-white focus:ring-4 focus:outline-none resize-none transition-all duration-200 ${
+                    errors.description ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : 'focus:border-blue-500 focus:ring-blue-500/10'
+                  }`}
+                />
+                <div className="absolute bottom-3 right-3 text-xs text-gray-400">
+                  {description.length}/{VALIDATION.description.maxLength}
+                </div>
+              </div>
+              {errors.description && (
+                <div className="flex items-center gap-1.5 text-xs text-red-600">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  <span>{errors.description}</span>
+                </div>
+              )}
             </Field>
 
             {/* Grid de configuración con mejor espaciado */}
@@ -348,8 +513,13 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  max={maxDateString}
                   className="h-12 px-3 text-sm bg-gray-50 border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                 />
+                <p className="text-xs text-gray-400">
+                  Máximo 5 años en el futuro
+                </p>
               </Field>
             </div>
 
@@ -365,7 +535,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
               </Button>
               <Button
                 type="submit"
-                disabled={!title.trim()}
+                disabled={!isFormValid}
                 className="h-11 px-6 text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {task ? 'Guardar cambios' : 'Crear tarea'}

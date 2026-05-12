@@ -1,16 +1,39 @@
-/* Reset base - debe ir primero */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-* {
-  margin: 0;
-}
-
-/* Tailwind CSS v4 - importación principal */
 @import "tailwindcss";
+
+/* Reset base - debe ir antes que Tailwind para que no sobreescriba utilidades */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100%;
+    line-height: 1.5;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+  }
+
+  /* Establecer fuente por defecto */
+  html,
+  body {
+    font-family: var(--font-sans, 'Inter'), system-ui, -apple-system, sans-serif;
+  }
+}
 
 /* Variables CSS personalizadas */
 :root {
@@ -84,21 +107,6 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-}
-
-/* Estilos base del documento */
-html {
-  height: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  min-height: 100%;
-  font-family: var(--font-sans);
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  line-height: 1.5;
 }
 
 /* Utilidades adicionales */
