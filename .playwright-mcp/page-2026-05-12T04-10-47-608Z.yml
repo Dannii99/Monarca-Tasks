@@ -1,0 +1,211 @@
+- generic [ref=e2]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Monarca Tasks" [level=1] [ref=e6]
+      - generic [ref=e7]:
+        - generic [ref=e8]: 5 pendientes
+        - generic [ref=e9]: 1 urgentes
+        - generic [ref=e10]: 3 hechas
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - textbox "Buscar tareas..." [ref=e16]
+      - generic [ref=e17]:
+        - button "Work" [ref=e18]
+        - button "Home" [ref=e19]
+        - button "Personal" [ref=e20]
+      - generic [ref=e21]:
+        - img [ref=e22]
+        - generic [ref=e23]:
+          - img
+          - combobox [ref=e24] [cursor=pointer]:
+            - option "Prioridad" [selected]
+            - option "Fecha"
+            - option "Nombre"
+      - button "Agregar" [ref=e25]:
+        - img [ref=e26]
+        - text: Agregar
+      - button "Salir" [ref=e27]:
+        - img [ref=e28]
+        - text: Salir
+  - generic [ref=e32]:
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - img [ref=e36]
+          - heading "To Do" [level=3] [ref=e39]
+        - generic [ref=e40]:
+          - generic [ref=e41]: "4"
+          - button "Add task" [ref=e42]:
+            - img [ref=e43]
+      - generic [ref=e47]:
+        - generic [ref=e50]:
+          - img [ref=e51]
+          - generic [ref=e58]:
+            - heading "Preparar presentación para cliente" [level=4] [ref=e59]
+            - paragraph [ref=e60]: Crear slides del proyecto Q4 para la reunión del viernes
+            - generic [ref=e61]:
+              - generic [ref=e62]:
+                - img [ref=e63]
+                - text: Trabajo
+              - generic [ref=e66]:
+                - img [ref=e67]
+                - text: Alta
+              - generic [ref=e69]:
+                - img [ref=e70]
+                - text: May 12
+          - generic [ref=e72]:
+            - button "Complete task" [ref=e73]:
+              - img [ref=e74]
+            - button "More actions" [ref=e77]:
+              - img [ref=e78]
+        - generic [ref=e87]:
+          - img [ref=e88]
+          - generic [ref=e95]:
+            - heading "Actualizar portafolio web" [level=4] [ref=e96]
+            - paragraph [ref=e97]: Agregar últimos proyectos y mejorar sección de contacto
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - img [ref=e100]
+                - text: Personal
+              - generic [ref=e103]:
+                - img [ref=e104]
+                - text: Alta
+              - generic [ref=e106]:
+                - img [ref=e107]
+                - text: May 14
+          - generic [ref=e109]:
+            - button "Complete task" [ref=e110]:
+              - img [ref=e111]
+            - button "More actions" [ref=e114]:
+              - img [ref=e115]
+        - generic [ref=e124]:
+          - img [ref=e125]
+          - generic [ref=e132]:
+            - heading "Arreglar grifo del baño" [level=4] [ref=e133]
+            - paragraph [ref=e134]: Gotea constantemente, llamar al plomero o hacerlo uno mismo
+            - generic [ref=e135]:
+              - generic [ref=e136]:
+                - img [ref=e137]
+                - text: Hogar
+              - generic [ref=e140]:
+                - img [ref=e141]
+                - text: Media
+              - generic [ref=e142]:
+                - img [ref=e143]
+                - text: May 9
+          - generic [ref=e145]:
+            - button "Complete task" [ref=e146]:
+              - img [ref=e147]
+            - button "More actions" [ref=e150]:
+              - img [ref=e151]
+        - generic [ref=e160]:
+          - img [ref=e161]
+          - generic [ref=e168]:
+            - heading "Revisar propuesta de presupuesto" [level=4] [ref=e169]
+            - paragraph [ref=e170]: Analizar costos del nuevo proyecto y enviar feedback
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - img [ref=e173]
+                - text: Trabajo
+              - generic [ref=e176]:
+                - img [ref=e177]
+                - text: Media
+              - generic [ref=e178]:
+                - img [ref=e179]
+                - text: May 18
+          - generic [ref=e181]:
+            - button "Complete task" [ref=e182]:
+              - img [ref=e183]
+            - button "More actions" [ref=e186]:
+              - img [ref=e187]
+    - generic [ref=e194]:
+      - generic [ref=e195]:
+        - generic [ref=e196]:
+          - img [ref=e197]
+          - heading "In Progress" [level=3] [ref=e199]
+        - generic [ref=e200]:
+          - generic [ref=e201]: "1"
+          - button "Add task" [ref=e202]:
+            - img [ref=e203]
+      - generic [ref=e210]:
+        - img [ref=e211]
+        - generic [ref=e218]:
+          - heading "Comprar materiales de limpieza" [level=4] [ref=e219]
+          - paragraph [ref=e220]: Detergente, suavizante y productos de cocina
+          - generic [ref=e221]:
+            - generic [ref=e222]:
+              - img [ref=e223]
+              - text: Hogar
+            - generic [ref=e226]:
+              - img [ref=e227]
+              - text: Baja
+            - generic [ref=e229]:
+              - img [ref=e230]
+              - text: May 12
+        - generic [ref=e232]:
+          - button "Complete task" [ref=e233]:
+            - img [ref=e234]
+          - button "More actions" [ref=e237]:
+            - img [ref=e238]
+    - generic [ref=e245]:
+      - generic [ref=e246]:
+        - generic [ref=e247]:
+          - img [ref=e248]
+          - heading "Done" [level=3] [ref=e251]
+        - generic [ref=e252]:
+          - generic [ref=e253]: "3"
+          - button "Add task" [ref=e254]:
+            - img [ref=e255]
+      - generic [ref=e259]:
+        - generic [ref=e262]:
+          - img [ref=e263]
+          - generic [ref=e270]:
+            - heading "Enviar reporte semanal al equipo" [level=4] [ref=e271]
+            - paragraph [ref=e272]: Resumen de avances y blockers de la semana
+            - generic [ref=e273]:
+              - generic [ref=e274]:
+                - img [ref=e275]
+                - text: Trabajo
+              - generic [ref=e278]:
+                - img [ref=e279]
+                - text: Alta
+              - generic [ref=e281]:
+                - img [ref=e282]
+                - text: May 10
+          - button "More actions" [ref=e285]:
+            - img [ref=e286]
+        - generic [ref=e295]:
+          - img [ref=e296]
+          - generic [ref=e303]:
+            - heading "Leer capítulo 5 de Clean Code" [level=4] [ref=e304]
+            - paragraph [ref=e305]: Tomar notas sobre patrones de diseño
+            - generic [ref=e306]:
+              - generic [ref=e307]:
+                - img [ref=e308]
+                - text: Personal
+              - generic [ref=e311]:
+                - img [ref=e312]
+                - text: Baja
+              - generic [ref=e314]:
+                - img [ref=e315]
+                - text: May 18
+          - button "More actions" [ref=e318]:
+            - img [ref=e319]
+        - generic [ref=e328]:
+          - img [ref=e329]
+          - generic [ref=e336]:
+            - heading "Organizar escritorio y archivos" [level=4] [ref=e337]
+            - paragraph [ref=e338]: Limpiar documentos viejos y organizar carpetas
+            - generic [ref=e339]:
+              - generic [ref=e340]:
+                - img [ref=e341]
+                - text: Hogar
+              - generic [ref=e344]:
+                - img [ref=e345]
+                - text: Baja
+              - generic [ref=e347]:
+                - img [ref=e348]
+                - text: May 4
+          - button "More actions" [ref=e351]:
+            - img [ref=e352]

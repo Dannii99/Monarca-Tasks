@@ -1,158 +1,472 @@
-# UI Visual Guidelines - Mis Compromisos Task Manager
+# UI Visual Guidelines — Monarca Tasks
+**Versión**: 2.0 | **Actualizado**: 2026-05-11  
+**Stack de UI**: shadcn/ui · Lucide React · Tailwind CSS · SCSS · Motion (Framer Motion)
 
-## 1. Fuente visual
-- **ID del proyecto/diseño de Stitch usado**: 17997651674137774989
-- **Nombre del diseño**: Mis Compromisos - Task Management App
-- **Fecha de creación del documento**: 2026-05-11
+---
 
-## 2. Identidad visual general
-- **Descripción del estilo visual**: Estilo "Functional Modernist" con enfoque en claridad y utilidad para usuarios productivos que gestionan múltiples dominios de vida (Trabajo, Hogar, Personal). Interfaz de alto rendimiento que prioriza densidad de tareas sin sacrificar legibilidad.
-- **Tono de la interfaz**: Organizado, confiable y sin fricciones. Alto contraste con Flat UI, uso de espacios en blanco intencionales para reducir carga cognitiva y alineación estructural para transmitir orden.
-- **Nivel de modernidad**: Alto - diseño contemporáneo con estética minimalista y disciplinada.
-- **Minimalismo**: Alto - evita elementos decorativos innecesarios, enfocado en funcionalidad.
-- **Densidad visual**: Media-alta - permite alta densidad de información manteniendo claridad.
-- **Personalidad**: Profesional, técnica y eficiente, como una herramienta de alto rendimiento más que una experiencia social.
+## 1. Identidad visual
 
-## 3. Paleta de colores
-- **Colores primarios**:
-  - Trabajo (Work): #2563eb (azul)
-  - Hogar (Home): #10b981 (verde)
-  - Personal: #8b5cf6 (púrpura)
-- **Secundarios**:
-  - Verde secundario: #6cf8bb (para contenedores)
-  - Púrpura secundario: #7d4ce7 (para contenedores)
-- **Colores de fondo**:
-  - Fondo principal: #f8f9fa (gris claro frío)
-  - Superficies: #ffffff (blanco puro)
-  - Contenedores de superficie: #f3f4f5, #edeeef, #e7e8e9, #e1e3e4 (escala de grises)
-- **Colores de texto**:
-  - Texto principal: #191c1d (gris oscuro)
-  - Texto secundario: #434655 (gris medio)
-  - Texto en superficies: #191c1d
-- **Bordes**:
-  - Bordes estándar: #e5e7eb (gris claro, 0.5px-1px)
-  - Bordes outline: #737686
-  - Bordes outline-variant: #c3c6d7
-- **Estados hover, active, disabled, success, warning, error**:
-  - Hover: sutil aumento de peso de borde o glow primario sutil
-  - Active: glow primario (#0053db)
-  - Disabled: opacidad reducida (50-60%)
-  - Success: verde (#10b981)
-  - Warning: amarillo/naranja estándar (no detectado, usar #f59e0b)
-  - Error: rojo (#ba1a1a) con contenedor #ffdad6
-- **Uso recomendado de cada color**:
-  - Azul (Trabajo): Identificación de tareas laborales, botones primarios de acción
-  - Verde (Hogar): Identificación de tareas domésticas, estados de éxito
-  - Púrpura (Personal): Identificación de tareas personales, elementos terciarios
-  - Grises: Fondos, texto, separadores, contenedores neutros
-  - Blanco: Tarjetas, superficies principales
+| Atributo | Valor |
+|----------|-------|
+| Estilo | Functional Modernist |
+| Tono | Organizado, confiable, sin fricciones |
+| Modernidad | Alta — minimalista y disciplinado |
+| Densidad | Media-alta — información densa sin perder claridad |
+| Personalidad | Herramienta de alto rendimiento, no experiencia social |
 
-## 4. Tipografía
-- **Familia tipográfica**: Inter (Sans-serif)
-- **Jerarquía de títulos**:
-  - Display: 24px, 700 weight, line-height 32px, letter-spacing -0.02em (títulos principales)
-  - Task Title: 16px, 600 weight, line-height 24px, letter-spacing -0.01em (nombres de tareas)
-- **Tamaños sugeridos para heading, body, caption, labels y botones**:
-  - Heading: 24px (display)
-  - Body: 14px, 400 weight, line-height 20px, letter-spacing 0
-  - Caption/Metadata: 12px, 500 weight, line-height 16px, letter-spacing 0.02em
-  - Labels (caps): 11px, 700 weight, line-height 12px, letter-spacing 0.05em
-  - Botones: 14px body o 16px task-title según importancia
-- **Pesos visuales**:
-  - Regular: 400 (texto normal)
-  - Medium: 500 (metadata, énfasis secundario)
-  - SemiBold: 600 (títulos de tareas, énfasis)
-  - Bold: 700 (títulos principales, labels caps)
-- **Line-height recomendado**: Compacto para alta densidad - 20px para body, 24px para títulos
+> **Espacio creativo**: El agente puede proponer micro-detalles visuales (transiciones, empty states ilustrados, variaciones de hover) siempre que respeten la paleta, tipografía y espaciado definidos. La creatividad vive en los detalles, no en los fundamentos.
+
+---
+
+## 2. Paleta de colores
+
+### Colores categóricos — NO negociables
+```css
+--color-work:     #2563eb;   /* Azul    — Trabajo   */
+--color-home:     #10b981;   /* Verde   — Hogar     */
+--color-personal: #8b5cf6;   /* Púrpura — Personal  */
+```
+
+### Superficies y fondos
+```css
+--bg-base:        #f8f9fa;   /* Fondo principal */
+--bg-surface:     #ffffff;   /* Cards, modales  */
+--bg-subtle:      #f3f4f5;   /* Columnas Kanban */
+--bg-muted:       #edeeef;   /* Hover suave     */
+```
+
+### Texto
+```css
+--text-primary:   #191c1d;
+--text-secondary: #434655;
+--text-muted:     #737686;
+```
+
+### Bordes
+```css
+--border-default: #e5e7eb;
+--border-strong:  #c3c6d7;
+--border-focus:   #2563eb;
+```
+
+### Estados semánticos
+```css
+--color-success:  #10b981;
+--color-warning:  #f59e0b;
+--color-error:    #ba1a1a;
+--bg-error:       #ffdad6;
+--color-active:   #0053db;
+```
+
+### Badges por categoría
+```css
+/* Work */
+--badge-work-bg:   rgba(37, 99, 235, 0.12);
+--badge-work-text: #2563eb;
+
+/* Home */
+--badge-home-bg:   rgba(16, 185, 129, 0.12);
+--badge-home-text: #10b981;
+
+/* Personal */
+--badge-personal-bg:   rgba(139, 92, 246, 0.12);
+--badge-personal-text: #8b5cf6;
+```
+
+---
+
+## 3. Tipografía
+
+**Familia única**: `Inter` — importar desde Google Fonts o `next/font/google`.
+
+```css
+/* En globals.scss o layout.tsx */
+font-family: 'Inter', sans-serif;
+```
+
+### Escala tipográfica
+| Rol | Tamaño | Peso | Line-height | Letter-spacing |
+|-----|--------|------|-------------|----------------|
+| Display / H1 | 24px | 700 | 32px | -0.02em |
+| Task Title | 16px | 600 | 24px | -0.01em |
+| Body | 14px | 400 | 20px | 0 |
+| Caption / Meta | 12px | 500 | 16px | 0.02em |
+| Label caps | 11px | 700 | 12px | 0.05em |
+| Botón primario | 14px | 500 | — | 0 |
+
+---
+
+## 4. Sistema de espaciado
+
+Base **4px** — usar siempre múltiplos.
+
+```css
+--spacing-xs:  4px;
+--spacing-sm:  8px;
+--spacing-md:  16px;
+--spacing-lg:  24px;
+--spacing-xl:  32px;
+--spacing-2xl: 48px;
+```
+
+**En Tailwind**: usar clases `p-1 p-2 p-4 p-6 p-8 p-12` que corresponden a 4px, 8px, 16px, 24px, 32px, 48px.
+
+---
 
 ## 5. Layout y composición
-- **Estructura general de pantallas**: Layout de tablero Kanban con 3 columnas principales (Por hacer, En progreso, Completadas). Barra superior con navegación y controles. Sidebar opcional en desktop para filtros.
-- **Ancho máximo de contenedores**: 1200px
-- **Uso de grid/flex**: Grid fijo en desktop, fluid en mobile. Flex para alineaciones y distribución.
-- **Alineaciones**: Izquierda para contenido principal, centrado para headers y elementos focales.
-- **Radios de borde**: 4px (0.25rem) para cards/inputs/buttons, full (9999px) para badges/chips.
-- **Sombras**: Suaves, nivel único - 0px 4px 6px -1px rgba(0, 0, 0, 0.05), 0px 2px 4px -1px rgba(0, 0, 0, 0.03). Evitar sombras pesadas.
-- **Separación entre secciones**: Múltiplos de 4px (base 4px).
 
-## 6. Sistema de espaciado
-- **Escala de spacing recomendada**: Base 4px, escala x2: 4px (xs), 8px (sm), 16px (md), 24px (lg), 32px (xl)
-- **Paddings comunes**: 16px mobile horizontal, 24-32px desktop
-- **Gaps entre componentes**: 8px (sm) entre elementos relacionados, 16px (md) entre grupos
-- **Márgenes entre bloques**: 16px (md) entre secciones, 24px (lg) entre bloques mayores
+- **Max width**: `1200px` centrado
+- **Columnas Kanban**: 3 fijas en desktop, apiladas en mobile
+- **Sidebar filtros**: 280px en desktop, colapsado en mobile
+- **Grid desktop**: `grid-cols-3 gap-4`
+- **Padding horizontal**: `px-4` mobile · `px-6 lg:px-8` desktop
 
-## 7. Componentes visuales
-- **Botones**:
-  - Estilo principal: Ghost (sin fill, solo icono) para acciones secundarias
-  - Botón primario "Add Task": Fill con azul trabajo (#2563eb)
-  - Radio: 4px, altura consistente con texto
-  - Iconos: Tabler Icons (stroke-width: 2)
-- **Cards**:
-  - Fondo blanco (#ffffff), borde 1px #e5e7eb, radio 4px
-  - Contenido alineado izquierda, badge categoría arriba derecha
-  - Padding interno: 16px
-- **Inputs**:
-  - Radio 4px, borde sutil por defecto
-  - On focus: fondo blanco, borde azul primario 1px
-  - Placeholder: gris medio
-- **Formularios**:
-  - Campos en columna vertical, gap 8px
-  - Labels arriba de inputs
-- **Navegación**:
-  - Tabs horizontales con borde inferior 2px en activo
-  - Inactivos: text-muted
-  - Sidebar: 280px ancho en desktop
-- **Headers**:
-  - Barra superior con search, filtros, stats en tiempo real
-  - Altura consistente, padding horizontal responsive
-- **Tablas**: No detectado en diseño actual - usar si necesario con filas alternas sutiles
-- **Modales**: No detectado - usar si necesario con sombra suave, fondo semi-transparente
-- **Badges/Tags**:
-  - Altura compacta 20px
-  - Fondo: color surface categoría con 10-20% opacidad
-  - Texto: color main de categoría
-  - Radio: full (pill)
-- **Estados vacíos**: Mensajes centrados con iconos descriptivos
-- **Loaders/Skeletons**: Indicadores sutiles durante carga, placeholders con animación pulse
+### Radios de borde
+```css
+--radius-sm:   4px;    /* inputs, buttons, cards */
+--radius-full: 9999px; /* badges, chips, avatars */
+```
 
-## 8. Responsive design
-- **Comportamiento en mobile**: Layout fluid, columnas Kanban apiladas verticalmente, navegación colapsada en menú hamburguesa
-- **Comportamiento en tablet**: Columnas lado a lado con scroll horizontal si necesario, sidebar opcional
-- **Comportamiento en desktop**: 3 columnas fijas, sidebar 280px, max-width 1200px
-- **Reglas de adaptación del layout**: Mantener proporciones, ajustar paddings (16px mobile, 24-32px desktop), preservar jerarquía visual
+### Sombras
+```css
+--shadow-card: 0px 4px 6px -1px rgba(0,0,0,0.05),
+               0px 2px 4px -1px rgba(0,0,0,0.03);
+--shadow-modal: 0px 20px 40px -8px rgba(0,0,0,0.12);
+```
 
-## 9. Reglas para implementación en Next.js
-- **Cómo traducir el diseño a componentes reutilizables**: Crear componentes base (Button, Card, Badge) con variants para categorías, usar composición para layouts complejos
-- **Recomendaciones para Tailwind/CSS Modules/SCSS**: Usar Tailwind para utilidad rápida, CSS Modules para componentes específicos, SCSS para variables globales de diseño
-- **Estructura recomendada de componentes**: /components/ui/ para base, /components/features/ para específicos, /layouts/ para estructuras
-- **Nombres de clases o tokens visuales sugeridos**: Usar tokens como --color-work, --spacing-md, clases como .card-work, .btn-ghost
-- **Buenas prácticas para mantener consistencia**: Definir design tokens en CSS custom properties, usar componentes wrapper para categorías, validar contra guidelines antes de commits
+---
 
-## 10. Do and Don't
-- **Qué sí se debe respetar del diseño**:
-  - Usar estrictamente colores categóricos para Trabajo/Hogar/Personal
-  - Mantener Inter como única fuente
-  - Aplicar espaciado en múltiplos de 4px
-  - Usar radio 4px para elementos rectangulares, full para badges
-  - Priorizar claridad sobre decoración
-- **Qué no se debe alterar**:
-  - No cambiar paleta de colores sin aprobación
-  - No usar fuentes diferentes a Inter
-  - No aumentar densidad visual innecesariamente
-  - No agregar sombras pesadas o efectos 3D
-  - No ignorar jerarquía tipográfica
-- **Errores visuales que el agente debe evitar**:
-  - Mezclar colores categóricos incorrectamente
-  - Usar espaciado inconsistente
-  - Crear layouts que rompan la estructura Kanban
-  - Agregar elementos decorativos no funcionales
-  - Ignorar estados responsive
+## 6. Stack de componentes UI
 
-## 11. Checklist antes de implementar una pantalla
-- [ ] Revisar esta guía visual
-- [ ] Validar colores: ¿Usa paleta correcta para categorías?
-- [ ] Validar spacing: ¿Múltiplos de 4px?
-- [ ] Validar tipografía: ¿Inter con pesos y tamaños correctos?
-- [ ] Validar responsive: ¿Adapta correctamente mobile/tablet/desktop?
-- [ ] Validar consistencia: ¿Mantiene identidad "Productive Precision"?
-- [ ] Verificar componentes: ¿Usa patrones establecidos (cards, badges, buttons)?
-- [ ] Confirmar layout: ¿Respeta estructura Kanban de 3 columnas?
+### shadcn/ui — componentes permitidos y configuración
+
+Instalar con tema `neutral` y radio `sm` (4px):
+
+```bash
+npx shadcn@latest init
+# style: default | base color: neutral | radius: 0.25rem
+```
+
+| Componente shadcn | Uso en Monarca Tasks |
+|-------------------|----------------------|
+| `Button` | Acciones primarias y secundarias |
+| `Input` | Búsqueda, formularios de tarea |
+| `Select` | Filtros de categoría y prioridad |
+| `Dialog` | Modal de crear/editar tarea |
+| `Badge` | Etiquetas de categoría y prioridad |
+| `Separator` | Divisores entre secciones |
+| `Skeleton` | Loading states de cards |
+| `Tooltip` | Labels en botones icon-only |
+| `DropdownMenu` | Menú de acciones en tarjeta |
+| `ScrollArea` | Columnas Kanban con overflow |
+
+> **Regla**: Siempre sobreescribir los colores por defecto de shadcn con los tokens categóricos del proyecto. No usar el azul por defecto de shadcn, usar `--color-work`.
+
+**Personalizar `globals.css`** (generado por shadcn):
+```css
+:root {
+  --primary: 37 99% 45%;      /* mapear al azul trabajo */
+  --radius: 0.25rem;
+}
+```
+
+---
+
+### Lucide React — iconografía
+
+Instalar: `npm install lucide-react`
+
+#### Iconos por contexto
+
+| Contexto | Icono Lucide |
+|----------|-------------|
+| Trabajo | `<Briefcase />` |
+| Hogar | `<Home />` |
+| Personal | `<User />` |
+| Prioridad alta | `<AlertCircle />` color `#ba1a1a` |
+| Prioridad media | `<Minus />` color `#f59e0b` |
+| Prioridad baja | `<ArrowDown />` color `#10b981` |
+| Agregar tarea | `<Plus />` |
+| Eliminar | `<Trash2 />` |
+| Editar | `<Pencil />` |
+| Completar | `<CheckCircle2 />` |
+| Buscar | `<Search />` |
+| Filtros | `<SlidersHorizontal />` |
+| Ordenar | `<ArrowUpDown />` |
+| Drag handle | `<GripVertical />` |
+| Fecha | `<Calendar />` |
+| Vacío | `<ClipboardList />` |
+| Cerrar sesión | `<LogOut />` |
+
+#### Uso estándar
+```tsx
+import { Briefcase } from 'lucide-react'
+
+// Tamaño estándar: 16px inline, 20px decorativo
+<Briefcase size={16} strokeWidth={2} className="text-[#2563eb]" />
+```
+
+---
+
+### Tailwind CSS — convenciones
+
+Usar Tailwind como capa de utilidades. Evitar clases que contradigan los tokens del proyecto.
+
+#### Clases base por componente
+
+**Card de tarea**:
+```
+bg-white rounded-[4px] border border-[#e5e7eb] p-4 
+shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.05)]
+```
+
+**Badge categoría**:
+```
+inline-flex items-center gap-1 px-2 py-0.5 
+rounded-full text-[11px] font-bold uppercase tracking-[0.05em]
+```
+
+**Input**:
+```
+rounded-[4px] border border-[#e5e7eb] bg-white px-3 py-2 
+text-sm text-[#191c1d] placeholder:text-[#737686]
+focus:border-[#2563eb] focus:ring-0 focus:outline-none
+```
+
+**Columna Kanban**:
+```
+flex flex-col gap-2 bg-[#f3f4f5] rounded-[4px] p-4 min-h-[400px]
+```
+
+---
+
+### SCSS — cuándo usarlo
+
+SCSS complementa Tailwind para casos que las utilidades no cubren bien:
+
+```scss
+// src/styles/_tokens.scss — fuente de verdad de tokens
+:root {
+  --color-work:     #2563eb;
+  --color-home:     #10b981;
+  --color-personal: #8b5cf6;
+  --spacing-md:     16px;
+  // ... resto de tokens
+}
+
+// src/styles/_mixins.scss
+@mixin category-accent($color) {
+  border-left: 3px solid $color;
+  &:hover { box-shadow: 0 0 0 1px #{$color}22; }
+}
+
+// src/components/TaskCard/TaskCard.module.scss
+.card {
+  &--work     { @include category-accent(#2563eb); }
+  &--home     { @include category-accent(#10b981); }
+  &--personal { @include category-accent(#8b5cf6); }
+}
+```
+
+**Usar SCSS para**: animaciones complejas, mixins de categoría, variantes de estado anidadas, keyframes personalizados.  
+**Usar Tailwind para**: espaciado, layout, colores simples, tipografía, display/flex/grid.
+
+---
+
+## 7. Motion (Framer Motion) — animaciones
+
+Instalar: `npm install motion`
+
+### Principios de animación
+
+- **Duración**: corta (150-300ms) — app de productividad, no landing page
+- **Easing**: `easeOut` para entradas, `easeIn` para salidas
+- **No animar**: cambios de datos en tiempo real, contadores, filtros
+- **Sí animar**: entrada de cards, modales, drag & drop, empty states, notificaciones
+
+### Presets reutilizables
+
+```tsx
+// src/lib/motion.ts — exportar y reusar
+
+export const fadeInUp = {
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0 },
+  exit:    { opacity: 0, y: -4 },
+  transition: { duration: 0.2, ease: 'easeOut' }
+}
+
+export const scaleIn = {
+  initial: { opacity: 0, scale: 0.96 },
+  animate: { opacity: 1, scale: 1 },
+  exit:    { opacity: 0, scale: 0.96 },
+  transition: { duration: 0.15, ease: 'easeOut' }
+}
+
+export const slideInRight = {
+  initial: { opacity: 0, x: 16 },
+  animate: { opacity: 1, x: 0 },
+  exit:    { opacity: 0, x: 16 },
+  transition: { duration: 0.2, ease: 'easeOut' }
+}
+
+export const staggerContainer = {
+  animate: {
+    transition: { staggerChildren: 0.06 }
+  }
+}
+```
+
+### Uso por componente
+
+| Componente | Animación | Preset |
+|------------|-----------|--------|
+| TaskCard al crear | Entrada suave desde abajo | `fadeInUp` |
+| TaskCard al eliminar | Salida con escala | `scaleIn` exit |
+| Lista de cards | Entrada escalonada | `staggerContainer` |
+| Modal crear/editar | Escala desde centro | `scaleIn` |
+| Sidebar filtros | Deslizar desde izquierda | `slideInRight` |
+| Empty state | Fade in | `fadeInUp` |
+| Toast / notificación | Deslizar desde arriba | `slideInRight` |
+| Drag overlay | Scale up sutil (1.02) | custom inline |
+
+```tsx
+// Ejemplo TaskCard
+import { motion, AnimatePresence } from 'motion'
+import { fadeInUp } from '@/lib/motion'
+
+<motion.div {...fadeInUp} layout>
+  <TaskCard task={task} />
+</motion.div>
+```
+
+> **Nota**: Usar `layout` prop de Motion para animar reordenamientos en drag & drop sin código adicional.
+
+---
+
+## 8. Componentes — guía de implementación
+
+### TaskCard
+```
+Estructura:
+├── Accent bar izquierda (3px, color categoría)
+├── Header: nombre tarea + badge categoría
+├── Meta: fecha + prioridad icon + estado
+└── Footer: acciones (editar, completar, eliminar)
+
+shadcn: Card, Badge, Tooltip, DropdownMenu
+Lucide: GripVertical, Pencil, Trash2, CheckCircle2, Calendar
+Motion: fadeInUp, layout
+```
+
+### BoardColumn
+```
+Estructura:
+├── Header: label columna + count badge + btn agregar
+├── ScrollArea (shadcn) con lista de TaskCards
+└── EmptyState si no hay tareas
+
+shadcn: ScrollArea, Button
+Lucide: Plus, icono representativo del estado
+Motion: staggerContainer en la lista
+```
+
+### TaskFormModal
+```
+shadcn: Dialog, Input, Select, Button, Separator
+Lucide: X (close), Calendar, Flag
+Motion: scaleIn para el Dialog
+Campos: nombre, categoría, prioridad, fecha límite
+```
+
+### BoardHeader
+```
+shadcn: Input (search), Select (filtros), Button
+Lucide: Search, SlidersHorizontal, ArrowUpDown, LogOut
+Stats en tiempo real: pills con conteo por estado
+```
+
+### EmptyState
+```
+Lucide: ClipboardList (grande, muted)
+Motion: fadeInUp
+Texto: mensaje contextual por columna
+CTA: botón agregar primera tarea
+```
+
+---
+
+## 9. Responsive design
+
+| Breakpoint | Layout | Comportamiento |
+|------------|--------|----------------|
+| `< 768px` mobile | 1 columna | Kanban apilado, nav hamburguesa, tabs para cambiar columna |
+| `768px` tablet | 2-3 columnas | Scroll horizontal opcional, sidebar colapsado |
+| `> 1024px` desktop | 3 columnas fijas | Sidebar 280px, max-width 1200px |
+
+```tsx
+// Clases responsive Tailwind
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+```
+
+---
+
+## 10. Do & Don't
+
+### ✅ Sí hacer
+- Usar tokens CSS para colores en lugar de valores hardcodeados en Tailwind
+- Sobreescribir el tema de shadcn con los colores categóricos del proyecto
+- Usar `lucide-react` exclusivamente para iconos (no mezclar con otras librerías)
+- Animar con Motion solo entradas, salidas y drag — nunca datos en tiempo real
+- Mantener Inter como única fuente
+- Espaciado siempre en múltiplos de 4px
+- Usar `layout` de Motion en listas que se reordenan
+
+### ❌ No hacer
+- No usar colores por defecto de shadcn sin sobreescribir
+- No usar sombras pesadas ni efectos 3D
+- No mezclar Tabler Icons con Lucide — solo Lucide
+- No animar más de lo necesario (app de productividad, no portfolio visual)
+- No cambiar la paleta categórica
+- No usar fuentes diferentes a Inter
+- No crear layouts que rompan la estructura Kanban de 3 columnas
+
+---
+
+## 11. Estructura de archivos recomendada
+
+```
+src/
+├── styles/
+│   ├── _tokens.scss        ← CSS custom properties
+│   ├── _mixins.scss        ← mixins de categoría y utilidad
+│   └── globals.scss        ← imports + shadcn overrides
+├── lib/
+│   └── motion.ts           ← presets de animación reutilizables
+├── components/
+│   ├── ui/                 ← componentes shadcn (auto-generados)
+│   ├── board/
+│   │   ├── TaskCard/
+│   │   │   ├── TaskCard.tsx
+│   │   │   └── TaskCard.module.scss
+│   │   ├── BoardColumn/
+│   │   └── BoardHeader/
+│   └── shared/
+│       ├── EmptyState/
+│       └── CategoryBadge/
+```
+
+---
+
+## 12. Checklist antes de implementar una pantalla
+
+- [ ] Leer esta guía completa antes de escribir código
+- [ ] ¿Los colores categóricos usan los tokens, no valores hardcodeados?
+- [ ] ¿El componente shadcn fue sobreescrito con la paleta del proyecto?
+- [ ] ¿Los iconos son de Lucide React exclusivamente?
+- [ ] ¿Las animaciones usan los presets de `src/lib/motion.ts`?
+- [ ] ¿El espaciado es múltiplo de 4px?
+- [ ] ¿La tipografía usa Inter con los pesos correctos?
+- [ ] ¿El layout responde correctamente en mobile, tablet y desktop?
+- [ ] ¿Los empty states tienen icono + mensaje + CTA?
+- [ ] ¿Los loading states usan Skeleton de shadcn?

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { signOut } from 'next-auth/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { Task, TaskStatus } from '@/types/task'
 import { Column } from './column'
 import { BoardToolbar } from './board-toolbar'
@@ -48,6 +49,10 @@ export function Board({ initialTasks }: BoardProps) {
       }
       return 0
     })
+
+  const pendingCount = tasks.filter((t) => t.status !== 'DONE').length
+  const urgentCount = tasks.filter((t) => t.isOverdue && t.status !== 'DONE').length
+  const doneCount = tasks.filter((t) => t.status === 'DONE').length
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     setDraggedTaskId(taskId)
@@ -110,6 +115,24 @@ export function Board({ initialTasks }: BoardProps) {
       await fetch(`/api/tasks/${id}`, { method: 'DELETE' })
     } catch {
       setTasks((prev) => [...prev, tasks.find((t) => t.id === id)!])
+    }
+  }
+
+  const handleComplete = async (id: string) => {
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id ? { ...t, status: 'DONE' as TaskStatus, isOverdue: false } : t
+      )
+    )
+
+    try {
+      await fetch(`/api/tasks/${id}/move`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'DONE' }),
+      })
+    } catch {
+      setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status: tasks.find((x) => x.id === id)?.status as TaskStatus, isOverdue: tasks.find((x) => x.id === id)?.isOverdue ?? false } : t)))
     }
   }
 
@@ -190,7 +213,7 @@ export function Board({ initialTasks }: BoardProps) {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col h-screen w-full overflow-hidden bg-gray-50/50">
       <BoardToolbar
         search={search}
         onSearchChange={setSearch}
@@ -200,36 +223,47 @@ export function Board({ initialTasks }: BoardProps) {
         onSortByChange={setSortBy}
         onAddTask={handleOpenModal}
         onLogout={handleLogout}
+        pendingCount={pendingCount}
+        urgentCount={urgentCount}
+        doneCount={doneCount}
       />
 
-      <div className="flex-1 overflow-x-auto p-4">
-        <div className="flex gap-4 min-w-fit h-full">
-          {STATUS_COLUMNS.map((status) => (
-            <Column
-              key={status}
-              status={status}
-              tasks={filteredTasks}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onDragStart={handleDragStart}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-            />
-          ))}
+      <div className="flex-1 overflow-x-auto overflow-y-hidden">
+        <div className="h-full p-4 sm:p-6 lg:p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 h-full min-w-0">
+            {STATUS_COLUMNS.map((status) => (
+              <Column
+                key={status}
+                status={status}
+                tasks={filteredTasks}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onComplete={handleComplete}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onAddTask={handleOpenModal}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
-      <TaskFormModal
-        open={isModalOpen}
-        onOpenChange={(open) => {
-          if (!open) {
-            setIsModalOpen(false)
-            setEditingTask(null)
-          }
-        }}
-        task={editingTask}
-        onSave={handleSave}
-      />
+      <AnimatePresence>
+        {isModalOpen && (
+          <TaskFormModal
+            open={isModalOpen}
+            onOpenChange={(open) => {
+              if (!open) {
+                setIsModalOpen(false)
+                setEditingTask(null)
+              }
+            }}
+            task={editingTask}
+            onSave={handleSave}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }

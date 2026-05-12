@@ -1,0 +1,29 @@
+.card {
+  position: relative;
+  border-left: 4px solid transparent;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  &--work {
+    border-left-color: #2563eb;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &--home {
+    border-left-color: #10b981;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &--personal {
+    border-left-color: #8b5cf6;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+  }
+}

@@ -1,0 +1,53 @@
+:root {
+  /* Colores categóricos — NO negociables */
+  --color-work: #2563eb;
+  --color-home: #10b981;
+  --color-personal: #8b5cf6;
+
+  /* Superficies y fondos */
+  --bg-base: #f8f9fa;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f3f4f5;
+  --bg-muted: #edeeef;
+
+  /* Texto */
+  --text-primary: #191c1d;
+  --text-secondary: #434655;
+  --text-muted: #737686;
+
+  /* Bordes */
+  --border-default: #e5e7eb;
+  --border-strong: #c3c6d7;
+  --border-focus: #2563eb;
+
+  /* Estados semánticos */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ba1a1a;
+  --bg-error: #ffdad6;
+  --color-active: #0053db;
+
+  /* Badges por categoría */
+  --badge-work-bg: rgba(37, 99, 235, 0.12);
+  --badge-work-text: #2563eb;
+  --badge-home-bg: rgba(16, 185, 129, 0.12);
+  --badge-home-text: #10b981;
+  --badge-personal-bg: rgba(139, 92, 246, 0.12);
+  --badge-personal-text: #8b5cf6;
+
+  /* Espaciado */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Radios */
+  --radius-sm: 4px;
+  --radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-card: 0px 4px 6px -1px rgba(0, 0, 0, 0.05), 0px 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-modal: 0px 20px 40px -8px rgba(0, 0, 0, 0.12);
+}
