@@ -352,9 +352,9 @@ export function LoginForm() {
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
+            <div className="p-5 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-default)]">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-white to-gray-100 border border-gray-200 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-default)] flex items-center justify-center">
                   <Image src="/monarca.png" alt="Monarca" width={32} height={32} className="w-8 h-8 object-contain" />
                 </div>
                 <div>

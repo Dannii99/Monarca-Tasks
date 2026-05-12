@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { GripVertical, Calendar, CheckCircle2, MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Task } from '@/types/task'
@@ -16,7 +17,7 @@ import { fadeInUp } from '@/lib/motion'
 
 interface TaskCardProps {
   task: Task
-  onEdit: (task: Task) => void
+  onEdit?: (task: Task) => void
   onDelete: (id: string) => void
   onComplete: (id: string) => void
   onDragStart: (e: React.DragEvent, taskId: string) => void
@@ -24,7 +25,16 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart, isMobile }: TaskCardProps) {
+  const router = useRouter()
   const isDone = task.status === 'DONE'
+
+  const handleClick = (e: React.MouseEvent) => {
+    // No navegar si se hizo click en un botón o menú
+    if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('[role="menu"]')) {
+      return
+    }
+    router.push(`/task/${task.id}`)
+  }
 
   return (
     <motion.div 
@@ -37,8 +47,9 @@ export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart, isMo
       <div
         draggable={!isMobile}
         onDragStart={(e) => onDragStart(e, task.id)}
+        onClick={handleClick}
         className={`
-          group relative rounded-2xl border bg-[var(--bg-surface)] cursor-grab active:cursor-grabbing 
+          group relative rounded-2xl border bg-[var(--bg-surface)] cursor-pointer
           hover:shadow-lg transition-all duration-200
           ${isDone 
             ? 'border-[var(--border-default)] opacity-75' 
@@ -140,11 +151,11 @@ export function TaskCard({ task, onEdit, onDelete, onComplete, onDragStart, isMo
                 className="w-44 bg-[var(--bg-surface)] border-[var(--border-default)]"
               >
                 <DropdownMenuItem 
-                  onClick={() => onEdit(task)} 
+                  onClick={() => router.push(`/task/${task.id}`)}
                   className="gap-3 text-[var(--text-secondary)] hover:bg-[var(--bg-subtle)] py-2.5"
                 >
                   <Pencil size={16} />
-                  Editar
+                  Ver detalle
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="gap-3 text-[var(--color-error)] focus:text-[var(--color-error)] focus:bg-[var(--color-error)]/10 py-2.5"

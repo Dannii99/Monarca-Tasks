@@ -43,7 +43,7 @@ const columnConfig: Record<string, {
 interface ColumnProps {
   status: string
   tasks: Task[]
-  onEdit: (task: Task) => void
+  onEdit?: (task: Task) => void
   onDelete: (id: string) => void
   onComplete: (id: string) => void
   onDragStart: (e: React.DragEvent, taskId: string) => void
