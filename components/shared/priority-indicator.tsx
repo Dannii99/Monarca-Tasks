@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 interface PriorityIndicatorProps {
   priority: string
   className?: string
+  isMobile?: boolean
 }
 
 const priorityConfig: Record<string, { icon: typeof AlertCircle; bg: string; text: string; border: string; label: string }> = {
@@ -30,21 +31,22 @@ const priorityConfig: Record<string, { icon: typeof AlertCircle; bg: string; tex
   },
 }
 
-export function PriorityIndicator({ priority, className }: PriorityIndicatorProps) {
+export function PriorityIndicator({ priority, className, isMobile }: PriorityIndicatorProps) {
   const config = priorityConfig[priority] || priorityConfig.MEDIUM
   const Icon = config.icon
 
   return (
     <span 
       className={cn(
-        'inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold border',
+        'inline-flex items-center gap-1 rounded-lg font-semibold border',
+        isMobile ? 'px-2.5 py-1.5 text-xs' : 'px-2 py-1 text-[11px]',
         config.bg,
         config.text,
         config.border,
         className
       )}
     >
-      <Icon className="w-3 h-3" strokeWidth={2} />
+      <Icon className={isMobile ? 'w-3.5 h-3.5' : 'w-3 h-3'} strokeWidth={2} />
       {config.label}
     </span>
   )

@@ -8,10 +8,29 @@ import { Column } from './column'
 import { BoardToolbar } from './board-toolbar'
 import { TaskFormModal } from './task-form-modal'
 import { STATUS_COLUMNS } from '@/lib/constants'
+import { Circle, Loader2, CheckCircle2, AlertTriangle } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useLoading } from '@/components/ui/loading'
 
 interface BoardProps {
   initialTasks: Task[]
 }
+
+// Configuración de tabs para móvil
+const statusTabs = [
+  { value: 'TODO', label: 'Por hacer', icon: Circle, color: 'text-slate-500' },
+  { value: 'IN_PROGRESS', label: 'En progreso', icon: Loader2, color: 'text-blue-500' },
+  { value: 'DONE', label: 'Completadas', icon: CheckCircle2, color: 'text-emerald-500' },
+]
 
 export function Board({ initialTasks }: BoardProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
@@ -21,6 +40,13 @@ export function Board({ initialTasks }: BoardProps) {
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null)
+  // Estado para controlar qué columna se muestra en móvil
+  const [activeTab, setActiveTab] = useState<TaskStatus>('TODO')
+  // Estado para el diálogo de confirmación de eliminación
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null)
+  // Hook de loading
+  const { startLoading, stopLoading } = useLoading()
 
   const filteredTasks = tasks
     .filter((task) => {
@@ -54,6 +80,10 @@ export function Board({ initialTasks }: BoardProps) {
   const urgentCount = tasks.filter((t) => t.isOverdue && t.status !== 'DONE').length
   const doneCount = tasks.filter((t) => t.status === 'DONE').length
 
+  // Contar tareas por estado para mostrar en tabs
+  const getTaskCount = (status: TaskStatus) => 
+    filteredTasks.filter((t) => t.status === status).length
+
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     setDraggedTaskId(taskId)
     e.dataTransfer.effectAllowed = 'move'
@@ -82,6 +112,7 @@ export function Board({ initialTasks }: BoardProps) {
       )
     )
 
+    startLoading('Moviendo tarea...')
     try {
       const res = await fetch(`/api/tasks/${draggedTaskId}/move`, {
         method: 'PATCH',
@@ -94,6 +125,8 @@ export function Board({ initialTasks }: BoardProps) {
       setTasks((prev) =>
         prev.map((t) => (t.id === draggedTaskId ? { ...t, status: task.status as TaskStatus, isOverdue: task.isOverdue } : t))
       )
+    } finally {
+      stopLoading()
     }
 
     setDraggedTaskId(null)
@@ -104,17 +137,25 @@ export function Board({ initialTasks }: BoardProps) {
     setIsModalOpen(true)
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.')) {
-      return
-    }
+  const handleDelete = (id: string) => {
+    setTaskToDelete(id)
+    setDeleteDialogOpen(true)
+  }
 
-    setTasks((prev) => prev.filter((t) => t.id !== id))
+  const confirmDelete = async () => {
+    if (!taskToDelete) return
+
+    setTasks((prev) => prev.filter((t) => t.id !== taskToDelete))
+    startLoading('Eliminando tarea...')
 
     try {
-      await fetch(`/api/tasks/${id}`, { method: 'DELETE' })
+      await fetch(`/api/tasks/${taskToDelete}`, { method: 'DELETE' })
     } catch {
-      setTasks((prev) => [...prev, tasks.find((t) => t.id === id)!])
+      setTasks((prev) => [...prev, tasks.find((t) => t.id === taskToDelete)!])
+    } finally {
+      stopLoading()
+      setDeleteDialogOpen(false)
+      setTaskToDelete(null)
     }
   }
 
@@ -125,6 +166,7 @@ export function Board({ initialTasks }: BoardProps) {
       )
     )
 
+    startLoading('Completando tarea...')
     try {
       await fetch(`/api/tasks/${id}/move`, {
         method: 'PATCH',
@@ -133,10 +175,14 @@ export function Board({ initialTasks }: BoardProps) {
       })
     } catch {
       setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status: tasks.find((x) => x.id === id)?.status as TaskStatus, isOverdue: tasks.find((x) => x.id === id)?.isOverdue ?? false } : t)))
+    } finally {
+      stopLoading()
     }
   }
 
   const handleSave = async (taskData: Partial<Task>) => {
+    startLoading(editingTask ? 'Guardando cambios...' : 'Creando tarea...')
+    
     if (editingTask) {
       setTasks((prev) =>
         prev.map((t) => (t.id === editingTask.id ? { ...t, ...taskData } : t))
@@ -199,6 +245,7 @@ export function Board({ initialTasks }: BoardProps) {
       }
     }
 
+    stopLoading()
     setIsModalOpen(false)
     setEditingTask(null)
   }
@@ -213,7 +260,8 @@ export function Board({ initialTasks }: BoardProps) {
   }
 
   return (
-    <div className="flex flex-col h-screen w-full overflow-hidden bg-gray-50/50 dark:bg-gray-950">
+    <div className="flex flex-col h-screen w-full overflow-hidden bg-[var(--bg-base)]">
+      {/* Header Fijo */}
       <BoardToolbar
         search={search}
         onSearchChange={setSearch}
@@ -228,13 +276,75 @@ export function Board({ initialTasks }: BoardProps) {
         doneCount={doneCount}
       />
 
-      <div className="flex-1 overflow-x-auto overflow-y-hidden">
-        <div className="h-full p-4 sm:p-6 lg:p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 h-full min-w-0">
-            {STATUS_COLUMNS.map((status) => (
+      {/* Contenido Principal */}
+      <div className="flex-1 overflow-hidden relative">
+        {/* Vista Desktop: Grid de columnas */}
+        <div className="hidden xl:block h-full overflow-x-auto overflow-y-hidden">
+          <div className="h-full p-6 lg:p-8">
+            <div className="grid grid-cols-3 gap-6 h-full min-w-[1000px] max-w-[1600px] mx-auto">
+              {STATUS_COLUMNS.map((status) => (
+                <Column
+                  key={status}
+                  status={status}
+                  tasks={filteredTasks}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onComplete={handleComplete}
+                  onDragStart={handleDragStart}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  onAddTask={handleOpenModal}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Vista Tablet/Móvil: Una columna con tabs */}
+        <div className="xl:hidden h-full flex flex-col">
+          {/* Tabs de navegación tipo app móvil */}
+          <div className="flex-none bg-[var(--bg-surface)] border-b border-[var(--border-default)] px-4 py-3">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              {statusTabs.map((tab) => {
+                const Icon = tab.icon
+                const count = getTaskCount(tab.value as TaskStatus)
+                const isActive = activeTab === tab.value
+                
+                return (
+                  <motion.button
+                    key={tab.value}
+                    onClick={() => setActiveTab(tab.value as TaskStatus)}
+                    className={`
+                      relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
+                      transition-all duration-200 whitespace-nowrap flex-shrink-0
+                      ${isActive 
+                        ? 'bg-[var(--text-primary)] text-[var(--bg-surface)] shadow-lg' 
+                        : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)]'
+                      }
+                    `}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <Icon className={`w-4 h-4 ${isActive ? '' : tab.color}`} />
+                    <span>{tab.label}</span>
+                    {count > 0 && (
+                      <span className={`
+                        ml-1 text-xs px-1.5 py-0.5 rounded-full font-bold
+                        ${isActive ? 'bg-white/20' : 'bg-[var(--bg-surface)] text-[var(--text-muted)]'}
+                      `}>
+                        {count}
+                      </span>
+                    )}
+                  </motion.button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Contenido scrollable de la columna activa */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--bg-base)]">
+            <div className="p-4 pb-24 max-w-lg mx-auto">
               <Column
-                key={status}
-                status={status}
+                status={activeTab}
                 tasks={filteredTasks}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -243,8 +353,57 @@ export function Board({ initialTasks }: BoardProps) {
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
                 onAddTask={handleOpenModal}
+                isMobile
               />
-            ))}
+            </div>
+          </div>
+
+          {/* Bottom Navigation tipo app (opcional, para móviles pequeños) */}
+          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-surface)] border-t border-[var(--border-default)] px-2 py-2 safe-area-pb z-30">
+            <div className="flex items-center justify-around">
+              {statusTabs.map((tab) => {
+                const Icon = tab.icon
+                const count = getTaskCount(tab.value as TaskStatus)
+                const isActive = activeTab === tab.value
+                
+                return (
+                  <motion.button
+                    key={tab.value}
+                    onClick={() => setActiveTab(tab.value as TaskStatus)}
+                    className={`
+                      relative flex flex-col items-center gap-1 px-3 py-2 rounded-xl
+                      transition-all duration-200 min-w-[70px]
+                      ${isActive 
+                        ? 'text-[var(--color-work)]' 
+                        : 'text-[var(--text-muted)]'
+                      }
+                    `}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <div className={`
+                      relative p-2 rounded-full transition-all
+                      ${isActive ? 'bg-[var(--color-work)]/10' : ''}
+                    `}>
+                      <Icon className={`w-5 h-5 ${isActive ? 'text-[var(--color-work)]' : ''}`} />
+                      {count > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-error)] text-[10px] text-white font-bold">
+                          {count > 9 ? '9+' : count}
+                        </span>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium ${isActive ? 'text-[var(--text-primary)]' : ''}`}>
+                      {tab.label}
+                    </span>
+                    {isActive && (
+                      <motion.div 
+                        layoutId="activeTab"
+                        className="absolute -bottom-2 w-1 h-1 rounded-full bg-[var(--color-work)]"
+                      />
+                    )}
+                  </motion.button>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -264,6 +423,31 @@ export function Board({ initialTasks }: BoardProps) {
           />
         )}
       </AnimatePresence>
+
+      {/* Diálogo de confirmación para eliminar */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 rounded-full bg-[var(--color-error)]/10 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-[var(--color-error)]" />
+              </div>
+              <AlertDialogTitle className="text-xl">¿Eliminar tarea?</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-base">
+              ¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="mt-6">
+            <AlertDialogCancel onClick={() => setTaskToDelete(null)}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
