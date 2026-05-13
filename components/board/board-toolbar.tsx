@@ -198,7 +198,7 @@ export function BoardToolbar({
             </div>
 
             {/* Center/Right: Stats Cards Grid */}
-            <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb- lg:pb-0">
+            <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-hide p-2">
               {/* Total Tasks */}
               <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
