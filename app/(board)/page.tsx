@@ -6,8 +6,10 @@ import type { Task } from '@/types/task'
 
 export default async function BoardPage() {
   const session = await auth()
+  const userId = session?.user?.id || 'admin'
   
   const tasks = await prisma.task.findMany({
+    where: { userId },
     orderBy: [
       {
         priority: 'asc',
