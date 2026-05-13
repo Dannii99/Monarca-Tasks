@@ -267,7 +267,7 @@ export function Board({ initialTasks, userName, userEmail }: BoardProps) {
           </div>
 
           {/* Bottom Navigation tipo app (opcional, para móviles pequeños) */}
-          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-surface)] border-t border-[var(--border-default)] px-2 py-2 safe-area-pb z-30">
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[var(--bg-surface)] border-t border-[var(--border-default)] px-2 py-2 safe-area-pb z-30">
             <div className="flex items-center justify-around">
               {statusTabs.map((tab) => {
                 const Icon = tab.icon

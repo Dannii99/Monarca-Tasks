@@ -13,6 +13,8 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const userId = session.user?.id || 'admin'
+
   try {
     const { id } = await params
     const task = await prisma.task.findUnique({
@@ -21,6 +23,11 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
     if (!task) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+    }
+
+    // Verificar que la tarea pertenece al usuario
+    if (task.userId !== userId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     return NextResponse.json(serializeTask(task))
@@ -35,6 +42,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const userId = session.user?.id || 'admin'
+
   try {
     const { id } = await params
     const body = await request.json()
@@ -43,6 +52,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const task = await prisma.task.findUnique({ where: { id } })
     if (!task) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+    }
+
+    // Verificar que la tarea pertenece al usuario
+    if (task.userId !== userId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const updatedTask = await prisma.task.update({
@@ -69,12 +83,19 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const userId = session.user?.id || 'admin'
+
   try {
     const { id } = await params
     const task = await prisma.task.findUnique({ where: { id } })
 
     if (!task) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+    }
+
+    // Verificar que la tarea pertenece al usuario
+    if (task.userId !== userId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     await prisma.task.delete({ where: { id } })

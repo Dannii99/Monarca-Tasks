@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
 /**
+ * Model DemoSeed
+ * 
+ */
+export type DemoSeed = $Result.DefaultSelection<Prisma.$DemoSeedPayload>
+/**
  * Model Subtask
  * 
  */
@@ -159,6 +164,16 @@ export class PrismaClient<
     * ```
     */
   get task(): Prisma.TaskDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.demoSeed`: Exposes CRUD operations for the **DemoSeed** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DemoSeeds
+    * const demoSeeds = await prisma.demoSeed.findMany()
+    * ```
+    */
+  get demoSeed(): Prisma.DemoSeedDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.subtask`: Exposes CRUD operations for the **Subtask** model.
@@ -614,6 +629,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Task: 'Task',
+    DemoSeed: 'DemoSeed',
     Subtask: 'Subtask',
     Activity: 'Activity'
   };
@@ -631,7 +647,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "task" | "subtask" | "activity"
+      modelProps: "task" | "demoSeed" | "subtask" | "activity"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -706,6 +722,80 @@ export namespace Prisma {
           count: {
             args: Prisma.TaskCountArgs<ExtArgs>
             result: $Utils.Optional<TaskCountAggregateOutputType> | number
+          }
+        }
+      }
+      DemoSeed: {
+        payload: Prisma.$DemoSeedPayload<ExtArgs>
+        fields: Prisma.DemoSeedFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DemoSeedFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DemoSeedFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>
+          }
+          findFirst: {
+            args: Prisma.DemoSeedFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DemoSeedFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>
+          }
+          findMany: {
+            args: Prisma.DemoSeedFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>[]
+          }
+          create: {
+            args: Prisma.DemoSeedCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>
+          }
+          createMany: {
+            args: Prisma.DemoSeedCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DemoSeedCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>[]
+          }
+          delete: {
+            args: Prisma.DemoSeedDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>
+          }
+          update: {
+            args: Prisma.DemoSeedUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>
+          }
+          deleteMany: {
+            args: Prisma.DemoSeedDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DemoSeedUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DemoSeedUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>[]
+          }
+          upsert: {
+            args: Prisma.DemoSeedUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemoSeedPayload>
+          }
+          aggregate: {
+            args: Prisma.DemoSeedAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDemoSeed>
+          }
+          groupBy: {
+            args: Prisma.DemoSeedGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DemoSeedGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DemoSeedCountArgs<ExtArgs>
+            result: $Utils.Optional<DemoSeedCountAggregateOutputType> | number
           }
         }
       }
@@ -966,6 +1056,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     task?: TaskOmit
+    demoSeed?: DemoSeedOmit
     subtask?: SubtaskOmit
     activity?: ActivityOmit
   }
@@ -1107,6 +1198,7 @@ export namespace Prisma {
     dueDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    userId: string | null
   }
 
   export type TaskMaxAggregateOutputType = {
@@ -1119,6 +1211,7 @@ export namespace Prisma {
     dueDate: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    userId: string | null
   }
 
   export type TaskCountAggregateOutputType = {
@@ -1131,6 +1224,7 @@ export namespace Prisma {
     dueDate: number
     createdAt: number
     updatedAt: number
+    userId: number
     _all: number
   }
 
@@ -1145,6 +1239,7 @@ export namespace Prisma {
     dueDate?: true
     createdAt?: true
     updatedAt?: true
+    userId?: true
   }
 
   export type TaskMaxAggregateInputType = {
@@ -1157,6 +1252,7 @@ export namespace Prisma {
     dueDate?: true
     createdAt?: true
     updatedAt?: true
+    userId?: true
   }
 
   export type TaskCountAggregateInputType = {
@@ -1169,6 +1265,7 @@ export namespace Prisma {
     dueDate?: true
     createdAt?: true
     updatedAt?: true
+    userId?: true
     _all?: true
   }
 
@@ -1254,6 +1351,7 @@ export namespace Prisma {
     dueDate: Date | null
     createdAt: Date
     updatedAt: Date
+    userId: string
     _count: TaskCountAggregateOutputType | null
     _min: TaskMinAggregateOutputType | null
     _max: TaskMaxAggregateOutputType | null
@@ -1283,6 +1381,7 @@ export namespace Prisma {
     dueDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    userId?: boolean
     subtasks?: boolean | Task$subtasksArgs<ExtArgs>
     activities?: boolean | Task$activitiesArgs<ExtArgs>
     _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
@@ -1298,6 +1397,7 @@ export namespace Prisma {
     dueDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    userId?: boolean
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1310,6 +1410,7 @@ export namespace Prisma {
     dueDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    userId?: boolean
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectScalar = {
@@ -1322,9 +1423,10 @@ export namespace Prisma {
     dueDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    userId?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "category" | "priority" | "dueDate" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "status" | "category" | "priority" | "dueDate" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subtasks?: boolean | Task$subtasksArgs<ExtArgs>
     activities?: boolean | Task$activitiesArgs<ExtArgs>
@@ -1349,6 +1451,7 @@ export namespace Prisma {
       dueDate: Date | null
       createdAt: Date
       updatedAt: Date
+      userId: string
     }, ExtArgs["result"]["task"]>
     composites: {}
   }
@@ -1783,6 +1886,7 @@ export namespace Prisma {
     readonly dueDate: FieldRef<"Task", 'DateTime'>
     readonly createdAt: FieldRef<"Task", 'DateTime'>
     readonly updatedAt: FieldRef<"Task", 'DateTime'>
+    readonly userId: FieldRef<"Task", 'String'>
   }
     
 
@@ -2239,6 +2343,980 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TaskInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DemoSeed
+   */
+
+  export type AggregateDemoSeed = {
+    _count: DemoSeedCountAggregateOutputType | null
+    _min: DemoSeedMinAggregateOutputType | null
+    _max: DemoSeedMaxAggregateOutputType | null
+  }
+
+  export type DemoSeedMinAggregateOutputType = {
+    id: string | null
+    seededAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DemoSeedMaxAggregateOutputType = {
+    id: string | null
+    seededAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DemoSeedCountAggregateOutputType = {
+    id: number
+    seededAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DemoSeedMinAggregateInputType = {
+    id?: true
+    seededAt?: true
+    updatedAt?: true
+  }
+
+  export type DemoSeedMaxAggregateInputType = {
+    id?: true
+    seededAt?: true
+    updatedAt?: true
+  }
+
+  export type DemoSeedCountAggregateInputType = {
+    id?: true
+    seededAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DemoSeedAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DemoSeed to aggregate.
+     */
+    where?: DemoSeedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemoSeeds to fetch.
+     */
+    orderBy?: DemoSeedOrderByWithRelationInput | DemoSeedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DemoSeedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemoSeeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemoSeeds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DemoSeeds
+    **/
+    _count?: true | DemoSeedCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DemoSeedMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DemoSeedMaxAggregateInputType
+  }
+
+  export type GetDemoSeedAggregateType<T extends DemoSeedAggregateArgs> = {
+        [P in keyof T & keyof AggregateDemoSeed]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDemoSeed[P]>
+      : GetScalarType<T[P], AggregateDemoSeed[P]>
+  }
+
+
+
+
+  export type DemoSeedGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DemoSeedWhereInput
+    orderBy?: DemoSeedOrderByWithAggregationInput | DemoSeedOrderByWithAggregationInput[]
+    by: DemoSeedScalarFieldEnum[] | DemoSeedScalarFieldEnum
+    having?: DemoSeedScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DemoSeedCountAggregateInputType | true
+    _min?: DemoSeedMinAggregateInputType
+    _max?: DemoSeedMaxAggregateInputType
+  }
+
+  export type DemoSeedGroupByOutputType = {
+    id: string
+    seededAt: Date
+    updatedAt: Date
+    _count: DemoSeedCountAggregateOutputType | null
+    _min: DemoSeedMinAggregateOutputType | null
+    _max: DemoSeedMaxAggregateOutputType | null
+  }
+
+  type GetDemoSeedGroupByPayload<T extends DemoSeedGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DemoSeedGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DemoSeedGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DemoSeedGroupByOutputType[P]>
+            : GetScalarType<T[P], DemoSeedGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DemoSeedSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    seededAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["demoSeed"]>
+
+  export type DemoSeedSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    seededAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["demoSeed"]>
+
+  export type DemoSeedSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    seededAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["demoSeed"]>
+
+  export type DemoSeedSelectScalar = {
+    id?: boolean
+    seededAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DemoSeedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "seededAt" | "updatedAt", ExtArgs["result"]["demoSeed"]>
+
+  export type $DemoSeedPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DemoSeed"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      seededAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["demoSeed"]>
+    composites: {}
+  }
+
+  type DemoSeedGetPayload<S extends boolean | null | undefined | DemoSeedDefaultArgs> = $Result.GetResult<Prisma.$DemoSeedPayload, S>
+
+  type DemoSeedCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DemoSeedFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DemoSeedCountAggregateInputType | true
+    }
+
+  export interface DemoSeedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DemoSeed'], meta: { name: 'DemoSeed' } }
+    /**
+     * Find zero or one DemoSeed that matches the filter.
+     * @param {DemoSeedFindUniqueArgs} args - Arguments to find a DemoSeed
+     * @example
+     * // Get one DemoSeed
+     * const demoSeed = await prisma.demoSeed.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DemoSeedFindUniqueArgs>(args: SelectSubset<T, DemoSeedFindUniqueArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DemoSeed that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DemoSeedFindUniqueOrThrowArgs} args - Arguments to find a DemoSeed
+     * @example
+     * // Get one DemoSeed
+     * const demoSeed = await prisma.demoSeed.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DemoSeedFindUniqueOrThrowArgs>(args: SelectSubset<T, DemoSeedFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DemoSeed that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemoSeedFindFirstArgs} args - Arguments to find a DemoSeed
+     * @example
+     * // Get one DemoSeed
+     * const demoSeed = await prisma.demoSeed.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DemoSeedFindFirstArgs>(args?: SelectSubset<T, DemoSeedFindFirstArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DemoSeed that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemoSeedFindFirstOrThrowArgs} args - Arguments to find a DemoSeed
+     * @example
+     * // Get one DemoSeed
+     * const demoSeed = await prisma.demoSeed.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DemoSeedFindFirstOrThrowArgs>(args?: SelectSubset<T, DemoSeedFindFirstOrThrowArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DemoSeeds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemoSeedFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DemoSeeds
+     * const demoSeeds = await prisma.demoSeed.findMany()
+     * 
+     * // Get first 10 DemoSeeds
+     * const demoSeeds = await prisma.demoSeed.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const demoSeedWithIdOnly = await prisma.demoSeed.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DemoSeedFindManyArgs>(args?: SelectSubset<T, DemoSeedFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DemoSeed.
+     * @param {DemoSeedCreateArgs} args - Arguments to create a DemoSeed.
+     * @example
+     * // Create one DemoSeed
+     * const DemoSeed = await prisma.demoSeed.create({
+     *   data: {
+     *     // ... data to create a DemoSeed
+     *   }
+     * })
+     * 
+     */
+    create<T extends DemoSeedCreateArgs>(args: SelectSubset<T, DemoSeedCreateArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DemoSeeds.
+     * @param {DemoSeedCreateManyArgs} args - Arguments to create many DemoSeeds.
+     * @example
+     * // Create many DemoSeeds
+     * const demoSeed = await prisma.demoSeed.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DemoSeedCreateManyArgs>(args?: SelectSubset<T, DemoSeedCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DemoSeeds and returns the data saved in the database.
+     * @param {DemoSeedCreateManyAndReturnArgs} args - Arguments to create many DemoSeeds.
+     * @example
+     * // Create many DemoSeeds
+     * const demoSeed = await prisma.demoSeed.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DemoSeeds and only return the `id`
+     * const demoSeedWithIdOnly = await prisma.demoSeed.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DemoSeedCreateManyAndReturnArgs>(args?: SelectSubset<T, DemoSeedCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DemoSeed.
+     * @param {DemoSeedDeleteArgs} args - Arguments to delete one DemoSeed.
+     * @example
+     * // Delete one DemoSeed
+     * const DemoSeed = await prisma.demoSeed.delete({
+     *   where: {
+     *     // ... filter to delete one DemoSeed
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DemoSeedDeleteArgs>(args: SelectSubset<T, DemoSeedDeleteArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DemoSeed.
+     * @param {DemoSeedUpdateArgs} args - Arguments to update one DemoSeed.
+     * @example
+     * // Update one DemoSeed
+     * const demoSeed = await prisma.demoSeed.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DemoSeedUpdateArgs>(args: SelectSubset<T, DemoSeedUpdateArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DemoSeeds.
+     * @param {DemoSeedDeleteManyArgs} args - Arguments to filter DemoSeeds to delete.
+     * @example
+     * // Delete a few DemoSeeds
+     * const { count } = await prisma.demoSeed.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DemoSeedDeleteManyArgs>(args?: SelectSubset<T, DemoSeedDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DemoSeeds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemoSeedUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DemoSeeds
+     * const demoSeed = await prisma.demoSeed.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DemoSeedUpdateManyArgs>(args: SelectSubset<T, DemoSeedUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DemoSeeds and returns the data updated in the database.
+     * @param {DemoSeedUpdateManyAndReturnArgs} args - Arguments to update many DemoSeeds.
+     * @example
+     * // Update many DemoSeeds
+     * const demoSeed = await prisma.demoSeed.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DemoSeeds and only return the `id`
+     * const demoSeedWithIdOnly = await prisma.demoSeed.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DemoSeedUpdateManyAndReturnArgs>(args: SelectSubset<T, DemoSeedUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DemoSeed.
+     * @param {DemoSeedUpsertArgs} args - Arguments to update or create a DemoSeed.
+     * @example
+     * // Update or create a DemoSeed
+     * const demoSeed = await prisma.demoSeed.upsert({
+     *   create: {
+     *     // ... data to create a DemoSeed
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DemoSeed we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DemoSeedUpsertArgs>(args: SelectSubset<T, DemoSeedUpsertArgs<ExtArgs>>): Prisma__DemoSeedClient<$Result.GetResult<Prisma.$DemoSeedPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DemoSeeds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemoSeedCountArgs} args - Arguments to filter DemoSeeds to count.
+     * @example
+     * // Count the number of DemoSeeds
+     * const count = await prisma.demoSeed.count({
+     *   where: {
+     *     // ... the filter for the DemoSeeds we want to count
+     *   }
+     * })
+    **/
+    count<T extends DemoSeedCountArgs>(
+      args?: Subset<T, DemoSeedCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DemoSeedCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DemoSeed.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemoSeedAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DemoSeedAggregateArgs>(args: Subset<T, DemoSeedAggregateArgs>): Prisma.PrismaPromise<GetDemoSeedAggregateType<T>>
+
+    /**
+     * Group by DemoSeed.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemoSeedGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DemoSeedGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DemoSeedGroupByArgs['orderBy'] }
+        : { orderBy?: DemoSeedGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DemoSeedGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDemoSeedGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DemoSeed model
+   */
+  readonly fields: DemoSeedFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DemoSeed.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DemoSeedClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DemoSeed model
+   */
+  interface DemoSeedFieldRefs {
+    readonly id: FieldRef<"DemoSeed", 'String'>
+    readonly seededAt: FieldRef<"DemoSeed", 'DateTime'>
+    readonly updatedAt: FieldRef<"DemoSeed", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DemoSeed findUnique
+   */
+  export type DemoSeedFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * Filter, which DemoSeed to fetch.
+     */
+    where: DemoSeedWhereUniqueInput
+  }
+
+  /**
+   * DemoSeed findUniqueOrThrow
+   */
+  export type DemoSeedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * Filter, which DemoSeed to fetch.
+     */
+    where: DemoSeedWhereUniqueInput
+  }
+
+  /**
+   * DemoSeed findFirst
+   */
+  export type DemoSeedFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * Filter, which DemoSeed to fetch.
+     */
+    where?: DemoSeedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemoSeeds to fetch.
+     */
+    orderBy?: DemoSeedOrderByWithRelationInput | DemoSeedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DemoSeeds.
+     */
+    cursor?: DemoSeedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemoSeeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemoSeeds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DemoSeeds.
+     */
+    distinct?: DemoSeedScalarFieldEnum | DemoSeedScalarFieldEnum[]
+  }
+
+  /**
+   * DemoSeed findFirstOrThrow
+   */
+  export type DemoSeedFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * Filter, which DemoSeed to fetch.
+     */
+    where?: DemoSeedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemoSeeds to fetch.
+     */
+    orderBy?: DemoSeedOrderByWithRelationInput | DemoSeedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DemoSeeds.
+     */
+    cursor?: DemoSeedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemoSeeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemoSeeds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DemoSeeds.
+     */
+    distinct?: DemoSeedScalarFieldEnum | DemoSeedScalarFieldEnum[]
+  }
+
+  /**
+   * DemoSeed findMany
+   */
+  export type DemoSeedFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * Filter, which DemoSeeds to fetch.
+     */
+    where?: DemoSeedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemoSeeds to fetch.
+     */
+    orderBy?: DemoSeedOrderByWithRelationInput | DemoSeedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DemoSeeds.
+     */
+    cursor?: DemoSeedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemoSeeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemoSeeds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DemoSeeds.
+     */
+    distinct?: DemoSeedScalarFieldEnum | DemoSeedScalarFieldEnum[]
+  }
+
+  /**
+   * DemoSeed create
+   */
+  export type DemoSeedCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * The data needed to create a DemoSeed.
+     */
+    data: XOR<DemoSeedCreateInput, DemoSeedUncheckedCreateInput>
+  }
+
+  /**
+   * DemoSeed createMany
+   */
+  export type DemoSeedCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DemoSeeds.
+     */
+    data: DemoSeedCreateManyInput | DemoSeedCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DemoSeed createManyAndReturn
+   */
+  export type DemoSeedCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * The data used to create many DemoSeeds.
+     */
+    data: DemoSeedCreateManyInput | DemoSeedCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DemoSeed update
+   */
+  export type DemoSeedUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * The data needed to update a DemoSeed.
+     */
+    data: XOR<DemoSeedUpdateInput, DemoSeedUncheckedUpdateInput>
+    /**
+     * Choose, which DemoSeed to update.
+     */
+    where: DemoSeedWhereUniqueInput
+  }
+
+  /**
+   * DemoSeed updateMany
+   */
+  export type DemoSeedUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DemoSeeds.
+     */
+    data: XOR<DemoSeedUpdateManyMutationInput, DemoSeedUncheckedUpdateManyInput>
+    /**
+     * Filter which DemoSeeds to update
+     */
+    where?: DemoSeedWhereInput
+    /**
+     * Limit how many DemoSeeds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DemoSeed updateManyAndReturn
+   */
+  export type DemoSeedUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * The data used to update DemoSeeds.
+     */
+    data: XOR<DemoSeedUpdateManyMutationInput, DemoSeedUncheckedUpdateManyInput>
+    /**
+     * Filter which DemoSeeds to update
+     */
+    where?: DemoSeedWhereInput
+    /**
+     * Limit how many DemoSeeds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DemoSeed upsert
+   */
+  export type DemoSeedUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * The filter to search for the DemoSeed to update in case it exists.
+     */
+    where: DemoSeedWhereUniqueInput
+    /**
+     * In case the DemoSeed found by the `where` argument doesn't exist, create a new DemoSeed with this data.
+     */
+    create: XOR<DemoSeedCreateInput, DemoSeedUncheckedCreateInput>
+    /**
+     * In case the DemoSeed was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DemoSeedUpdateInput, DemoSeedUncheckedUpdateInput>
+  }
+
+  /**
+   * DemoSeed delete
+   */
+  export type DemoSeedDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
+    /**
+     * Filter which DemoSeed to delete.
+     */
+    where: DemoSeedWhereUniqueInput
+  }
+
+  /**
+   * DemoSeed deleteMany
+   */
+  export type DemoSeedDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DemoSeeds to delete
+     */
+    where?: DemoSeedWhereInput
+    /**
+     * Limit how many DemoSeeds to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DemoSeed without action
+   */
+  export type DemoSeedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemoSeed
+     */
+    select?: DemoSeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemoSeed
+     */
+    omit?: DemoSeedOmit<ExtArgs> | null
   }
 
 
@@ -4417,10 +5495,20 @@ export namespace Prisma {
     priority: 'priority',
     dueDate: 'dueDate',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    userId: 'userId'
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
+  export const DemoSeedScalarFieldEnum: {
+    id: 'id',
+    seededAt: 'seededAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DemoSeedScalarFieldEnum = (typeof DemoSeedScalarFieldEnum)[keyof typeof DemoSeedScalarFieldEnum]
 
 
   export const SubtaskScalarFieldEnum: {
@@ -4534,6 +5622,7 @@ export namespace Prisma {
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
+    userId?: StringFilter<"Task"> | string
     subtasks?: SubtaskListRelationFilter
     activities?: ActivityListRelationFilter
   }
@@ -4548,6 +5637,7 @@ export namespace Prisma {
     dueDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    userId?: SortOrder
     subtasks?: SubtaskOrderByRelationAggregateInput
     activities?: ActivityOrderByRelationAggregateInput
   }
@@ -4565,6 +5655,7 @@ export namespace Prisma {
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
+    userId?: StringFilter<"Task"> | string
     subtasks?: SubtaskListRelationFilter
     activities?: ActivityListRelationFilter
   }, "id">
@@ -4579,6 +5670,7 @@ export namespace Prisma {
     dueDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    userId?: SortOrder
     _count?: TaskCountOrderByAggregateInput
     _max?: TaskMaxOrderByAggregateInput
     _min?: TaskMinOrderByAggregateInput
@@ -4597,6 +5689,49 @@ export namespace Prisma {
     dueDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
+    userId?: StringWithAggregatesFilter<"Task"> | string
+  }
+
+  export type DemoSeedWhereInput = {
+    AND?: DemoSeedWhereInput | DemoSeedWhereInput[]
+    OR?: DemoSeedWhereInput[]
+    NOT?: DemoSeedWhereInput | DemoSeedWhereInput[]
+    id?: StringFilter<"DemoSeed"> | string
+    seededAt?: DateTimeFilter<"DemoSeed"> | Date | string
+    updatedAt?: DateTimeFilter<"DemoSeed"> | Date | string
+  }
+
+  export type DemoSeedOrderByWithRelationInput = {
+    id?: SortOrder
+    seededAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DemoSeedWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DemoSeedWhereInput | DemoSeedWhereInput[]
+    OR?: DemoSeedWhereInput[]
+    NOT?: DemoSeedWhereInput | DemoSeedWhereInput[]
+    seededAt?: DateTimeFilter<"DemoSeed"> | Date | string
+    updatedAt?: DateTimeFilter<"DemoSeed"> | Date | string
+  }, "id">
+
+  export type DemoSeedOrderByWithAggregationInput = {
+    id?: SortOrder
+    seededAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DemoSeedCountOrderByAggregateInput
+    _max?: DemoSeedMaxOrderByAggregateInput
+    _min?: DemoSeedMinOrderByAggregateInput
+  }
+
+  export type DemoSeedScalarWhereWithAggregatesInput = {
+    AND?: DemoSeedScalarWhereWithAggregatesInput | DemoSeedScalarWhereWithAggregatesInput[]
+    OR?: DemoSeedScalarWhereWithAggregatesInput[]
+    NOT?: DemoSeedScalarWhereWithAggregatesInput | DemoSeedScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DemoSeed"> | string
+    seededAt?: DateTimeWithAggregatesFilter<"DemoSeed"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DemoSeed"> | Date | string
   }
 
   export type SubtaskWhereInput = {
@@ -4729,6 +5864,7 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userId?: string
     subtasks?: SubtaskCreateNestedManyWithoutTaskInput
     activities?: ActivityCreateNestedManyWithoutTaskInput
   }
@@ -4743,6 +5879,7 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userId?: string
     subtasks?: SubtaskUncheckedCreateNestedManyWithoutTaskInput
     activities?: ActivityUncheckedCreateNestedManyWithoutTaskInput
   }
@@ -4757,6 +5894,7 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     subtasks?: SubtaskUpdateManyWithoutTaskNestedInput
     activities?: ActivityUpdateManyWithoutTaskNestedInput
   }
@@ -4771,6 +5909,7 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     subtasks?: SubtaskUncheckedUpdateManyWithoutTaskNestedInput
     activities?: ActivityUncheckedUpdateManyWithoutTaskNestedInput
   }
@@ -4785,6 +5924,7 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userId?: string
   }
 
   export type TaskUpdateManyMutationInput = {
@@ -4797,6 +5937,7 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type TaskUncheckedUpdateManyInput = {
@@ -4808,6 +5949,49 @@ export namespace Prisma {
     priority?: StringFieldUpdateOperationsInput | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DemoSeedCreateInput = {
+    id?: string
+    seededAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemoSeedUncheckedCreateInput = {
+    id?: string
+    seededAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemoSeedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    seededAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemoSeedUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    seededAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemoSeedCreateManyInput = {
+    id?: string
+    seededAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemoSeedUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    seededAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemoSeedUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    seededAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -5022,6 +6206,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type TaskMaxOrderByAggregateInput = {
@@ -5034,6 +6219,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type TaskMinOrderByAggregateInput = {
@@ -5046,6 +6232,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5110,6 +6297,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type DemoSeedCountOrderByAggregateInput = {
+    id?: SortOrder
+    seededAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DemoSeedMaxOrderByAggregateInput = {
+    id?: SortOrder
+    seededAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DemoSeedMinOrderByAggregateInput = {
+    id?: SortOrder
+    seededAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type TaskScalarRelationFilter = {
@@ -5551,6 +6756,7 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userId?: string
     activities?: ActivityCreateNestedManyWithoutTaskInput
   }
 
@@ -5564,6 +6770,7 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userId?: string
     activities?: ActivityUncheckedCreateNestedManyWithoutTaskInput
   }
 
@@ -5593,6 +6800,7 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     activities?: ActivityUpdateManyWithoutTaskNestedInput
   }
 
@@ -5606,6 +6814,7 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     activities?: ActivityUncheckedUpdateManyWithoutTaskNestedInput
   }
 
@@ -5619,6 +6828,7 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userId?: string
     subtasks?: SubtaskCreateNestedManyWithoutTaskInput
   }
 
@@ -5632,6 +6842,7 @@ export namespace Prisma {
     dueDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userId?: string
     subtasks?: SubtaskUncheckedCreateNestedManyWithoutTaskInput
   }
 
@@ -5661,6 +6872,7 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     subtasks?: SubtaskUpdateManyWithoutTaskNestedInput
   }
 
@@ -5674,6 +6886,7 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
     subtasks?: SubtaskUncheckedUpdateManyWithoutTaskNestedInput
   }
 

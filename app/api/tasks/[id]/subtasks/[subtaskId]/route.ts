@@ -1,13 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
 
 // PATCH /api/tasks/[id]/subtasks/[subtaskId]
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; subtaskId: string }> }
 ) {
+  const session = await auth()
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const userId = session.user?.id || 'admin'
   const { id, subtaskId } = await params
   const body = await request.json()
+
+  // Verificar que la tarea padre pertenece al usuario
+  const task = await prisma.task.findUnique({ where: { id } })
+  if (!task) {
+    return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+  }
+  if (task.userId !== userId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   
   // Obtener subtarea actual
   const currentSubtask = await prisma.subtask.findFirst({
@@ -67,7 +83,22 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; subtaskId: string }> }
 ) {
+  const session = await auth()
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const userId = session.user?.id || 'admin'
   const { id, subtaskId } = await params
+
+  // Verificar que la tarea padre pertenece al usuario
+  const task = await prisma.task.findUnique({ where: { id } })
+  if (!task) {
+    return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+  }
+  if (task.userId !== userId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   
   const subtask = await prisma.subtask.findFirst({
     where: { 

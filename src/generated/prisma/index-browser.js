@@ -129,6 +129,13 @@ exports.Prisma.TaskScalarFieldEnum = {
   priority: 'priority',
   dueDate: 'dueDate',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+};
+
+exports.Prisma.DemoSeedScalarFieldEnum = {
+  id: 'id',
+  seededAt: 'seededAt',
   updatedAt: 'updatedAt'
 };
 
@@ -168,6 +175,7 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   Task: 'Task',
+  DemoSeed: 'DemoSeed',
   Subtask: 'Subtask',
   Activity: 'Activity'
 };

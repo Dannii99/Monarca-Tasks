@@ -290,7 +290,7 @@ export function BoardToolbar({
         <div className="px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3">
           <div className="flex items-center justify-between gap-3">
             {/* Filters Section - Desktop Only */}
-            <div className="hidden sm:flex flex-row items-center gap-2 lg:ml-auto lg:flex-1 lg:justify-end">
+            <div className="hidden lg:flex flex-row items-center gap-2 lg:ml-auto lg:flex-1 lg:justify-end">
               {/* Category Filter Pills */}
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-medium text-[var(--text-muted)] mr-1 hidden lg:inline">Filtrar:</span>
@@ -353,7 +353,7 @@ export function BoardToolbar({
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="sm:hidden flex items-center gap-1.5 h-9 px-3 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg text-xs font-semibold text-[var(--text-secondary)] hover:border-[var(--border-strong)] transition-all shadow-sm ml-auto"
+              className="lg:hidden flex items-center gap-1.5 h-9 px-3 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-lg text-xs font-semibold text-[var(--text-secondary)] hover:border-[var(--border-strong)] transition-all shadow-sm ml-auto"
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
               <span>Filtros</span>
@@ -375,7 +375,7 @@ export function BoardToolbar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '100%' }}
             transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-            className="sm:hidden fixed inset-0 z-50 bg-[var(--bg-base)] flex flex-col"
+            className="lg:hidden fixed inset-0 z-50 bg-[var(--bg-base)] flex flex-col"
           >
             {/* Header del panel */}
             <div className="flex items-center justify-between px-4 h-14 border-b border-[var(--border-default)] bg-[var(--bg-surface)] flex-shrink-0">
