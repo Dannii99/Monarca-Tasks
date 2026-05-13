@@ -12,15 +12,31 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Monarca Tasks',
   description: 'Gestor de tareas personal tipo Kanban para un solo usuario',
-   manifest: '/manifest.json',
-   appleWebApp: {
+  manifest: '/manifest.json',
+  appleWebApp: {
     capable: true,
     title: 'Monarca Tasks',
+    statusBarStyle: 'default',
   },
   icons: {
-    icon: '/ico/favicon.png',
-    apple: '/ico/favicon.png',
+    icon: [
+      { url: '/ico/favicon.png', sizes: '192x192', type: 'image/png' },
+      { url: '/ico/favicon.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/ico/favicon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/ico/favicon.png',
   },
+  applicationName: 'Monarca Tasks',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#f97316',
 }
 
 // Script que se ejecuta antes de hidratación para aplicar el tema inmediatamente

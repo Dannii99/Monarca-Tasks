@@ -1,20 +1,27 @@
 {
   "name": "Monarca Tasks",
-  "short_name": "App",
+  "short_name": "Monarca",
+  "description": "Gestor de tareas personal tipo Kanban",
   "icons": [
     {
       "src": "/ico/favicon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "ico/favicon.png",
+      "src": "/ico/favicon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000"
+  "orientation": "portrait",
+  "background_color": "#f8f9fa",
+  "theme_color": "#f97316",
+  "categories": ["productivity", "utilities"],
+  "lang": "es",
+  "dir": "ltr"
 }
