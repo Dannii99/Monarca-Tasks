@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import { Plus, Check, X, Trash2, Circle, Loader2, CheckCircle2 } from 'lucide-react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
+import { Plus, Check, X, Trash2, Circle, CheckCircle2, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -27,21 +27,21 @@ const statusConfig = {
     label: 'Por hacer',
     color: 'text-slate-500',
     bg: 'bg-slate-100',
-    border: 'border-slate-200'
+    hoverBg: 'hover:bg-slate-200'
   },
   IN_PROGRESS: {
-    icon: Loader2,
+    icon: AlertCircle,
     label: 'En progreso',
-    color: 'text-blue-500',
-    bg: 'bg-blue-100',
-    border: 'border-blue-200'
+    color: 'text-orange-500',
+    bg: 'bg-orange-100',
+    hoverBg: 'hover:bg-orange-200'
   },
   DONE: {
     icon: CheckCircle2,
     label: 'Completada',
     color: 'text-emerald-500',
     bg: 'bg-emerald-100',
-    border: 'border-emerald-200'
+    hoverBg: 'hover:bg-emerald-200'
   }
 }
 
@@ -50,60 +50,84 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
   const [isAdding, setIsAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingTitle, setEditingTitle] = useState('')
+  const [loadingId, setLoadingId] = useState<string | null>(null)
+  
+  // Estado local para forzar recálculo del progreso
+  const [progressState, setProgressState] = useState({ completed: 0, total: 0, percentage: 0 })
 
-  const completedCount = subtasks.filter(st => st.status === 'DONE').length
-  const progress = subtasks.length > 0 ? (completedCount / subtasks.length) * 100 : 0
+  // Recalcular progreso cuando cambien las subtareas
+  useEffect(() => {
+    const completed = subtasks.filter(st => st.status === 'DONE').length
+    const total = subtasks.length
+    const percentage = total > 0 ? (completed / total) * 100 : 0
+    
+    setProgressState({ completed, total, percentage })
+    
+    console.log('[SubtasksList] Progreso recalculado:', { 
+      completed, 
+      total, 
+      percentage,
+      subtasksCount: subtasks.length 
+    })
+  }, [subtasks])
+
+  const { completed: completedCount, total: totalCount, percentage: progress } = progressState
 
   const handleAdd = useCallback(async () => {
     if (!newSubtaskTitle.trim()) return
 
     const tempId = `temp-${Date.now()}`
+    const title = newSubtaskTitle.trim()
+    
     const newSubtask: Subtask = {
       id: tempId,
-      title: newSubtaskTitle.trim(),
+      title: title,
       status: 'TODO',
       deletedAt: null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
 
-    // Optimistic update
-    onSubtasksChange([...subtasks, newSubtask])
+    // Limpiar input inmediatamente para mejor UX
     setNewSubtaskTitle('')
     setIsAdding(false)
+    
+    // Optimistic update - agregar inmediatamente
+    const updatedSubtasks = [...subtasks, newSubtask]
+    onSubtasksChange(updatedSubtasks)
 
     try {
       const res = await fetch(`/api/tasks/${taskId}/subtasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: newSubtaskTitle.trim() })
+        body: JSON.stringify({ title })
       })
 
       if (res.ok) {
         const saved = await res.json()
-        onSubtasksChange(subtasks.map(st => st.id === tempId ? saved : st))
+        // Reemplazar el temp con el real
+        onSubtasksChange(updatedSubtasks.map(st => st.id === tempId ? saved : st))
         
-        // Agregar actividad
-        const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
+        // Agregar actividad en segundo plano
+        fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'subtask_added',
-            details: newSubtaskTitle.trim()
+            details: title
           })
-        })
-        
-        if (activityRes.ok) {
-          const activity = await activityRes.json()
-          onActivityAdd(activity)
-        }
+        }).then(res => {
+          if (res.ok) return res.json()
+        }).then(activity => {
+          if (activity) onActivityAdd(activity)
+        }).catch(console.error)
       } else {
-        // Revert
-        onSubtasksChange(subtasks.filter(st => st.id !== tempId))
+        // Revert si falla
+        onSubtasksChange(subtasks)
       }
     } catch (error) {
       console.error('Error adding subtask:', error)
-      onSubtasksChange(subtasks.filter(st => st.id !== tempId))
+      onSubtasksChange(subtasks)
     }
   }, [taskId, subtasks, newSubtaskTitle, onSubtasksChange, onActivityAdd])
 
@@ -112,11 +136,13 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
     if (!subtask || subtask.status === newStatus) return
 
     const oldStatus = subtask.status
+    setLoadingId(subtaskId)
 
-    // Optimistic update
-    onSubtasksChange(subtasks.map(st => 
+    // Optimistic update - actualizar UI inmediatamente
+    const updatedSubtasks = subtasks.map(st => 
       st.id === subtaskId ? { ...st, status: newStatus } : st
-    ))
+    )
+    onSubtasksChange(updatedSubtasks)
 
     try {
       const res = await fetch(`/api/tasks/${taskId}/subtasks/${subtaskId}`, {
@@ -126,30 +152,32 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
       })
 
       if (res.ok) {
-        const updated = await res.json()
-        onSubtasksChange(subtasks.map(st => st.id === subtaskId ? updated : st))
+        const saved = await res.json()
+        // Actualizar con datos del servidor
+        onSubtasksChange(updatedSubtasks.map(st => st.id === subtaskId ? saved : st))
         
-        // Agregar actividad
-        const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
+        // Agregar actividad en segundo plano
+        fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'subtask_status_changed',
             details: `${subtask.title}: ${oldStatus} → ${newStatus}`
           })
-        })
-        
-        if (activityRes.ok) {
-          const activity = await activityRes.json()
-          onActivityAdd(activity)
-        }
+        }).then(res => {
+          if (res.ok) return res.json()
+        }).then(activity => {
+          if (activity) onActivityAdd(activity)
+        }).catch(console.error)
       } else {
-        // Revert
+        // Revert si falla
         onSubtasksChange(subtasks)
       }
     } catch (error) {
       console.error('Error changing subtask status:', error)
       onSubtasksChange(subtasks)
+    } finally {
+      setLoadingId(null)
     }
   }, [taskId, subtasks, onSubtasksChange, onActivityAdd])
 
@@ -157,8 +185,9 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
     const subtask = subtasks.find(st => st.id === subtaskId)
     if (!subtask) return
 
-    // Optimistic update (eliminar de la lista)
-    onSubtasksChange(subtasks.filter(st => st.id !== subtaskId))
+    // Optimistic update - eliminar inmediatamente
+    const updatedSubtasks = subtasks.filter(st => st.id !== subtaskId)
+    onSubtasksChange(updatedSubtasks)
 
     try {
       const res = await fetch(`/api/tasks/${taskId}/subtasks/${subtaskId}`, {
@@ -166,32 +195,32 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
       })
 
       if (res.ok) {
-        // Agregar actividad
-        const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
+        // Agregar actividad en segundo plano
+        fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'subtask_deleted',
             details: subtask.title
           })
-        })
-        
-        if (activityRes.ok) {
-          const activity = await activityRes.json()
-          onActivityAdd(activity)
-        }
+        }).then(res => {
+          if (res.ok) return res.json()
+        }).then(activity => {
+          if (activity) onActivityAdd(activity)
+        }).catch(console.error)
       } else {
-        // Revert
-        onSubtasksChange([...subtasks, subtask])
+        // Revert si falla
+        onSubtasksChange([...updatedSubtasks, subtask])
       }
     } catch (error) {
       console.error('Error deleting subtask:', error)
-      onSubtasksChange([...subtasks, subtask])
+      onSubtasksChange([...updatedSubtasks, subtask])
     }
   }, [taskId, subtasks, onSubtasksChange, onActivityAdd])
 
   const handleEdit = useCallback(async (subtaskId: string) => {
-    if (!editingTitle.trim() || editingTitle === subtasks.find(st => st.id === subtaskId)?.title) {
+    const newTitle = editingTitle.trim()
+    if (!newTitle || newTitle === subtasks.find(st => st.id === subtaskId)?.title) {
       setEditingId(null)
       setEditingTitle('')
       return
@@ -201,11 +230,13 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
     if (!subtask) return
 
     const oldTitle = subtask.title
+    setLoadingId(subtaskId)
 
     // Optimistic update
-    onSubtasksChange(subtasks.map(st => 
-      st.id === subtaskId ? { ...st, title: editingTitle.trim() } : st
-    ))
+    const updatedSubtasks = subtasks.map(st => 
+      st.id === subtaskId ? { ...st, title: newTitle } : st
+    )
+    onSubtasksChange(updatedSubtasks)
     setEditingId(null)
     setEditingTitle('')
 
@@ -213,34 +244,34 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
       const res = await fetch(`/api/tasks/${taskId}/subtasks/${subtaskId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: editingTitle.trim() })
+        body: JSON.stringify({ title: newTitle })
       })
 
       if (res.ok) {
-        const updated = await res.json()
-        onSubtasksChange(subtasks.map(st => st.id === subtaskId ? updated : st))
+        const saved = await res.json()
+        onSubtasksChange(updatedSubtasks.map(st => st.id === subtaskId ? saved : st))
         
-        // Agregar actividad
-        const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
+        // Agregar actividad en segundo plano
+        fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'subtask_edited',
-            details: `${oldTitle} → ${editingTitle.trim()}`
+            details: `${oldTitle} → ${newTitle}`
           })
-        })
-        
-        if (activityRes.ok) {
-          const activity = await activityRes.json()
-          onActivityAdd(activity)
-        }
+        }).then(res => {
+          if (res.ok) return res.json()
+        }).then(activity => {
+          if (activity) onActivityAdd(activity)
+        }).catch(console.error)
       } else {
-        // Revert
         onSubtasksChange(subtasks)
       }
     } catch (error) {
       console.error('Error editing subtask:', error)
       onSubtasksChange(subtasks)
+    } finally {
+      setLoadingId(null)
     }
   }, [taskId, subtasks, editingTitle, onSubtasksChange, onActivityAdd])
 
@@ -258,19 +289,20 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
           Subtareas
         </h3>
         <span className="text-xs text-[var(--text-muted)]">
-          {completedCount} de {subtasks.length} completadas
+          {completedCount} de {totalCount} completadas
         </span>
       </div>
 
-      {/* Progress bar */}
-      {subtasks.length > 0 && (
-        <div className="h-2 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-[var(--color-work)] transition-all duration-500 rounded-full"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      )}
+      {/* Progress bar - Siempre visible para sincronización */}
+      <div className="h-2 bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+        <div 
+          className="h-full bg-[var(--color-work)] transition-all duration-500 ease-out rounded-full"
+          style={{ 
+            width: `${progress}%`,
+            minWidth: totalCount > 0 ? '4px' : '0px'
+          }}
+        />
+      </div>
 
       {/* Add new subtask */}
       {!isAdding ? (
@@ -329,22 +361,25 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
         {subtasks.map((subtask) => {
           const config = statusConfig[subtask.status]
           const StatusIcon = config.icon
+          const isLoading = loadingId === subtask.id
           
           return (
             <div
               key={subtask.id}
               className="group flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-subtle)] hover:bg-[var(--bg-muted)] transition-all duration-200"
             >
-              {/* Status button */}
+              {/* Status button - sin animación de spin */}
               <button
-                onClick={() => handleStatusChange(subtask.id, cycleStatus(subtask.status))}
+                onClick={() => !isLoading && handleStatusChange(subtask.id, cycleStatus(subtask.status))}
+                disabled={isLoading}
                 className={`
                   w-8 h-8 rounded-lg flex items-center justify-center transition-all
-                  ${config.bg} ${config.color} hover:scale-110
+                  ${config.bg} ${config.color} ${config.hoverBg}
+                  ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'}
                 `}
                 title={config.label}
               >
-                <StatusIcon className={`w-4 h-4 ${subtask.status === 'IN_PROGRESS' ? 'animate-spin' : ''}`} />
+                <StatusIcon className="w-4 h-4" />
               </button>
               
               {editingId === subtask.id ? (
@@ -375,6 +410,7 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
                     className={`
                       flex-1 text-sm cursor-pointer select-none
                       ${subtask.status === 'DONE' ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}
+                      ${isLoading ? 'opacity-50' : ''}
                     `}
                   >
                     {subtask.title}
@@ -389,6 +425,7 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
                     variant="ghost"
                     size="sm"
                     onClick={() => handleDelete(subtask.id)}
+                    disabled={isLoading}
                     className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-lg transition-opacity"
                   >
                     <Trash2 className="w-4 h-4" />
