@@ -83,8 +83,8 @@ export function useNotifications(tasks: Task[], isMuted: boolean) {
 
     const notification = new Notification(title, {
       body,
-      icon: '/ico/favicon.png',
-      badge: '/ico/favicon.png',
+      icon: '/ico/monarca-logo.png',
+      badge: '/ico/monarca-logo.png',
       tag: `${taskId}-${type}`,
       requireInteraction: type === 'overdue',
       silent: false,
