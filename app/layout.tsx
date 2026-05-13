@@ -20,13 +20,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/ico/favicon.png', sizes: '192x192', type: 'image/png' },
-      { url: '/ico/favicon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/ico/monarca-logo.png', sizes: '192x192', type: 'image/png' },
+      { url: '/ico/monarca-logo.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      { url: '/ico/favicon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/ico/monarca-logo.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: '/ico/favicon.png',
+    shortcut: '/ico/monarca-logo.png',
   },
   applicationName: 'Monarca Tasks',
 }

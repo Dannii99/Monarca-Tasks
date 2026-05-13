@@ -4,13 +4,13 @@
   "description": "Gestor de tareas personal tipo Kanban",
   "icons": [
     {
-      "src": "/ico/favicon.png",
+      "src": "/ico/monarca-logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/ico/favicon.png",
+      "src": "/ico/monarca-logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
