@@ -26,10 +26,10 @@ const columnConfig: Record<string, {
   },
   IN_PROGRESS: {
     icon: Loader2,
-    color: 'text-blue-600 dark:text-blue-400',
-    gradient: 'from-blue-400 to-blue-600',
-    accentColor: 'border-b-blue-500',
-    lightBg: 'bg-blue-50/60',
+    color: 'text-orange-600 dark:text-orange-400',
+    gradient: 'from-[#ed7a28] to-[#FF5722]',
+    accentColor: 'border-b-[#ed7a28]',
+    lightBg: 'bg-orange-50/60',
   },
   DONE: {
     icon: CheckCircle2,
@@ -145,7 +145,7 @@ export function Column({ status, tasks, onEdit, onDelete, onComplete, onDragStar
         <div className="p-3 border-t border-[var(--border-default)] bg-[var(--bg-subtle)]">
           <Button
             onClick={onAddTask}
-            className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-purple-500/20 font-semibold"
+            className="w-full h-12 bg-gradient-to-r from-[#ed7a28] to-[#FF5722] hover:from-[#d86a1f] hover:to-[#e64a19] text-white rounded-xl shadow-lg shadow-orange-500/20 font-semibold"
           >
             <Plus className="w-5 h-5 mr-2" />
             Agregar tarea

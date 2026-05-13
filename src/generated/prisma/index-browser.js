@@ -132,6 +132,24 @@ exports.Prisma.TaskScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SubtaskScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  status: 'status',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  taskId: 'taskId'
+};
+
+exports.Prisma.ActivityScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  details: 'details',
+  createdAt: 'createdAt',
+  taskId: 'taskId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -149,7 +167,9 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  Task: 'Task'
+  Task: 'Task',
+  Subtask: 'Subtask',
+  Activity: 'Activity'
 };
 
 /**

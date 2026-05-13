@@ -1,6 +1,6 @@
 'use client'
 
-import { Search, Plus, SlidersHorizontal, LogOut, ArrowUpDown, CheckCircle2, AlertCircle, Clock, Sun, Moon, Briefcase, Home, User, X, LayoutGrid } from 'lucide-react'
+import { Search, Plus, SlidersHorizontal, LogOut, ArrowUpDown, CheckCircle2, AlertCircle, Clock, Sun, Moon, Briefcase, Home, User, X, LayoutGrid, Hand } from 'lucide-react'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -21,15 +21,17 @@ interface BoardToolbarProps {
   pendingCount: number
   urgentCount: number
   doneCount: number
+  userName: string
+  userEmail: string
 }
 
 // Configuración de colores para categorías
 const categoryStyles: Record<string, { icon: typeof Briefcase; color: string; bg: string; border: string }> = {
   WORK: { 
     icon: Briefcase, 
-    color: 'text-blue-600 dark:text-blue-400',
-    bg: 'bg-blue-50 dark:bg-blue-500/10',
-    border: 'border-blue-200 dark:border-blue-500/20'
+    color: 'text-orange-600 dark:text-orange-400',
+    bg: 'bg-orange-50 dark:bg-orange-500/10',
+    border: 'border-orange-200 dark:border-orange-500/20'
   },
   HOME: { 
     icon: Home, 
@@ -57,11 +59,22 @@ export function BoardToolbar({
   pendingCount,
   urgentCount,
   doneCount,
+  userName,
+  userEmail,
 }: BoardToolbarProps) {
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const { theme, toggleTheme, mounted } = useTheme()
 
   const totalTasks = pendingCount + doneCount
+  
+  // Obtener hora actual para el saludo
+  const currentHour = new Date().getHours()
+  let greeting = 'Buenos días'
+  if (currentHour >= 12 && currentHour < 18) {
+    greeting = 'Buenas tardes'
+  } else if (currentHour >= 18) {
+    greeting = 'Buenas noches'
+  }
 
   return (
     <header className="bg-[var(--bg-surface)] border-b border-[var(--border-default)] sticky top-0 z-20 shadow-sm">
@@ -127,7 +140,7 @@ export function BoardToolbar({
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={onAddTask}
-                className="h-9 sm:h-10 px-3 sm:px-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600 text-white rounded-xl shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 font-medium text-sm"
+                className="h-9 sm:h-10 px-3 sm:px-4 bg-gradient-to-r from-[#ed7a28] to-[#FF5722] hover:from-[#d86a1f] hover:to-[#e64a19] text-white rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-200 font-medium text-sm"
               >
                 <Plus className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Nueva tarea</span>
@@ -144,70 +157,118 @@ export function BoardToolbar({
                 <LogOut className="w-4 h-4" />
               </Button>
             </motion.div>
+
+            {/* Logout - Visible solo en móvil */}
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="sm:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onLogout}
+                className="h-9 w-9 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-xl transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Stats & Filters Bar - Más compacto en móvil */}
-      <div className="border-t border-[var(--border-default)] bg-[var(--bg-subtle)]/50 backdrop-blur-sm">
-        <div className="px-3 sm:px-6 lg:px-8 py-2.5 sm:py-4">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4">
-            {/* Stats Cards - Compactos en móvil */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Pendientes */}
-              <motion.div 
-                whileHover={{ y: -1 }}
-                className="flex items-center gap-2 px-2.5 sm:px-4 py-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm"
+      {/* Professional Hero Section */}
+      <div className="border-t border-[var(--border-default)] bg-gradient-to-br from-[var(--bg-surface)] via-[var(--bg-subtle)] to-[var(--bg-surface)]">
+        <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
+            
+            {/* Left: Greeting & Welcome */}
+            <div className="flex-1 min-w-0">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20">
-                  <Clock className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
+                <p className="text-xs sm:text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">
+                  {greeting}
+                </p>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--text-primary)] truncate">
+                  {userName}
+                </h2>
+                <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 truncate">
+                  {userEmail || 'Usuario invitado'}
+                </p>
+              </motion.div>
+            </div>
+
+            {/* Center/Right: Stats Cards Grid */}
+            <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb- lg:pb-0">
+              {/* Total Tasks */}
+              <motion.div
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 bg-[var(--stat-bg)] rounded-xl border border-[var(--stat-border)] shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--stat-total-icon-from), var(--stat-total-icon-to))' }}>
+                  <LayoutGrid className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
-                <div className="hidden sm:block">
-                  <p className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] leading-none">{pendingCount}</p>
-                  <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-medium mt-0.5">Pendientes</p>
-                </div>
-                <div className="sm:hidden">
-                  <p className="text-lg font-bold text-[var(--text-primary)] leading-none">{pendingCount}</p>
+                <div>
+                  <p className="text-lg sm:text-2xl font-bold leading-none" style={{ color: 'var(--stat-total-text)' }}>{totalTasks}</p>
+                  <p className="text-[10px] sm:text-xs text-[var(--stat-text-secondary)] uppercase tracking-wide font-medium mt-0.5">Total tareas</p>
                 </div>
               </motion.div>
 
-              {/* Urgentes - Oculto en móvil si es 0 */}
-              {(urgentCount > 0 || !showMobileFilters) && urgentCount > 0 && (
-                <motion.div 
-                  whileHover={{ y: -1 }}
-                  className="flex items-center gap-2 px-2.5 sm:px-4 py-2 bg-[var(--bg-surface)] rounded-xl border border-red-200 dark:border-red-500/20 shadow-sm"
+              {/* Pendientes */}
+              <motion.div
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 bg-[var(--stat-bg)] rounded-xl border border-[var(--stat-border)] shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--stat-pending-icon-from), var(--stat-pending-icon-to))' }}>
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-lg sm:text-2xl font-bold leading-none" style={{ color: 'var(--stat-pending-text)' }}>{pendingCount}</p>
+                  <p className="text-[10px] sm:text-xs text-[var(--stat-text-secondary)] uppercase tracking-wide font-medium mt-0.5">Pendientes</p>
+                </div>
+              </motion.div>
+
+              {/* Urgentes - Solo si hay */}
+              {urgentCount > 0 && (
+                <motion.div
+                  whileHover={{ y: -2, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 bg-[var(--stat-bg)] rounded-xl border border-[var(--stat-border)] shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center shadow-md shadow-red-500/20">
-                    <AlertCircle className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--stat-urgent-icon-from), var(--stat-urgent-icon-to))' }}>
+                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   </div>
-                  <div className="hidden sm:block">
-                    <p className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400 leading-none">{urgentCount}</p>
-                    <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-medium mt-0.5">Urgentes</p>
-                  </div>
-                  <div className="sm:hidden">
-                    <p className="text-lg font-bold text-red-600 leading-none">{urgentCount}</p>
+                  <div>
+                    <p className="text-lg sm:text-2xl font-bold leading-none" style={{ color: 'var(--stat-urgent-text)' }}>{urgentCount}</p>
+                    <p className="text-[10px] sm:text-xs text-[var(--stat-text-secondary)] uppercase tracking-wide font-medium mt-0.5">Urgentes</p>
                   </div>
                 </motion.div>
               )}
 
               {/* Completadas */}
-              <motion.div 
-                whileHover={{ y: -1 }}
-                className="flex items-center gap-2 px-2.5 sm:px-4 py-2 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-default)] shadow-sm"
+              <motion.div
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 bg-[var(--stat-bg)] rounded-xl border border-[var(--stat-border)] shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/20">
-                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--stat-done-icon-from), var(--stat-done-icon-to))' }}>
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
-                <div className="hidden sm:block">
-                  <p className="text-xl sm:text-2xl font-bold text-[var(--text-primary)] leading-none">{doneCount}</p>
-                  <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider font-medium mt-0.5">Completadas</p>
-                </div>
-                <div className="sm:hidden">
-                  <p className="text-lg font-bold text-[var(--text-primary)] leading-none">{doneCount}</p>
+                <div>
+                  <p className="text-lg sm:text-2xl font-bold leading-none" style={{ color: 'var(--stat-done-text)' }}>{doneCount}</p>
+                  <p className="text-[10px] sm:text-xs text-[var(--stat-text-secondary)] uppercase tracking-wide font-medium mt-0.5">Completadas</p>
                 </div>
               </motion.div>
             </div>
+          </div>
+        </div>
+      </div>
 
+      {/* Filters Bar */}
+      <div className="border-t border-[var(--border-default)] bg-[var(--bg-subtle)]/50 backdrop-blur-sm">
+        <div className="px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3">
+          <div className="flex items-center justify-between gap-3">
             {/* Filters Section - Desktop Only */}
             <div className="hidden sm:flex flex-row items-center gap-2 lg:ml-auto lg:flex-1 lg:justify-end">
               {/* Category Filter Pills */}
@@ -277,7 +338,7 @@ export function BoardToolbar({
               <SlidersHorizontal className="w-3.5 h-3.5" />
               <span>Filtros</span>
               {(categoryFilter || sortBy !== 'priority' || search) && (
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-[9px] text-white font-bold">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-[#ed7a28] to-[#FF5722] text-[9px] text-white font-bold">
                   {(categoryFilter ? 1 : 0) + (sortBy !== 'priority' ? 1 : 0) + (search ? 1 : 0)}
                 </span>
               )}
@@ -419,14 +480,6 @@ export function BoardToolbar({
               {/* Divider */}
               <div className="h-px bg-[var(--border-default)]" />
 
-              {/* Logout en móvil */}
-              <button
-                onClick={onLogout}
-                className="w-full flex items-center justify-center gap-3 h-14 px-4 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-2xl text-base font-semibold text-[var(--color-error)] hover:bg-[var(--color-error)]/5 transition-colors"
-              >
-                <LogOut className="w-5 h-5" />
-                Cerrar sesión
-              </button>
             </div>
 
             {/* Botón fijo en la parte inferior */}

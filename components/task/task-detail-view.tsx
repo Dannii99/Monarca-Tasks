@@ -18,7 +18,8 @@ interface TaskDetailViewProps {
   initialSubtasks: Array<{
     id: string
     title: string
-    completed: boolean
+    status: 'TODO' | 'IN_PROGRESS' | 'DONE'
+    deletedAt: string | null
     createdAt: string
     updatedAt: string
   }>
@@ -39,8 +40,8 @@ const statusConfig: Record<TaskStatus, { icon: typeof Circle; color: string; bg:
   },
   IN_PROGRESS: {
     icon: Loader2,
-    color: 'text-blue-600',
-    bg: 'bg-blue-100',
+    color: 'text-orange-600',
+    bg: 'bg-orange-100',
     label: 'En progreso'
   },
   DONE: {

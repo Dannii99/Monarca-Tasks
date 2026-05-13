@@ -10,9 +10,9 @@ interface CategoryBadgeProps {
 const categoryConfig: Record<string, { icon: typeof Briefcase; bg: string; text: string; label: string; border: string }> = {
   WORK: {
     icon: Briefcase,
-    bg: 'bg-blue-50',
-    text: 'text-blue-700',
-    border: 'border-blue-200',
+    bg: 'bg-orange-50',
+    text: 'text-orange-700',
+    border: 'border-orange-200',
     label: 'Trabajo',
   },
   HOME: {
@@ -24,9 +24,9 @@ const categoryConfig: Record<string, { icon: typeof Briefcase; bg: string; text:
   },
   PERSONAL: {
     icon: User,
-    bg: 'bg-purple-50',
-    text: 'text-purple-700',
-    border: 'border-purple-200',
+    bg: 'bg-orange-50',
+    text: 'text-orange-700',
+    border: 'border-orange-200',
     label: 'Personal',
   },
 }

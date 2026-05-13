@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 // GET /api/tasks/[id]/activities
 export async function GET(
@@ -7,8 +8,13 @@ export async function GET(
 ) {
   const { id } = await params
   
-  // Por ahora retornar array vacío - se integrará con Neon
-  return NextResponse.json([])
+  const activities = await prisma.activity.findMany({
+    where: { taskId: id },
+    orderBy: { createdAt: 'desc' },
+    take: 50
+  })
+  
+  return NextResponse.json(activities)
 }
 
 // POST /api/tasks/[id]/activities
@@ -19,14 +25,13 @@ export async function POST(
   const { id } = await params
   const body = await request.json()
   
-  // Mock response - se integrará con Neon
-  const newActivity = {
-    id: `temp-${Date.now()}`,
-    action: body.action || 'updated',
-    details: body.details || null,
-    taskId: id,
-    createdAt: new Date().toISOString()
-  }
+  const activity = await prisma.activity.create({
+    data: {
+      action: body.action,
+      details: body.details,
+      taskId: id
+    }
+  })
   
-  return NextResponse.json(newActivity)
+  return NextResponse.json(activity)
 }

@@ -535,7 +535,7 @@ export function TaskFormModal({ open, onOpenChange, task, onSave }: TaskFormModa
               <Button
                 type="submit"
                 disabled={!isFormValid}
-                className="flex-1 sm:flex-none h-12 sm:h-11 px-4 sm:px-6 text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 sm:flex-none h-12 sm:h-11 px-4 sm:px-6 text-sm font-semibold bg-gradient-to-r from-[#ed7a28] to-[#FF5722] hover:from-[#d86a1f] hover:to-[#e64a19] text-white rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {task ? 'Guardar' : 'Crear'}
               </Button>

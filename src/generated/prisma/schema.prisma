@@ -17,4 +17,38 @@ model Task {
   dueDate     DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  // Relaciones
+  subtasks   Subtask[]
+  activities Activity[]
+}
+
+model Subtask {
+  id        String    @id @default(cuid())
+  title     String
+  status    String    @default("TODO") // TODO | IN_PROGRESS | DONE
+  deletedAt DateTime? // Soft delete
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relación
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([taskId, deletedAt])
+  @@index([deletedAt])
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  action    String // 'created', 'updated', 'subtask_added', 'subtask_status_changed', 'subtask_deleted', 'subtask_edited'
+  details   String?
+  createdAt DateTime @default(now())
+
+  // Relación
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId, createdAt])
 }

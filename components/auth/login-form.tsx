@@ -209,7 +209,7 @@ export function LoginForm() {
         transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
       >
         <Card className="w-full border-0 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl rounded-2xl overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#ed7a28] to-[#FF5722]" />
           
           <CardHeader className="pb-6 pt-8 text-center space-y-3 bg-[var(--bg-surface)]">
             <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-white to-gray-100 border border-gray-200 flex items-center justify-center shadow-lg">
@@ -324,7 +324,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 disabled={loading || Object.keys(errors).some(k => errors[k as keyof typeof errors])}
-                className="w-full h-12 text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="w-full h-12 text-sm font-semibold bg-gradient-to-r from-[#ed7a28] to-[#FF5722] hover:from-[#d86a1f] hover:to-[#e64a19] text-white rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
