@@ -1,6 +1,6 @@
 'use client'
 
-import { Search, Plus, SlidersHorizontal, LogOut, ArrowUpDown, CheckCircle2, AlertCircle, Clock, Sun, Moon, Briefcase, Home, User, X, LayoutGrid, Hand } from 'lucide-react'
+import { Search, Plus, SlidersHorizontal, LogOut, ArrowUpDown, CheckCircle2, AlertCircle, Clock, Sun, Moon, Briefcase, Home, User, X, LayoutGrid, Hand, Bell, BellOff } from 'lucide-react'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -23,6 +23,8 @@ interface BoardToolbarProps {
   doneCount: number
   userName: string
   userEmail: string
+  notificationsMuted: boolean
+  onToggleNotifications: () => void
 }
 
 // Configuración de colores para categorías
@@ -61,6 +63,8 @@ export function BoardToolbar({
   doneCount,
   userName,
   userEmail,
+  notificationsMuted,
+  onToggleNotifications,
 }: BoardToolbarProps) {
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const { theme, toggleTheme, mounted } = useTheme()
@@ -136,6 +140,22 @@ export function BoardToolbar({
             ) : (
               <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-[var(--bg-subtle)]" />
             )}
+
+            {/* Notifications Toggle */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onToggleNotifications}
+              className="h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-xl bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] border border-transparent hover:border-[var(--border-default)] transition-all duration-200"
+              aria-label={notificationsMuted ? 'Activar notificaciones' : 'Silenciar notificaciones'}
+              title={notificationsMuted ? 'Activar notificaciones' : 'Silenciar notificaciones'}
+            >
+              {notificationsMuted ? (
+                <BellOff className="w-4 h-4 text-[var(--text-muted)]" />
+              ) : (
+                <Bell className="w-4 h-4" />
+              )}
+            </motion.button>
 
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button

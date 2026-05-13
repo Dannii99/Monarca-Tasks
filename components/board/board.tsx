@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { motion, AnimatePresence } from 'motion/react'
@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useLoading } from '@/components/ui/loading'
+import { useNotifications, useNotificationMute } from '@/hooks/use-notifications'
 
 interface BoardProps {
   initialTasks: Task[]
@@ -48,6 +49,24 @@ export function Board({ initialTasks, userName, userEmail }: BoardProps) {
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null)
   // Hook de loading
   const { startLoading, stopLoading } = useLoading()
+  // Estado para notificaciones silenciadas
+  const { isMuted, setMuted } = useNotificationMute()
+  const [notificationsMuted, setNotificationsMuted] = useState(false)
+  
+  // Inicializar estado de notificaciones
+  useEffect(() => {
+    setNotificationsMuted(isMuted())
+  }, [])
+  
+  // Hook de notificaciones
+  useNotifications(tasks, notificationsMuted)
+  
+  // Toggle de notificaciones
+  const handleToggleNotifications = () => {
+    const newState = !notificationsMuted
+    setNotificationsMuted(newState)
+    setMuted(newState)
+  }
 
   const filteredTasks = tasks
     .filter((task) => {
@@ -201,6 +220,8 @@ export function Board({ initialTasks, userName, userEmail }: BoardProps) {
         doneCount={doneCount}
         userName={userName}
         userEmail={userEmail}
+        notificationsMuted={notificationsMuted}
+        onToggleNotifications={handleToggleNotifications}
       />
 
       {/* Contenido Principal */}
