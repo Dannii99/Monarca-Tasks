@@ -78,6 +78,27 @@ html.dark {
   --badge-home-text: #10b981;
   --badge-personal-bg: rgba(139, 92, 246, 0.12);
   --badge-personal-text: #8b5cf6;
+  /* Stat cards - Modo Claro */
+  --stat-bg: #ffffff;
+  --stat-border: #e5e7eb;
+  --stat-text-primary: #191c1d;
+  --stat-text-secondary: #737686;
+  /* Stat: Total Tasks */
+  --stat-total-icon-from: #ed7a28;
+  --stat-total-icon-to: #FF5722;
+  --stat-total-text: #f97316;
+  /* Stat: Pendientes */
+  --stat-pending-icon-from: #60a5fa;
+  --stat-pending-icon-to: #3b82f6;
+  --stat-pending-text: #3b82f6;
+  /* Stat: Urgentes */
+  --stat-urgent-icon-from: #f87171;
+  --stat-urgent-icon-to: #dc2626;
+  --stat-urgent-text: #dc2626;
+  /* Stat: Completadas */
+  --stat-done-icon-from: #34d399;
+  --stat-done-icon-to: #10b981;
+  --stat-done-text: #10b981;
   --radius-sm: 4px;
   --radius-full: 9999px;
   --shadow-card: 0px 4px 6px -1px rgba(0, 0, 0, 0.05), 0px 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -126,6 +147,27 @@ html.dark {
   --badge-home-text: #4ade80;
   --badge-personal-bg: rgba(168, 85, 247, 0.2);
   --badge-personal-text: #c084fc;
+  /* Stat cards - Modo Oscuro */
+  --stat-bg: rgba(26, 26, 27, 0.8);
+  --stat-border: #27272a;
+  --stat-text-primary: #f5f5f5;
+  --stat-text-secondary: #71717a;
+  /* Stat: Total Tasks */
+  --stat-total-icon-from: #fb923c;
+  --stat-total-icon-to: #f97316;
+  --stat-total-text: #fb923c;
+  /* Stat: Pendientes */
+  --stat-pending-icon-from: #60a5fa;
+  --stat-pending-icon-to: #3b82f6;
+  --stat-pending-text: #60a5fa;
+  /* Stat: Urgentes */
+  --stat-urgent-icon-from: #f87171;
+  --stat-urgent-icon-to: #dc2626;
+  --stat-urgent-text: #f87171;
+  /* Stat: Completadas */
+  --stat-done-icon-from: #34d399;
+  --stat-done-icon-to: #10b981;
+  --stat-done-text: #34d399;
   --shadow-card: 0px 4px 6px -1px rgba(0, 0, 0, 0.3), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
   --shadow-modal: 0px 20px 40px -8px rgba(0, 0, 0, 0.5);
 

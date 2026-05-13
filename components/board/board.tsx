@@ -23,6 +23,8 @@ import { useLoading } from '@/components/ui/loading'
 
 interface BoardProps {
   initialTasks: Task[]
+  userName: string
+  userEmail: string
 }
 
 // Configuración de tabs para móvil
@@ -32,7 +34,7 @@ const statusTabs = [
   { value: 'DONE', label: 'Completadas', icon: CheckCircle2, color: 'text-emerald-500' },
 ]
 
-export function Board({ initialTasks }: BoardProps) {
+export function Board({ initialTasks, userName, userEmail }: BoardProps) {
   const router = useRouter()
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [search, setSearch] = useState('')
@@ -197,6 +199,8 @@ export function Board({ initialTasks }: BoardProps) {
         pendingCount={pendingCount}
         urgentCount={urgentCount}
         doneCount={doneCount}
+        userName={userName}
+        userEmail={userEmail}
       />
 
       {/* Contenido Principal */}
