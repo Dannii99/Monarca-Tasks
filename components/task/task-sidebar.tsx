@@ -37,8 +37,8 @@ const categoryConfig: Record<TaskCategory, { icon: typeof Briefcase; color: stri
   },
   PERSONAL: {
     icon: User,
-    color: 'text-purple-600',
-    bg: 'bg-purple-50',
+    color: 'text-orange-600',
+    bg: 'bg-orange-50',
     label: 'Personal'
   }
 }
@@ -71,8 +71,8 @@ const statusConfig: Record<TaskStatus, { color: string; bg: string; label: strin
     label: 'Por hacer'
   },
   IN_PROGRESS: {
-    color: 'text-blue-600',
-    bg: 'bg-blue-100',
+    color: 'text-orange-600',
+    bg: 'bg-orange-100',
     label: 'En progreso'
   },
   DONE: {

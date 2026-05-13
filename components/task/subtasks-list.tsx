@@ -1,15 +1,15 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { Plus, Check, X, Trash2, MoreHorizontal } from 'lucide-react'
+import { Plus, Check, X, Trash2, Circle, Loader2, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 
 interface Subtask {
   id: string
   title: string
-  completed: boolean
+  status: 'TODO' | 'IN_PROGRESS' | 'DONE'
+  deletedAt: string | null
   createdAt: string
   updatedAt: string
 }
@@ -21,13 +21,37 @@ interface SubtasksListProps {
   onActivityAdd: (activity: any) => void
 }
 
+const statusConfig = {
+  TODO: {
+    icon: Circle,
+    label: 'Por hacer',
+    color: 'text-slate-500',
+    bg: 'bg-slate-100',
+    border: 'border-slate-200'
+  },
+  IN_PROGRESS: {
+    icon: Loader2,
+    label: 'En progreso',
+    color: 'text-blue-500',
+    bg: 'bg-blue-100',
+    border: 'border-blue-200'
+  },
+  DONE: {
+    icon: CheckCircle2,
+    label: 'Completada',
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-100',
+    border: 'border-emerald-200'
+  }
+}
+
 export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd }: SubtasksListProps) {
   const [newSubtaskTitle, setNewSubtaskTitle] = useState('')
   const [isAdding, setIsAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingTitle, setEditingTitle] = useState('')
 
-  const completedCount = subtasks.filter(st => st.completed).length
+  const completedCount = subtasks.filter(st => st.status === 'DONE').length
   const progress = subtasks.length > 0 ? (completedCount / subtasks.length) * 100 : 0
 
   const handleAdd = useCallback(async () => {
@@ -37,7 +61,8 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
     const newSubtask: Subtask = {
       id: tempId,
       title: newSubtaskTitle.trim(),
-      completed: false,
+      status: 'TODO',
+      deletedAt: null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
@@ -58,7 +83,7 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
         const saved = await res.json()
         onSubtasksChange(subtasks.map(st => st.id === tempId ? saved : st))
         
-        // Add activity
+        // Agregar actividad
         const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -82,34 +107,35 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
     }
   }, [taskId, subtasks, newSubtaskTitle, onSubtasksChange, onActivityAdd])
 
-  const handleToggle = useCallback(async (subtaskId: string, completed: boolean) => {
+  const handleStatusChange = useCallback(async (subtaskId: string, newStatus: 'TODO' | 'IN_PROGRESS' | 'DONE') => {
     const subtask = subtasks.find(st => st.id === subtaskId)
-    if (!subtask) return
+    if (!subtask || subtask.status === newStatus) return
+
+    const oldStatus = subtask.status
 
     // Optimistic update
     onSubtasksChange(subtasks.map(st => 
-      st.id === subtaskId ? { ...st, completed } : st
+      st.id === subtaskId ? { ...st, status: newStatus } : st
     ))
 
     try {
       const res = await fetch(`/api/tasks/${taskId}/subtasks/${subtaskId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed })
+        body: JSON.stringify({ status: newStatus })
       })
 
       if (res.ok) {
         const updated = await res.json()
         onSubtasksChange(subtasks.map(st => st.id === subtaskId ? updated : st))
         
-        // Add activity
-        const action = completed ? 'subtask_completed' : 'subtask_uncompleted'
+        // Agregar actividad
         const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            action,
-            details: subtask.title
+            action: 'subtask_status_changed',
+            details: `${subtask.title}: ${oldStatus} → ${newStatus}`
           })
         })
         
@@ -122,7 +148,7 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
         onSubtasksChange(subtasks)
       }
     } catch (error) {
-      console.error('Error toggling subtask:', error)
+      console.error('Error changing subtask status:', error)
       onSubtasksChange(subtasks)
     }
   }, [taskId, subtasks, onSubtasksChange, onActivityAdd])
@@ -131,7 +157,7 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
     const subtask = subtasks.find(st => st.id === subtaskId)
     if (!subtask) return
 
-    // Optimistic update
+    // Optimistic update (eliminar de la lista)
     onSubtasksChange(subtasks.filter(st => st.id !== subtaskId))
 
     try {
@@ -140,7 +166,7 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
       })
 
       if (res.ok) {
-        // Add activity
+        // Agregar actividad
         const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -194,7 +220,7 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
         const updated = await res.json()
         onSubtasksChange(subtasks.map(st => st.id === subtaskId ? updated : st))
         
-        // Add activity
+        // Agregar actividad
         const activityRes = await fetch(`/api/tasks/${taskId}/activities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -217,6 +243,13 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
       onSubtasksChange(subtasks)
     }
   }, [taskId, subtasks, editingTitle, onSubtasksChange, onActivityAdd])
+
+  const cycleStatus = (currentStatus: 'TODO' | 'IN_PROGRESS' | 'DONE') => {
+    const order: ('TODO' | 'IN_PROGRESS' | 'DONE')[] = ['TODO', 'IN_PROGRESS', 'DONE']
+    const currentIndex = order.indexOf(currentStatus)
+    const nextIndex = (currentIndex + 1) % order.length
+    return order[nextIndex]
+  }
 
   return (
     <div className="space-y-4">
@@ -251,7 +284,9 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
         </Button>
       ) : (
         <div className="flex items-center gap-2">
-          <Checkbox className="ml-1" disabled />
+          <div className="w-8 h-8 rounded-lg bg-[var(--bg-muted)] flex items-center justify-center">
+            <Circle className="w-4 h-4 text-[var(--text-muted)]" />
+          </div>
           <Input
             value={newSubtaskTitle}
             onChange={(e) => setNewSubtaskTitle(e.target.value)}
@@ -291,67 +326,78 @@ export function SubtasksList({ taskId, subtasks, onSubtasksChange, onActivityAdd
 
       {/* Subtasks list */}
       <div className="space-y-2">
-        {subtasks.map((subtask) => (
-          <div
-            key={subtask.id}
-            className={`
-              group flex items-center gap-3 p-3 rounded-xl
-              transition-all duration-200
-              ${subtask.completed ? 'bg-[var(--bg-subtle)]/50' : 'bg-[var(--bg-subtle)]'}
-              hover:bg-[var(--bg-muted)]
-            `}
-          >
-            <Checkbox
-              checked={subtask.completed}
-              onCheckedChange={(checked) => handleToggle(subtask.id, checked as boolean)}
-              className="border-[var(--border-strong)] data-[state=checked]:bg-[var(--color-work)] data-[state=checked]:border-[var(--color-work)]"
-            />
-            
-            {editingId === subtask.id ? (
-              <div className="flex-1 flex items-center gap-2">
-                <Input
-                  value={editingTitle}
-                  onChange={(e) => setEditingTitle(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleEdit(subtask.id)
-                    if (e.key === 'Escape') {
-                      setEditingId(null)
-                      setEditingTitle('')
-                    }
-                  }}
-                  onBlur={() => handleEdit(subtask.id)}
-                  autoFocus
-                  maxLength={100}
-                  className="flex-1 h-8 bg-[var(--bg-surface)] border-[var(--border-focus)] text-[var(--text-primary)] text-sm rounded-lg"
-                />
-              </div>
-            ) : (
-              <>
-                <span
-                  onClick={() => {
-                    setEditingId(subtask.id)
-                    setEditingTitle(subtask.title)
-                  }}
-                  className={`
-                    flex-1 text-sm cursor-pointer select-none
-                    ${subtask.completed ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}
-                  `}
-                >
-                  {subtask.title}
-                </span>
-                
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleDelete(subtask.id)}
-                  className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-lg transition-opacity"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </>
-            )}
-          </div>
-        ))}
+        {subtasks.map((subtask) => {
+          const config = statusConfig[subtask.status]
+          const StatusIcon = config.icon
+          
+          return (
+            <div
+              key={subtask.id}
+              className="group flex items-center gap-3 p-3 rounded-xl bg-[var(--bg-subtle)] hover:bg-[var(--bg-muted)] transition-all duration-200"
+            >
+              {/* Status button */}
+              <button
+                onClick={() => handleStatusChange(subtask.id, cycleStatus(subtask.status))}
+                className={`
+                  w-8 h-8 rounded-lg flex items-center justify-center transition-all
+                  ${config.bg} ${config.color} hover:scale-110
+                `}
+                title={config.label}
+              >
+                <StatusIcon className={`w-4 h-4 ${subtask.status === 'IN_PROGRESS' ? 'animate-spin' : ''}`} />
+              </button>
+              
+              {editingId === subtask.id ? (
+                <div className="flex-1 flex items-center gap-2">
+                  <Input
+                    value={editingTitle}
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleEdit(subtask.id)
+                      if (e.key === 'Escape') {
+                        setEditingId(null)
+                        setEditingTitle('')
+                      }
+                    }}
+                    onBlur={() => handleEdit(subtask.id)}
+                    autoFocus
+                    maxLength={100}
+                    className="flex-1 h-8 bg-[var(--bg-surface)] border-[var(--border-focus)] text-[var(--text-primary)] text-sm rounded-lg"
+                  />
+                </div>
+              ) : (
+                <>
+                  <span
+                    onClick={() => {
+                      setEditingId(subtask.id)
+                      setEditingTitle(subtask.title)
+                    }}
+                    className={`
+                      flex-1 text-sm cursor-pointer select-none
+                      ${subtask.status === 'DONE' ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}
+                    `}
+                  >
+                    {subtask.title}
+                  </span>
+                  
+                  {/* Status label */}
+                  <span className={`text-xs px-2 py-1 rounded-md ${config.bg} ${config.color} hidden sm:inline`}>
+                    {config.label}
+                  </span>
+                  
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDelete(subtask.id)}
+                    className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-lg transition-opacity"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

@@ -45,9 +45,9 @@ const categoryConfig: Record<TaskCategory, { color: string; bg: string; border: 
     label: 'Hogar'
   },
   PERSONAL: {
-    color: 'text-purple-600',
-    bg: 'bg-purple-50',
-    border: 'border-purple-200',
+    color: 'text-orange-600',
+    bg: 'bg-orange-50',
+    border: 'border-orange-200',
     label: 'Personal'
   }
 }

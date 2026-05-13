@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SessionProvider } from 'next-auth/react'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -11,6 +12,15 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Monarca Tasks',
   description: 'Gestor de tareas personal tipo Kanban para un solo usuario',
+   manifest: '/manifest.json',
+   appleWebApp: {
+    capable: true,
+    title: 'Monarca Tasks',
+  },
+  icons: {
+    icon: '/ico/favicon.png',
+    apple: '/ico/favicon.png',
+  },
 }
 
 // Script que se ejecuta antes de hidratación para aplicar el tema inmediatamente
@@ -34,10 +44,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+      <head />
       <body className={inter.className}>
+        {/* Script de tema que se ejecuta antes de la hidratación */}
+        <Script
+          id="theme-script"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
         <ThemeProvider>
           <SessionProvider>
             <TooltipProvider>

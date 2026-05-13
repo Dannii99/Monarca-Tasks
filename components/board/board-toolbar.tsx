@@ -27,9 +27,9 @@ interface BoardToolbarProps {
 const categoryStyles: Record<string, { icon: typeof Briefcase; color: string; bg: string; border: string }> = {
   WORK: { 
     icon: Briefcase, 
-    color: 'text-blue-600 dark:text-blue-400',
-    bg: 'bg-blue-50 dark:bg-blue-500/10',
-    border: 'border-blue-200 dark:border-blue-500/20'
+    color: 'text-orange-600 dark:text-orange-400',
+    bg: 'bg-orange-50 dark:bg-orange-500/10',
+    border: 'border-orange-200 dark:border-orange-500/20'
   },
   HOME: { 
     icon: Home, 
@@ -127,7 +127,7 @@ export function BoardToolbar({
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={onAddTask}
-                className="h-9 sm:h-10 px-3 sm:px-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600 text-white rounded-xl shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 font-medium text-sm"
+                className="h-9 sm:h-10 px-3 sm:px-4 bg-gradient-to-r from-[#ed7a28] to-[#FF5722] hover:from-[#d86a1f] hover:to-[#e64a19] text-white rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-200 font-medium text-sm"
               >
                 <Plus className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Nueva tarea</span>
@@ -140,6 +140,18 @@ export function BoardToolbar({
                 size="icon"
                 onClick={onLogout}
                 className="h-9 w-9 sm:h-10 sm:w-10 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-xl transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </motion.div>
+
+            {/* Logout - Visible solo en móvil */}
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="sm:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onLogout}
+                className="h-9 w-9 text-[var(--text-muted)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 rounded-xl transition-colors"
               >
                 <LogOut className="w-4 h-4" />
               </Button>
@@ -277,7 +289,7 @@ export function BoardToolbar({
               <SlidersHorizontal className="w-3.5 h-3.5" />
               <span>Filtros</span>
               {(categoryFilter || sortBy !== 'priority' || search) && (
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-[9px] text-white font-bold">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-[#ed7a28] to-[#FF5722] text-[9px] text-white font-bold">
                   {(categoryFilter ? 1 : 0) + (sortBy !== 'priority' ? 1 : 0) + (search ? 1 : 0)}
                 </span>
               )}
@@ -419,14 +431,6 @@ export function BoardToolbar({
               {/* Divider */}
               <div className="h-px bg-[var(--border-default)]" />
 
-              {/* Logout en móvil */}
-              <button
-                onClick={onLogout}
-                className="w-full flex items-center justify-center gap-3 h-14 px-4 bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-2xl text-base font-semibold text-[var(--color-error)] hover:bg-[var(--color-error)]/5 transition-colors"
-              >
-                <LogOut className="w-5 h-5" />
-                Cerrar sesión
-              </button>
             </div>
 
             {/* Botón fijo en la parte inferior */}

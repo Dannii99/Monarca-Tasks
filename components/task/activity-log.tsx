@@ -40,8 +40,8 @@ const actionConfig: Record<string, {
   updated: {
     icon: Edit3,
     label: 'Tarea actualizada',
-    color: 'text-blue-600',
-    bg: 'bg-blue-50'
+    color: 'text-orange-600',
+    bg: 'bg-orange-50'
   },
   completed: {
     icon: CheckCircle2,
@@ -58,8 +58,8 @@ const actionConfig: Record<string, {
   subtask_added: {
     icon: Plus,
     label: 'Subtarea agregada',
-    color: 'text-purple-600',
-    bg: 'bg-purple-50'
+    color: 'text-orange-600',
+    bg: 'bg-orange-50'
   },
   subtask_completed: {
     icon: CheckCircle2,
@@ -82,8 +82,14 @@ const actionConfig: Record<string, {
   subtask_edited: {
     icon: Edit3,
     label: 'Subtarea editada',
-    color: 'text-blue-600',
-    bg: 'bg-blue-50'
+    color: 'text-orange-600',
+    bg: 'bg-orange-50'
+  },
+  subtask_status_changed: {
+    icon: ListTodo,
+    label: 'Estado de subtarea cambiado',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50'
   },
   status_changed: {
     icon: ListTodo,

@@ -12,7 +12,17 @@ export default async function TaskPage({ params }: TaskPageProps) {
   const { id } = await params
   
   const task = await prisma.task.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      subtasks: {
+        where: { deletedAt: null }, // Solo subtareas activas
+        orderBy: { createdAt: 'asc' }
+      },
+      activities: {
+        orderBy: { createdAt: 'desc' },
+        take: 50
+      }
+    }
   })
 
   if (!task) {
@@ -21,28 +31,19 @@ export default async function TaskPage({ params }: TaskPageProps) {
 
   const serializedTask = serializeTask(task) as Task
   
-  // Por ahora usamos arrays vacíos - se integrarán con Neon después
-  const subtasks: Array<{
-    id: string
-    title: string
-    completed: boolean
-    createdAt: string
-    updatedAt: string
-  }> = []
+  // Serializar subtareas y actividades
+  const subtasks = task.subtasks.map((st) => ({
+    ...st,
+    status: st.status as 'TODO' | 'IN_PROGRESS' | 'DONE',
+    createdAt: st.createdAt.toISOString(),
+    updatedAt: st.updatedAt.toISOString(),
+    deletedAt: st.deletedAt?.toISOString() || null
+  }))
   
-  const activities: Array<{
-    id: string
-    action: string
-    details: string | null
-    createdAt: string
-  }> = [
-    {
-      id: '1',
-      action: 'created',
-      details: 'Tarea creada',
-      createdAt: task.createdAt.toISOString()
-    }
-  ]
+  const activities = task.activities.map((act) => ({
+    ...act,
+    createdAt: act.createdAt.toISOString()
+  }))
 
   return (
     <TaskDetailView 
